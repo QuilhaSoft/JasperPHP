@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2016-01-27T14:07:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="56" bottomMargin="56" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MYSQL.xml"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="documentos_codigo" class="java.lang.String"/>
+	<parameter name="criteria" class="java.lang.String"/>
+	<parameter name="tabela" class="java.lang.String"/>
+	<parameter name="join" class="java.lang.String"/>
+	<parameter name="empresas_codigo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *,
+(SELECT cidades_nome FROM cidades where empresas.cidades_codigo = cidades_codigo) as empresas_cidades_nome,
+(SELECT documentos_source 
+	FROM documentos 
+	WHERE documentos_codigo =  $P{documentos_codigo}
+) as documentos_source,
+DATE(NOW()) as data_atual
+FROM  $P{tabela}  $P{join} 
+JOIN empresas ON empresas.empresas_codigo =  $P{empresas_codigo} 
+WHERE  $P{criteria}]]>
+	</queryString>
+	<field name="documentos_source" class="java.lang.String"/>
+	<field name="recordObj" class="java.lang.String"/>
+	<variable name="htmlData" class="HTMLDATA">
+		<variableExpression><![CDATA[$F{documentos_source}]]></variableExpression>
+	</variable>
+	<variable name="recordObj" class="java.lang.String"/>
+	<detail>
+		<band height="50">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="480" height="50" uuid="85966df0-3629-4ed5-991f-ae3ddadebf9f"/>
+				<textElement markup="html">
+					<font size="12"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{htmlData}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

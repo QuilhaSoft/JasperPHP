@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-12-01T23:33:00 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="locatarios" pageWidth="595" pageHeight="842" columnWidth="595" columnSpacing="2" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="685cedec-9701-4851-aebd-e3182481bdc7">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MYSQL.xml"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="locacoes_codigo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT locatarios_nome,COUNT(*) as qtd FROM locatarios l
+JOIN locacoes_locatarios ll ON ll.locatarios_codigo = l.locatarios_codigo
+WHERE ll.locacoes_codigo =  $P{locacoes_codigo} 
+ ORDER BY ll.locacoes_locatarios_principal DESC]]>
+	</queryString>
+	<field name="locatarios_nome" class="java.lang.String"/>
+	<field name="qtd" class="java.lang.Integer"/>
+	<detail>
+		<band height="38">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="20" width="50" height="18" uuid="65af8a42-0e34-447e-b662-ae97e30e0d13">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Locatario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="20" width="495" height="18" uuid="5a4d8309-9b3f-438f-bd64-5c426cad7ad8">
+					<printWhenExpression><![CDATA[$F{qtd}==1]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{locatarios_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="20" width="494" height="18" uuid="d6dbbc8e-b546-4a6d-9776-249feabfa4b8">
+					<printWhenExpression><![CDATA[$F{qtd}>1]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{locatarios_nome}+" e outros "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

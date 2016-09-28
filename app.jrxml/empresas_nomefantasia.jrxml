@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2016-01-04T20:23:05 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="empresas_nomefantasia" pageWidth="350" pageHeight="842" columnWidth="350" columnSpacing="2" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="685cedec-9701-4851-aebd-e3182481bdc7">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+	<parameter name="empresas_codigo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT empresas_nomefantasia,
+cidades_nome
+FROM empresas emp
+JOIN cidades cid ON cid.cidades_codigo = emp.cidades_codigo
+WHERE empresas_codigo =   $P{empresas_codigo}]]>
+	</queryString>
+	<field name="empresas_nomefantasia" class="java.lang.String"/>
+	<field name="cidades_nome" class="java.lang.String"/>
+	<variable name="empresas_nomefantasia" class="java.lang.String">
+		<variableExpression><![CDATA[$F{empresas_nomefantasia}]]></variableExpression>
+	</variable>
+	<variable name="cidades_nome" class="java.lang.String">
+		<variableExpression><![CDATA[$F{cidades_nome}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="0" width="250" height="10" isPrintWhenDetailOverflows="true" uuid="d6dbbc8e-b546-4a6d-9776-249feabfa4b8">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresas_nomefantasia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
