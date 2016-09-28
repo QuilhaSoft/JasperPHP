@@ -1,0 +1,23 @@
+{
+    "name": "rctnet/jasperphp",
+    "type": "library",
+    "description": "Conjunto de classes para geração de relatorios lendo o formato jrxml",
+    "keywords": ["relatorio", "jrxml", "jaspersoft", "pdf"],
+    "licence": "MIT",
+    "authors": [
+        {
+            "name": "Rogerio Muniz de Castro",
+            "email": "rogerio@ciatec.net"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+            "JasperPHP\\" : ["src"]
+        }
+    },
+    "require": {
+        "php": ">=5.3.0" ,
+        "tecnickcom/tcpdf":"6.2.*"
+    },
+    "config": {}
+}

@@ -1,0 +1,23 @@
+<?php
+namespace JasperPHP;
+use JasperPHP\Element;
+/**
+ * classe TLabel
+ * classe para construção de rótulos de texto
+ *
+ * @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
+ * @version  2015.03.11
+ * @access   restrict
+ * 
+ * 2015.03.11 -- criação
+**/
+class ComponentElement extends Element
+{
+	
+	
+	public function generate($dbData = null)
+	{
+		parent::generate($dbData);
+	}
+}
+?>
