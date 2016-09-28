@@ -8,7 +8,7 @@ use \PHPExcel_CachedObjectStorageFactory;
 	* classe TConnection
 	* gerencia conexões com bancos de dados através de arquivos de configuração.
 	*
-	* @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
+	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 	* @version  2015.03.10
 	* @access   restrict
 	* 
