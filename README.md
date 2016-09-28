@@ -78,7 +78,7 @@ class TJasper
         $this->report->arrayVariable[$name]['initialValue'] = $value ;
     }
 }
-require('../../autoload.php') ;
+require('autoloader.php') ;
 TTransaction::open('dev');
 $jasper = new TJasper('template.jrxml',$_GET);
 $jasper->outpage();
