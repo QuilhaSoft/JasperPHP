@@ -3,8 +3,8 @@ namespace JasperPHP;
 use \JasperPHP;
 use \TCPDF;
 	/*
-	* classe TConnection
-	* gerencia conexões com bancos de dados através de arquivos de configuração.
+	* classe Pdf
+	* 
 	*
 	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 	* @version  2015.03.10
