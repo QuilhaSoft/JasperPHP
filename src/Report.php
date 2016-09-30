@@ -109,7 +109,7 @@ class Report extends Element
     public function parameter_handler($xml_path,$param) {
         foreach($xml_path->parameter as $parameter){
             $paraName = (string)$parameter["name"];
-            $this->arrayParameter[$paraName] = $param[$paraName];        
+            $this->arrayParameter[$paraName] = array_key_exists($paraName,$param)? $param[$paraName]:'';        
         }
     }
 
@@ -182,7 +182,7 @@ class Report extends Element
             if($arraydata["type"]=="setPage"){
                 $pdf->setPage($arraydata["value"],$arraydata["resetMargins"]);
             }
-            if($arraydata["rotation"]!=""){
+            if(array_key_exists("rotation",$arraydata)){
                 if($arraydata["rotation"]=="Left"){
                     $w=$arraydata["width"];
                     $arraydata["width"]=$arraydata["height"];
@@ -209,33 +209,33 @@ class Report extends Element
                 $arraydata["font"]=  strtolower($arraydata["font"]);
 
                 $fontfile=$this->fontdir.'/'.$arraydata["font"].'.php';
-                if(file_exists($fontfile) || $this->bypassnofont==false){
+                // if(file_exists($fontfile) || $this->bypassnofont==false){
 
-                    $fontfile=$this->fontdir.'/'.$arraydata["font"].'.php';
+                $fontfile=$this->fontdir.'/'.$arraydata["font"].'.php';
 
-                    $pdf->SetFont($arraydata["font"],$arraydata["fontstyle"],$arraydata["fontsize"],$fontfile);
-                }
+                $pdf->SetFont($arraydata["font"],$arraydata["fontstyle"],$arraydata["fontsize"],$fontfile);
+                /* }
                 else{
-                    $arraydata["font"]="freeserif";
-                    if($arraydata["fontstyle"]=="")
-                        $pdf->SetFont('freeserif',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserif.php');
-                    elseif($arraydata["fontstyle"]=="B")
-                        $pdf->SetFont('freeserifb',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifb.php');
-                    elseif($arraydata["fontstyle"]=="I")
-                        $pdf->SetFont('freeserifi',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifi.php');
-                    elseif($arraydata["fontstyle"]=="BI")
-                        $pdf->SetFont('freeserifbi',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
-                    elseif($arraydata["fontstyle"]=="BIU")
-                        $pdf->SetFont('freeserifbi',"BIU",$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
-                    elseif($arraydata["fontstyle"]=="U")
-                        $pdf->SetFont('freeserif',"U",$arraydata["fontsize"],$this->fontdir.'/freeserif.php');
-                    elseif($arraydata["fontstyle"]=="BU")
-                        $pdf->SetFont('freeserifb',"U",$arraydata["fontsize"],$this->fontdir.'/freeserifb.php');
-                    elseif($arraydata["fontstyle"]=="IU")
-                        $pdf->SetFont('freeserifi',"IU",$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
+                $arraydata["font"]="freeserif";
+                if($arraydata["fontstyle"]=="")
+                $pdf->SetFont('freeserif',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserif.php');
+                elseif($arraydata["fontstyle"]=="B")
+                $pdf->SetFont('freeserifb',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifb.php');
+                elseif($arraydata["fontstyle"]=="I")
+                $pdf->SetFont('freeserifi',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifi.php');
+                elseif($arraydata["fontstyle"]=="BI")
+                $pdf->SetFont('freeserifbi',$arraydata["fontstyle"],$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
+                elseif($arraydata["fontstyle"]=="BIU")
+                $pdf->SetFont('freeserifbi',"BIU",$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
+                elseif($arraydata["fontstyle"]=="U")
+                $pdf->SetFont('freeserif',"U",$arraydata["fontsize"],$this->fontdir.'/freeserif.php');
+                elseif($arraydata["fontstyle"]=="BU")
+                $pdf->SetFont('freeserifb',"U",$arraydata["fontsize"],$this->fontdir.'/freeserifb.php');
+                elseif($arraydata["fontstyle"]=="IU")
+                $pdf->SetFont('freeserifi',"IU",$arraydata["fontsize"],$this->fontdir.'/freeserifbi.php');
 
 
-                }
+                }        */
 
             }
             elseif($arraydata["type"]=="subreport") {    
@@ -351,10 +351,10 @@ class Report extends Element
                 $this->textcolor_g=$arraydata['g'];
                 $this->textcolor_b=$arraydata['b'];
 
-                if($this->hideheader==true && $this->currentband=='pageHeader')
-                    $pdf->SetTextColor(100,33,30);
-                else
-                    $pdf->SetTextColor($arraydata["r"],$arraydata["g"],$arraydata["b"]);
+                //if($this->hideheader==true && $this->currentband=='pageHeader')
+                //    $pdf->SetTextColor(100,33,30);
+                //else
+                $pdf->SetTextColor($arraydata["r"],$arraydata["g"],$arraydata["b"]);
             }
             elseif($arraydata["type"]=="SetDrawColor") {
                 $this->drawcolor_r=$arraydata['r'];
@@ -475,21 +475,22 @@ class Report extends Element
                 } 
 
                 $x=$pdf->GetX();
-                $y=$pdf->GetY();
-                $text=$this->formatText($txt, $arraydata["pattern"]);
+                $y=$pdf->GetY(); 
+                $pattern = (array_key_exists("pattern",$arraydata))?$arraydata["pattern"]:'';
+                $text = $this->formatText($txt, $pattern);
                 $pdf->Cell($arraydata["width"], $arraydata["height"],$text,
                     $arraydata["border"],"",$arraydata["align"],$arraydata["fill"],
                     $arraydata["link"],
                     0,true,"T",$arraydata["valign"]); 
                 //$pdf->Ln();
-                if($this->currentband=='detail'){
-                    if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
-                        $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    else{
-                        if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
-                            $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    }
+                /* if($this->currentband=='detail'){
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                else{
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
                 }
+                }  */
             }
             elseif($arraydata["poverflow"]=="true") {
                 if($arraydata["valign"]=="C")
@@ -499,36 +500,37 @@ class Report extends Element
 
                 $x=$pdf->GetX();
                 $yAfter = $pdf->GetY();
+                $maxheight = array_key_exists('maxheight',$arraydata)?$arraydata['maxheight']:'';
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $this->formatText($txt, $arraydata["pattern"]),$arraydata["border"] 
                     ,$arraydata["align"], $arraydata["fill"],1,'','',true,0,false,true,$maxheight);//,$arraydata["valign"]);
                 if(($yAfter+$arraydata["height"])<=$this->arrayPageSetting["pageHeight"]){
                     $this->y_axis = $pdf->GetY()-20;
                 }
-                if( $pdf->balancetext=='' && $this->currentband=='detail'){
-                    if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
-                        $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    else{
-                        if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
-                            $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    }
+                /*if( $pdf->balancetext=='' && $this->currentband=='detail'){
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                else{
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                }
                 }
                 //$this->pageFooter();
                 if($pdf->balancetext!='' ){
-                    $this->continuenextpageText=array('width'=>$arraydata["width"], 'height'=>$arraydata["height"], 'txt'=>$pdf->balancetext,
-                        'border'=>$arraydata["border"] ,'align'=>$arraydata["align"], 'fill'=>$arraydata["fill"],'ln'=>1,
-                        'x'=>$x,'y'=>'','reset'=>true,'streth'=>0,'ishtml'=>false,'autopadding'=>true);
-                    $pdf->balancetext='';
-                    $this->forcetextcolor_b=$this->textcolor_b;
-                    $this->forcetextcolor_g=$this->textcolor_g;
-                    $this->forcetextcolor_r=$this->textcolor_r;
-                    $this->forcefillcolor_b=$this->fillcolor_b;
-                    $this->forcefillcolor_g=$this->fillcolor_g;
-                    $this->forcefillcolor_r=$this->fillcolor_r;
-                    if($this->continuenextpageText)
-                        $this->printlongtext($pdf->getFontFamily(),$pdf->getFontStyle(),$pdf->getFontSize());
+                $this->continuenextpageText=array('width'=>$arraydata["width"], 'height'=>$arraydata["height"], 'txt'=>$pdf->balancetext,
+                'border'=>$arraydata["border"] ,'align'=>$arraydata["align"], 'fill'=>$arraydata["fill"],'ln'=>1,
+                'x'=>$x,'y'=>'','reset'=>true,'streth'=>0,'ishtml'=>false,'autopadding'=>true);
+                $pdf->balancetext='';
+                $this->forcetextcolor_b=$this->textcolor_b;
+                $this->forcetextcolor_g=$this->textcolor_g;
+                $this->forcetextcolor_r=$this->textcolor_r;
+                $this->forcefillcolor_b=$this->fillcolor_b;
+                $this->forcefillcolor_g=$this->fillcolor_g;
+                $this->forcefillcolor_r=$this->fillcolor_r;
+                if($this->continuenextpageText)
+                $this->printlongtext($pdf->getFontFamily(),$pdf->getFontStyle(),$pdf->getFontSize());
 
-                }          
+                }   */       
             }
             elseif($arraydata["soverflow"]=="true") {
 
@@ -540,20 +542,20 @@ class Report extends Element
                 $pdf->Cell($arraydata["width"], $arraydata["height"],  $this->formatText($txt, $arraydata["pattern"]),$arraydata["border"],"",$arraydata["align"],$arraydata["fill"],$arraydata["link"]."",0,true,"T",
                     $arraydata["valign"]);
                 $pdf->Ln();
-                if($this->currentband=='detail'){
+                /*if($this->currentband=='detail'){
                     if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
                         $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
                     else{
                         if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
                             $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
                     }
-                }
+                }  */
             }
             else {
                 //MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0) {    
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $this->formatText($txt, $arraydata["pattern"]), $arraydata["border"], 
                     $arraydata["align"], $arraydata["fill"],1,'','',true,0,true,true,$maxheight);
-                if( $pdf->balancetext=='' && $this->currentband=='detail'){
+                /*if( $pdf->balancetext=='' && $this->currentband=='detail'){
                     if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
                         $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
                     else{
@@ -576,7 +578,7 @@ class Report extends Element
                     if($this->continuenextpageText)
                         $this->printlongtext($pdf->getFontFamily(),$pdf->getFontStyle(),$pdf->getFontSize());
 
-                }   
+                } */  
             }
         }
         $this->print_expression_result=false;   
@@ -585,6 +587,7 @@ class Report extends Element
         $expression=$data["printWhenExpression"];
         $this->print_expression_result=false;
         if($expression!=""){
+            //echo      'if('.$expression.'){$this->print_expression_result=true;}';
             //$expression=$this->analyse_expression($expression);
             eval('if('.$expression.'){$this->print_expression_result=true;}');
         }
@@ -594,61 +597,66 @@ class Report extends Element
 
     }
     public function formatText($txt,$pattern) {
-        $nome_meses = array('Janeiro','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
-        if($pattern=="###0")
-            return number_format($txt,0,"","");
-        elseif($pattern=="#,##0")
-            return number_format($txt,0,",",".");
-        elseif($pattern=="###0.0")
-            return number_format($txt,1,",","");
-        elseif($pattern=="#.##0.0" || $pattern=="#,##0.0;-#,##0.0")
-            return number_format($txt,1,",",".");
-        elseif($pattern=="###0.00" || $pattern=="###0.00;-###0.00")
-            return number_format($txt,2,",","");
-        elseif($pattern=="#,##0.00" || $pattern=="#,##0.00;-#,##0.00")
-            return number_format($txt,2,",",".");
-        elseif($pattern=="###0.00;(###0.00)")
-            return ($txt<0 ? "(".number_format(abs($txt),2,",","").")" : number_format($txt,2,",",""));
-        elseif($pattern=="#,##0.00;(#,##0.00)")
-            return ($txt<0 ? "(".number_format(abs($txt),2,",",".").")" : number_format($txt,2,",","."));
-        elseif($pattern=="#,##0.00;(-#,##0.00)")
-            return ($txt<0 ? "(".number_format($txt,2,",",".").")" : number_format($txt,2,",","."));
-        elseif($pattern=="###0.000")
-            return number_format($txt,3,",","");
-        elseif($pattern=="#,##0.000")
-            return number_format($txt,3,",",".");
-        elseif($pattern=="#,##0.0000")
-            return number_format($txt,4,",",".");
-        elseif($pattern=="###0.0000")
-            return number_format($txt,4,",","");
-            
-        elseif($pattern=="xx/xx"  && $txt !="")
-            return substr($txt,0,2)."/".substr($txt,2,2);
+        if($txt!='')
+        {
+            $nome_meses = array('Janeiro','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
+            if($pattern=="###0")
+                return number_format($txt,0,"","");
+            elseif($pattern=="#,##0")
+                return number_format($txt,0,",",".");
+            elseif($pattern=="###0.0")
+                return number_format($txt,1,",","");
+            elseif($pattern=="#.##0.0" || $pattern=="#,##0.0;-#,##0.0")
+                return number_format($txt,1,",",".");
+            elseif($pattern=="###0.00" || $pattern=="###0.00;-###0.00")
+                return number_format($txt,2,",","");
+            elseif($pattern=="#,##0.00" || $pattern=="#,##0.00;-#,##0.00")
+                return number_format($txt,2,",",".");
+            elseif($pattern=="###0.00;(###0.00)")
+                return ($txt<0 ? "(".number_format(abs($txt),2,",","").")" : number_format($txt,2,",",""));
+            elseif($pattern=="#,##0.00;(#,##0.00)")
+                return ($txt<0 ? "(".number_format(abs($txt),2,",",".").")" : number_format($txt,2,",","."));
+            elseif($pattern=="#,##0.00;(-#,##0.00)")
+                return ($txt<0 ? "(".number_format($txt,2,",",".").")" : number_format($txt,2,",","."));
+            elseif($pattern=="###0.000")
+                return number_format($txt,3,",","");
+            elseif($pattern=="#,##0.000")
+                return number_format($txt,3,",",".");
+            elseif($pattern=="#,##0.0000")
+                return number_format($txt,4,",",".");
+            elseif($pattern=="###0.0000")
+                return number_format($txt,4,",","");
 
-        elseif(($pattern=="dd/MM/yyyy" || $pattern=="ddMMyyyy") && $txt !="")
-            return date("d/m/Y",strtotime($txt));
-        elseif($pattern=="MM/dd/yyyy" && $txt !="")
-            return date("m/d/Y",strtotime($txt));
-        elseif($pattern=="dd/MM/yy" && $txt !="")
-            return date("d/m/y",strtotime($txt));
-        elseif($pattern=="yyyy/MM/dd" && $txt !="")
-            return date("Y/m/d",strtotime($txt));
-        elseif($pattern=="dd-MMM-yy" && $txt !="")
-            return date("d-M-Y",strtotime($txt));
-        elseif($pattern=="dd-MMM-yy" && $txt !="")
-            return date("d-M-Y",strtotime($txt));
-        elseif($pattern=="dd/MM/yyyy h.mm a" && $txt !="")
-            return date("d/m/Y h:i a",strtotime($txt));
-        elseif($pattern=="dd/MM/yyyy HH.mm.ss" && $txt !="")
-            return date("d-m-Y H:i:s",strtotime($txt));
-        elseif($pattern=="H:m:s" && $txt !="")
-            return date("H:i:s",strtotime($txt));
-        elseif(($pattern=="d F yyyy" ||$pattern=="dFyyyy") && $txt !="")
-            return date("d ",strtotime($txt))." de ".$nome_meses[date("n",strtotime($txt))]." de ".date("Y",strtotime($txt));
-        elseif($pattern!="" && $txt !=""){
-            return date($pattern,strtotime($txt));
-        }else
+            elseif($pattern=="xx/xx"  && $txt !="")
+                return substr($txt,0,2)."/".substr($txt,2,2);
+
+            elseif(($pattern=="dd/MM/yyyy" || $pattern=="ddMMyyyy") && $txt !="")
+                return date("d/m/Y",strtotime($txt));
+            elseif($pattern=="MM/dd/yyyy" && $txt !="")
+                return date("m/d/Y",strtotime($txt));
+            elseif($pattern=="dd/MM/yy" && $txt !="")
+                return date("d/m/y",strtotime($txt));
+            elseif($pattern=="yyyy/MM/dd" && $txt !="")
+                return date("Y/m/d",strtotime($txt));
+            elseif($pattern=="dd-MMM-yy" && $txt !="")
+                return date("d-M-Y",strtotime($txt));
+            elseif($pattern=="dd-MMM-yy" && $txt !="")
+                return date("d-M-Y",strtotime($txt));
+            elseif($pattern=="dd/MM/yyyy h.mm a" && $txt !="")
+                return date("d/m/Y h:i a",strtotime($txt));
+            elseif($pattern=="dd/MM/yyyy HH.mm.ss" && $txt !="")
+                return date("d-m-Y H:i:s",strtotime($txt));
+            elseif($pattern=="H:m:s" && $txt !="")
+                return date("H:i:s",strtotime($txt));
+            elseif(($pattern=="d F yyyy" ||$pattern=="dFyyyy") && $txt !="")
+                return date("d ",strtotime($txt))." de ".$nome_meses[date("n",strtotime($txt))]." de ".date("Y",strtotime($txt));
+            elseif($pattern!="" && $txt !=""){
+                return date($pattern,strtotime($txt));
+            }else
+                return $txt;
+        }else{
             return $txt;
+        }
     }
     /* public function analyse_expression($data,$isPrintRepeatedValue="true") {
     //echo $data."<br/>";
@@ -801,10 +809,12 @@ class Report extends Element
 
     } */        
     public function variables_calculation($obj,$row = 'StdClass') {
-
-        foreach($this->arrayVariable as $k=>$out) {
-            $this->variable_calculation($k,$out,$row);
-        } 
+        if($this->arrayVariable)
+        {
+            foreach($this->arrayVariable as $k=>$out) {
+                $this->variable_calculation($k,$out,$row);
+            }                       
+        }
     }
     public function setReturnVariables($subReportTag,$arrayVariablesSubReport){
         if($subReportTag->returnValues){
@@ -812,7 +822,8 @@ class Report extends Element
                 $val = (array)$value;
                 $subreportVariable = (string)$value['subreportVariable'];
                 $toVariable        = (string)$value['toVariable'] ;
-                $val['ans'] = $arrayVariablesSubReport[$subreportVariable]['ans'];
+                $ans = (array_key_exists('ans',$arrayVariablesSubReport[$subreportVariable]))?$arrayVariablesSubReport[$subreportVariable]['ans']:'';
+                $val['ans'] = $ans;
                 $val['calculation'] = (string)$value['calculation'];
                 $val['class'] = (string)$value['class'];
                 $this->returnedValues[$toVariable] = $val;
@@ -825,8 +836,9 @@ class Report extends Element
 
         foreach($this->returnedValues as $k=>$out) {
             $out['target'] = "\$F{".$k."}";
-            $subreportVariable = (string)$out['subreportVariable'];
-            $toVariable        = (string)$out['toVariable'] ;
+            //var_dump($out);
+            $subreportVariable = (string)$out['@attributes']['subreportVariable'];
+            $toVariable        = (string)$out['@attributes']['toVariable'];
             $row = array();
             $row[$k] = $out['ans'];
             $this->variable_calculation($k,$out,(object)$row);
@@ -834,10 +846,12 @@ class Report extends Element
     }
     public function getValOfVariable($variable,$text){
         $val = $this->arrayVariable[$variable];
+        $ans = array_key_exists('ans',$val)?$val['ans']:'';
         if(preg_match_all("/V{".$variable."}\.toString/",$text,$matchesV)>0){
-            return str_ireplace(array('$V{'.$variable.'}.toString()'),array(number_format($val['ans'],2,',','.')),$text);
+            $ans = $ans+0;
+            return str_ireplace(array('$V{'.$variable.'}.toString()'),array(number_format($ans,2,',','.')),$text);
         } elseif(preg_match_all("/V{".$variable."}\.numberToText/",$text,$matchesV)>0){
-            return str_ireplace(array('$V{'.$variable.'}.numberToText()'),array($this->numberToText($val['ans'],true)),$text); 
+            return str_ireplace(array('$V{'.$variable.'}.numberToText()'),array($this->numberToText($ans,true)),$text); 
         }elseif(preg_match_all("/V{".$variable."}\.(\w+)/",$text,$matchesV)>0){
             $funcName  = $matchesV[1][0];
             return str_ireplace(array('$V{'.$variable.'}'),array(call_user_func_array(array($this,$funcName),array($val,true))),$text);
@@ -845,13 +859,14 @@ class Report extends Element
             return str_ireplace(array('$V{'.$variable.'}'),array('$this->getAliasNbPages()'),$text);
         }elseif($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE"){
             return str_ireplace(array('$V{'.$variable.'}'),array('$this->getPageNo()'),$text);; 
-        }else{
-            return str_ireplace(array('$V{'.$variable.'}'),array($val['ans']),$text); 
+        }else{   
+            return str_ireplace(array('$V{'.$variable.'}'),array($ans),$text); 
         }
     }
     public function getValOfField($field,$row,$text){
-        $val = $row->$field;
+        $val = ($row->$field)?$row->$field:'';
         if(preg_match_all("/F{".$field."}\.toString/",$text,$matchesV)>0){
+            $val = $val+0;
             return str_ireplace(array('$F{'.$field.'}.toString()'),array(number_format($val,2,',','.')),$text);
         } elseif(preg_match_all("/F{".$field."}\.numberToText/",$text,$matchesV)>0){
             return str_ireplace(array('$F{'.$field.'}.numberToText()'),array($this->numberToText($val,true)),$text); 
@@ -876,8 +891,9 @@ class Report extends Element
         preg_match_all("/V{(\w+)}/",$out['target'] ,$matchesV);
         if($matchesV){
             foreach($matchesV[1] as $macthV){
-                $defVal = $this->arrayVariable[$macthV]['ans']!=''?$this->arrayVariable[$macthV]['ans']:$this->arrayVariable[$macthV]['initialValue'];
-                $out['target'] = str_ireplace(array('$V{'.$macthV.'}'),array($this->arrayVariable[$macthV]['ans']),$out['target']); 
+                $ans = array_key_exists('ans',$this->arrayVariable[$macthV])?$this->arrayVariable[$macthV]['ans']:'';
+                $defVal = $ans!=''?$ans:$this->arrayVariable[$macthV]['initialValue'];
+                $out['target'] = str_ireplace(array('$V{'.$macthV.'}'),array($ans),$out['target']); 
             }
         }
         preg_match_all("/F{(\w+)}/",$out['target'] ,$matchesF);
@@ -886,16 +902,18 @@ class Report extends Element
                 $out['target'] = $this->getValOfField($macthF,$row,$out['target']);//str_ireplace(array('$F{'.$macthF.'}'),array(utf8_encode($row->$macthF)),$out['target']); 
             }
         }
-        if(preg_match('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)/', $out['target'], $matchesMath)>0 && $this->arrayVariable['htmlData']['class'] != 'HTMLDATA' ){
+        $htmlData = array_key_exists('htmlData',$this->arrayVariable)?$this->arrayVariable['htmlData']['class']:'';
+        if(preg_match('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)/', $out['target'], $matchesMath)>0 && $htmlData != 'HTMLDATA' ){
             $mathValue = eval('return ('.$out['target'].');');
         }
 
-        $value=$this->arrayVariable[$k]["ans"];
+        $value=(array_key_exists('ans',$this->arrayVariable[$k]))?$this->arrayVariable[$k]["ans"]:null;
         $newValue = (isset($mathValue))?$mathValue:$out['target'];
         //   echo $out['resetType']. "<br/><br/>";
         switch($out["calculation"]) {
             case "Sum":
-                if($out['resetType']=='' || $out['resetType']=='None' ){
+                $resetType = (array_key_exists('resetType',$out))?$out['resetType']:'';
+                if($resetType=='' || $resetType=='None' ){
                     if(isset($this->arrayVariable[$k]['class'])&&$this->arrayVariable[$k]['class']=="java.sql.Time") {
                         //    foreach($this->arraysqltable as $table) {
                         $value=$this->time_to_sec($value);
@@ -918,7 +936,7 @@ class Report extends Element
                     }
 
                 }// finisish resettype=''
-                elseif($out['resetType']=='Group') //reset type='group'
+                elseif($resetType=='Group') //reset type='group'
                 {
 
 
@@ -1109,7 +1127,7 @@ class Report extends Element
 
         $z = 0; 
         $rt = "";
-
+        $valor = $valor +0;
         $valor = number_format($valor, 2, ".", "."); 
         $inteiro = explode(".", $valor); 
         for($i=0;$i<count($inteiro);$i++) 

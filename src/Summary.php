@@ -1,6 +1,6 @@
 <?php
 namespace JasperPHP;
-use JasperPHP\Element;
+use JasperPHP;
 	/**
 	* classe TLabel
 	* classe para construção de rótulos de texto
@@ -17,12 +17,13 @@ use JasperPHP\Element;
 
 		public function generate($dbData = null)
 		{
-			if($child->splitType=='Stretch' || $child->splitType=='Prevent'){
-				Jsp_pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$this->children['0']->height));
+            $height = (string)$this->children['0']->objElement['height'];
+			if($this->children['0']->splitType=='Stretch' || $this->children['0']->splitType=='Prevent'){
+				JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$height));
 			}
 			parent::generate($dbData);
-			if($child->splitType=='Stretch' || $child->splitType=='Prevent'){
-				Jsp_pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$this->children['0']->height));
+			if($this->children['0']->splitType=='Stretch' || $this->children['0']->splitType=='Prevent'){
+				JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$height));
 			}
 
 		}

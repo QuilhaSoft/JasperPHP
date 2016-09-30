@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2016-09-27T20:36:31 -->
+<!-- 2016-08-24T15:57:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="imoveis" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -76,22 +76,22 @@ JOIN imoveis im ON im.imoveis_codigo = l.imoveis_codigo
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="15">
+		<band height="61">
 			<line>
-				<reportElement x="1" y="13" width="574" height="1" uuid="114b2073-993c-4a5f-b81e-069c58e97cce"/>
+				<reportElement x="1" y="60" width="574" height="1" uuid="114b2073-993c-4a5f-b81e-069c58e97cce"/>
 			</line>
 			<textField pattern="#,##0.00">
-				<reportElement x="490" y="0" width="70" height="14" uuid="212d6b55-2345-4730-93d0-06334aeaa9ef"/>
+				<reportElement x="490" y="22" width="70" height="14" uuid="212d6b55-2345-4730-93d0-06334aeaa9ef"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_imovel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="14" uuid="00236a04-b0be-44bd-9dac-be6fc3f8ef59">
+				<reportElement x="0" y="22" width="490" height="14" uuid="00236a04-b0be-44bd-9dac-be6fc3f8ef59">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<text><![CDATA[Total]]></text>
+				<text><![CDATA[Total ------------------------------------------------------------------------------------------------------------------------------------------------------------------]]></text>
 			</staticText>
 		</band>
 	</columnFooter>

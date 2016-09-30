@@ -204,7 +204,7 @@ use \JasperPHP;
 
 			if($printoverflow=="true"){
 				$text = str_ireplace(array('+','+','"'),array('','',''),$text); 
-			}
+			} 
 			$printWhenExpression = $data->reportElement->printWhenExpression;
 			preg_match_all("/P{(\w+)}/",$printWhenExpression ,$matchesP);
 			preg_match_all("/F{(\w+)}/",$printWhenExpression ,$matchesF);

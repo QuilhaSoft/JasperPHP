@@ -20,7 +20,8 @@ use \JasperPHP;
 			{
 				$rowIndex = 1;
 				$totalRows = $dbData->rowCount();
-				$recordObject = array_key_exists('recordObj',$obj->arrayVariable)?$obj->arrayVariable['recordObj']['initialValue']:"stdClass"; 
+                $arrayVariable = ($obj->arrayVariable)?$obj->arrayVariable:array();
+				$recordObject = array_key_exists('recordObj',$arrayVariable)?$obj->arrayVariable['recordObj']['initialValue']:"stdClass"; 
 				while ($row = $dbData->fetchObject($recordObject))
 				{
 					$row->rowIndex = $rowIndex;
@@ -33,8 +34,11 @@ use \JasperPHP;
 						if (is_object($child))
 						{
 							$print_expression_result = false;
-							if($child->objElement->printWhenExpression!=''){
-								$printWhenExpression = $child->objElement->printWhenExpression;
+                            $printWhenExpression =(string)$child->objElement['printWhenExpression'];
+							if($printWhenExpression!=''){
+                                
+								
+                                //echo $printWhenExpression;
 								preg_match_all("/P{(\w+)}/",$printWhenExpression ,$matchesP);
 								preg_match_all("/F{(\w+)}/",$printWhenExpression ,$matchesF);
 								preg_match_all("/V{(\w+)}/",$printWhenExpression ,$matchesV);
@@ -52,18 +56,19 @@ use \JasperPHP;
 										$printWhenExpression = $obj->getValOfVariable($macthV,$printWhenExpression); 
 									}
 
-								}
+								}  //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
 								eval('if('.$printWhenExpression.'){$print_expression_result=true;}');
 							}else{
 							  $print_expression_result=true;  
 							}
+                            $height = (string)$child->objElement['height'];
 							if($print_expression_result == true){
-								if($child->splitType=='Stretch' || $child->splitType=='Prevent'){
-									JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$child->height));
+								if($child->objElement['splitType']=='Stretch' || $child->objElement['splitType']=='Prevent'){
+									JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$height));
 								}
 								$child->generate(array($obj,$row));
-								if($child->splitType=='Stretch' || $child->splitType=='Prevent'){
-									JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$child->height));
+								if($child->objElement['splitType']=='Stretch' || $child->objElement['splitType']=='Prevent'){
+									JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$height));
 								}
 							}
 

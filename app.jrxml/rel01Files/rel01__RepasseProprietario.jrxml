@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2016-09-27T20:35:41 -->
+<!-- 2016-08-24T15:58:04 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -22,6 +22,7 @@
 	</parameter>
 	<parameter name="locacoes_dia_repasse" class="java.lang.String"/>
 	<parameter name="eventos_mes_ref" class="java.lang.String"/>
+	<parameter name="rd_filtrar_pagos" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT p.proprietarios_codigo, 
 p.proprietarios_nome,
@@ -40,6 +41,7 @@ FROM locacoes l
  JOIN proprietarios p ON p.proprietarios_codigo = ip.proprietarios_codigo 
  JOIN bancos b ON b.bancos_codigo = cc.bancos_codigo
  WHERE l.motivos_rescisao_codigo IS NULL AND  l.locacoes_dia_repasse =  $P{locacoes_dia_repasse}
+ $P{rd_filtrar_pagos} 
  GROUP BY p.proprietarios_codigo,cc.cc_terceiros_conta]]>
 	</queryString>
 	<field name="proprietarios_codigo" class="java.lang.Integer"/>
@@ -218,7 +220,7 @@ FROM locacoes l
 				<textElement>
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[NNT Software Ltda.]]></text>
+				<text><![CDATA[QuilhaSoft.com.br]]></text>
 			</staticText>
 			<line>
 				<reportElement x="1" y="0" width="574" height="1" uuid="a8a8e584-b747-4d20-a622-546110c84392"/>

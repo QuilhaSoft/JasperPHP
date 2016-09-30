@@ -13,6 +13,7 @@ use \JasperPHP;
 **/
 class Band extends Element
 {
+    
 	public function generate($obj = null)
 	{   
 		$row = is_array($obj)?$obj[1]:array();

@@ -15,13 +15,16 @@ use \JasperPHP;
 	{
 
 
-		public function generate($dbData = null)
+		public function generate($obj = null)
 		{
 		   
-			$data = $this->objElement;
+            $rowData = is_array($obj)?$obj[1]:null;
+            $data = $this->objElement;
+            $obj = is_array($obj)?$obj[0]:$obj; 
 			$drawcolor=array("r"=>0,"g"=>0,"b"=>0);
 			$hidden_type="line";
 			$linewidth  ='';
+            $dash = '';
 			if($data->graphicElement->pen["lineWidth"]>0)
 				$linewidth=$data->graphicElement->pen["lineWidth"];
 
@@ -44,9 +47,6 @@ use \JasperPHP;
 					$dash="0,1";
 				elseif($data->graphicElement->pen["lineStyle"]=="Dashed")
 					$dash="4,2"; 
-				else
-					$dash="";
-				//Dotted Dashed
 			}
 
 
@@ -61,13 +61,32 @@ use \JasperPHP;
 
 			$style=array('color'=>$drawcolor,'width'=>$linewidth,'dash'=>$dash);
 			//        
+            $printWhenExpression = $data->reportElement->printWhenExpression;
+            preg_match_all("/P{(\w+)}/",$printWhenExpression ,$matchesP);
+            preg_match_all("/F{(\w+)}/",$printWhenExpression ,$matchesF);
+            preg_match_all("/V{(\w+)}/",$printWhenExpression ,$matchesV);
+            if($matchesP>0){
+                foreach($matchesP[1] as $macthP){
+                    $printWhenExpression = str_ireplace(array('$P{'.$macthP.'}','"'),array($obj->arrayParameter[$macthP],''),$printWhenExpression); 
+                }
+            }if($matchesF>0){
+                foreach($matchesF[1] as $macthF){
+                    $printWhenExpression = $obj->getValOfField($macthF,$rowData,$printWhenExpression); 
+                }
+            }
+            if($matchesV>0){
+                foreach($matchesV[1] as $macthV){
+                    $printWhenExpression = $obj->getValOfVariable($macthV,$printWhenExpression); 
+                }
+
+            }
 
 			if($data->reportElement["width"][0]+0 > $data->reportElement["height"][0]+0)    //width > height means horizontal line
 			{
 				JasperPHP\Pdf::addInstruction(array("type"=>"Line", "x1"=>$data->reportElement["x"]+0,"y1"=>$data->reportElement["y"]+0,
 					"x2"=>$data->reportElement["x"]+$data->reportElement["width"],"y2"=>$data->reportElement["y"]+$data->reportElement["height"]-1,
 					"hidden_type"=>$hidden_type,"style"=>$style,"forecolor"=>$data->reportElement["forecolor"]."",
-					"printWhenExpression"=>$data->reportElement->printWhenExpression));
+					"printWhenExpression"=>$printWhenExpression));
 			}
 			elseif($data->reportElement["height"][0]+0>$data->reportElement["width"][0]+0)        //vertical line
 			{
@@ -79,7 +98,7 @@ use \JasperPHP;
 
 			JasperPHP\Pdf::addInstruction(array("type"=>"SetDrawColor","r"=>0,"g"=>0,"b"=>0,"hidden_type"=>"drawcolor"));
 			JasperPHP\Pdf::addInstruction(array("type"=>"SetFillColor","r"=>255,"g"=>255,"b"=>255,"hidden_type"=>"fillcolor"));
-			parent::generate($dbData);
+			parent::generate($obj);
 		}
 	}
 ?>

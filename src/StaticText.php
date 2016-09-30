@@ -171,7 +171,8 @@ use \JasperPHP;
 				"txt"=>$txtEnc,"border"=>$border,"align"=>$align,"fill"=>$fill,"hidden_type"=>"statictext",
 				"printWhenExpression"=>$printWhenExpression."",
 				"soverflow"=>$stretchoverflow,"poverflow"=>$printoverflow,"rotation"=>$rotation,"valign"=>$valign,"link"=>null,
-				"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0));
+				"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,
+                'writeHTML'=>$writeHTML));
 			//### End of modification, below is the original line        
 			//        $pointer=array("type"=>"MultiCell","width"=>$data->reportElement["width"],"height"=>$height,"txt"=>$data->text,"border"=>$border,"align"=>$align,"fill"=>$fill,"hidden_type"=>"statictext","soverflow"=>$stretchoverflow,"poverflow"=>$printoverflow,"rotation"=>$rotation);
 

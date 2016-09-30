@@ -29,7 +29,7 @@ class TJasper
 	{
 		$xmlFile=  $jrxml;
 		$this->type = (array_key_exists('type',$param))?$param['type']:'pdf';
-		error_reporting(0);
+		//error_reporting(0);
 		switch ($this->type)
 		{
 			case 'pdf': 

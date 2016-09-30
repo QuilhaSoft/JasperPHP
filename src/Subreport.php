@@ -22,19 +22,20 @@ use \JasperPHP;
 			$obj = is_array($obj)?$obj[0]:$obj;
 			$xmlfile = (string)$this->objElement->subreportExpression;
 			//$rowArray =is_array($row)?$row:get_object_vars($row);
-            switch  ($row){
-                case is_array($row):
-                   $rowArray = $row;
-                break;
-                case  (method_exists($row,'toArray')):
+            if(is_array($row))
+            {
+                $rowArray = $row;
+            }
+            elseif(is_object( $row ))
+            {
+                if(method_exists($row,'toArray'))
+                {
                     $rowArray = $row->toArray();
-                break;
-                case (is_object( $row )):
+                }
+                else
+                {
                     $rowArray = get_object_vars($row);
-                break;
-                default:
-                    $rowArray = null;
-                break;
+                }
             }
 			$newParameters = ($rowArray)?array_merge($obj->arrayParameter,$rowArray):$obj->arrayParameter;
 			$report = new JasperPHP\Report($xmlfile,$newParameters);
