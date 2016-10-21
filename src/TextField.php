@@ -71,14 +71,14 @@ use \JasperPHP;
 				if(isset($data->box->pen["lineColor"])) {
 					$drawcolor=array("r"=>hexdec(substr($data->box->pen["lineColor"],1,2)),"g"=>hexdec(substr($data->box->pen["lineColor"],3,2)),"b"=>hexdec(substr($data->box->pen["lineColor"],5,2)));
 				}
-
+                $dash="";
 				if(isset($data->box->pen["lineStyle"])) {
 					if($data->box->pen["lineStyle"]=="Dotted")
 						$dash="0,1";
 					elseif($data->box->pen["lineStyle"]=="Dashed")
 						$dash="4,2"; 
-					else
-						$dash="";
+					
+						
 					//Dotted Dashed
 				}
 

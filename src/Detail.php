@@ -34,7 +34,9 @@ use \JasperPHP;
 						if (is_object($child))
 						{
 							$print_expression_result = false;
-                            $printWhenExpression =(string)$child->objElement['printWhenExpression'];
+                            //var_dump((string)$child->objElement->printWhenExpression);
+                            //echo     (string)$child->objElement['printWhenExpression']."oi";
+                            $printWhenExpression = (string)$child->objElement->printWhenExpression;
 							if($printWhenExpression!=''){
                                 
 								
@@ -56,7 +58,8 @@ use \JasperPHP;
 										$printWhenExpression = $obj->getValOfVariable($macthV,$printWhenExpression); 
 									}
 
-								}  //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
+								} 
+                                 //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
 								eval('if('.$printWhenExpression.'){$print_expression_result=true;}');
 							}else{
 							  $print_expression_result=true;  

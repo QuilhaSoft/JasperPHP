@@ -46,8 +46,10 @@ class Report extends Element
 
         $this->name = get_class($this);
         $this->objElement =  $ObjElement;
+        
         // atribui o conteúdo do label
-        $attributes = $ObjElement->attributes();
+        $attributes = $ObjElement->attributes;
+        //var_dump($attributes);
         foreach($attributes as $att => $value){
             $this->$att = $value; 
         }
@@ -288,49 +290,31 @@ class Report extends Element
             }
             elseif($arraydata["type"]=="Image") {
                 //echo $arraydata["path"];
-                $path=$this->analyse_expression($arraydata["path"]);
+                $path=$arraydata["path"];
                 $imgtype=substr($path,-3);
                 $arraydata["link"]=$arraydata["link"]."";
-                if($imgtype=='jpg' || right($path,3)=='jpg' || right($path,4)=='jpeg')
+                if($imgtype=='jpg')
                     $imgtype="JPEG";
                 elseif($imgtype=='png'|| $imgtype=='PNG')
                     $imgtype="PNG";
-                //echo $path;
-                if(file_exists($path) || $this->left($path,4)=='http' ){  
-                    //$path="/Applications/XAMPP/xamppfiles/simbiz/modules/simantz/images/modulepic.jpg";
-                    //  $path="/simbiz/images/pendingno.png";
-
-                    if($arraydata["link"]=="") 
-                        $pdf->Image($path,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,
-                            $arraydata["width"],$arraydata["height"],$imgtype,$arraydata["link"]);            
-                    else{
-                        //                 if($arraydata['linktarget']=='Blank' && strpos($_SERVER['HTTP_USER_AGENT'],"Safari")!==false &&     strpos($_SERVER['HTTP_USER_AGENT'],"Chrome")==false){
-                        //                        $href="javascript:window.open('".$arraydata["link"]."');";
-                        //                        $imagehtml='<A  href="'.$href.'"><img src="'.$path.'" '.
-                        //                                'width="'. $arraydata["width"] .'" height="'.$arraydata["height"].'" ></A>';   
-                        //                        $pdf->writeHTMLCell($arraydata["width"],$arraydata["height"],
-                        //                            $arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,$imagehtml);
-                        //                 }
-                        //                else
-                        $pdf->Image($path,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,
-                            $arraydata["width"],$arraydata["height"],$imgtype,$arraydata["link"]);
-
-
-
-
-                    }
+                   // echo $path;
+                if(file_exists($path)  || substr($path,0,4)=='http' ){  
+                     //echo $path;
+                    $pdf->Image($path,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,
+                        $arraydata["width"],$arraydata["height"],$imgtype,$arraydata["link"]);            
 
 
                 }
-                elseif($this->left($path,22)==  "data:image/jpeg;base64"){
+                elseif(substr($path,0,21)==  "data:image/jpg;base64"){
                     $imgtype="JPEG";
-                    $img=  str_replace('data:image/jpeg;base64,', '', $path);
+                   //echo $path;
+                    $img=  str_replace('data:image/jpg;base64,', '', $path);
                     $imgdata = base64_decode($img);
                     $pdf->Image('@'.$imgdata,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,$arraydata["width"],
                         $arraydata["height"],'',$arraydata["link"]); 
 
                 }
-                elseif($this->left($path,22)==  "data:image/png;base64,"){
+                elseif(substr($path,0,22)==  "data:image/png;base64,"){
                     $imgtype="PNG";
                     // $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
@@ -416,7 +400,7 @@ class Report extends Element
             }
             elseif($arraydata["type"]=="Barcode"){
 
-                $this->generateBarcode($arraydata, $this->y_axis);
+                $this->showBarcode($arraydata, $this->y_axis);
             }
             elseif($arraydata["type"]=="CrossTab"){
 
@@ -543,12 +527,12 @@ class Report extends Element
                     $arraydata["valign"]);
                 $pdf->Ln();
                 /*if($this->currentband=='detail'){
-                    if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
-                        $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    else{
-                        if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
-                            $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    }
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                else{
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                }
                 }  */
             }
             else {
@@ -556,27 +540,27 @@ class Report extends Element
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $this->formatText($txt, $arraydata["pattern"]), $arraydata["border"], 
                     $arraydata["align"], $arraydata["fill"],1,'','',true,0,true,true,$maxheight);
                 /*if( $pdf->balancetext=='' && $this->currentband=='detail'){
-                    if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
-                        $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    else{
-                        if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
-                            $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
-                    }
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                else{
+                if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
+                $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                }
                 }
                 if($pdf->balancetext!=''){
-                    $this->continuenextpageText=array('width'=>$arraydata["width"], 'height'=>$arraydata["height"], 'txt'=>$pdf->balancetext,
-                        'border'=>$arraydata["border"] ,'align'=>$arraydata["align"], 'fill'=>$arraydata["fill"],'ln'=>1,
-                        'x'=>$x,'y'=>'','reset'=>true,'streth'=>0,'ishtml'=>false,'autopadding'=>true);
-                    $pdf->balancetext='';
-                    $this->forcetextcolor_b=$this->textcolor_b;
-                    $this->forcetextcolor_g=$this->textcolor_g;
-                    $this->forcetextcolor_r=$this->textcolor_r;
-                    $this->forcefillcolor_b=$this->fillcolor_b;
-                    $this->forcefillcolor_g=$this->fillcolor_g;
-                    $this->forcefillcolor_r=$this->fillcolor_r;
-                    $this->gotTextOverPage=true;
-                    if($this->continuenextpageText)
-                        $this->printlongtext($pdf->getFontFamily(),$pdf->getFontStyle(),$pdf->getFontSize());
+                $this->continuenextpageText=array('width'=>$arraydata["width"], 'height'=>$arraydata["height"], 'txt'=>$pdf->balancetext,
+                'border'=>$arraydata["border"] ,'align'=>$arraydata["align"], 'fill'=>$arraydata["fill"],'ln'=>1,
+                'x'=>$x,'y'=>'','reset'=>true,'streth'=>0,'ishtml'=>false,'autopadding'=>true);
+                $pdf->balancetext='';
+                $this->forcetextcolor_b=$this->textcolor_b;
+                $this->forcetextcolor_g=$this->textcolor_g;
+                $this->forcetextcolor_r=$this->textcolor_r;
+                $this->forcefillcolor_b=$this->fillcolor_b;
+                $this->forcefillcolor_g=$this->fillcolor_g;
+                $this->forcefillcolor_r=$this->fillcolor_r;
+                $this->gotTextOverPage=true;
+                if($this->continuenextpageText)
+                $this->printlongtext($pdf->getFontFamily(),$pdf->getFontStyle(),$pdf->getFontSize());
 
                 } */  
             }
@@ -589,7 +573,9 @@ class Report extends Element
         if($expression!=""){
             //echo      'if('.$expression.'){$this->print_expression_result=true;}';
             //$expression=$this->analyse_expression($expression);
+            error_reporting(0);
             eval('if('.$expression.'){$this->print_expression_result=true;}');
+            error_reporting(5);
         }
         else
             $this->print_expression_result=true;
@@ -864,7 +850,9 @@ class Report extends Element
         }
     }
     public function getValOfField($field,$row,$text){
+        error_reporting(0);
         $val = ($row->$field)?$row->$field:'';
+        error_reporting(5);
         if(preg_match_all("/F{".$field."}\.toString/",$text,$matchesV)>0){
             $val = $val+0;
             return str_ireplace(array('$F{'.$field.'}.toString()'),array(number_format($val,2,',','.')),$text);
@@ -904,7 +892,10 @@ class Report extends Element
         }
         $htmlData = array_key_exists('htmlData',$this->arrayVariable)?$this->arrayVariable['htmlData']['class']:'';
         if(preg_match('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)/', $out['target'], $matchesMath)>0 && $htmlData != 'HTMLDATA' ){
+
+            error_reporting(0);
             $mathValue = eval('return ('.$out['target'].');');
+            error_reporting(5);
         }
 
         $value=(array_key_exists('ans',$this->arrayVariable[$k]))?$this->arrayVariable[$k]["ans"]:null;
@@ -1110,6 +1101,110 @@ class Report extends Element
             $pdf->_out(sprintf('q %.5f %.5f %.5f %.5f %.2f %.2f cm 1 0 0 1 %.2f %.2f cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
         }
     }
+    public function showBarcode($data,$y){
+
+        $pdf = JasperPHP\Pdf::get();
+        $type=  strtoupper($data['barcodetype']);
+        $height=$data['height'];
+        $width=$data['width'];
+        $x=$data['x'];
+        $y=$data['y']+$y;
+        $textposition=$data['textposition'];
+        $code=$data['code'];
+        //$code=$this->analyse_expression($code);
+        $modulewidth=$data['modulewidth'];
+        if($textposition=="" || $textposition=="none")
+            $withtext = false;
+        else
+            $withtext = true;
+
+        $style = array(
+            'border' => false,
+            'vpadding' => 'auto',
+            'hpadding' => 'auto',
+            'text'=>$withtext,
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255)
+            'module_width' => 1, // width of a single module in points
+            'module_height' => 1 // height of a single module in points
+        );
+
+
+        //[2D barcode section]        
+        //DATAMATRIX
+        //QRCODE,H or Q or M or L (H=high level correction, L=low level correction)
+        // -------------------------------------------------------------------
+        // PDF417 (ISO/IEC 15438:2006)
+
+        /*
+
+        The $type parameter can be simple 'PDF417' or 'PDF417' followed by a
+        number of comma-separated options:
+
+        'PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6'
+
+        Possible options are:
+
+        a  = aspect ratio (width/height);
+        e  = error correction level (0-8);
+
+        Macro Control Block options:
+
+        t  = total number of macro segments;
+        s  = macro segment index (0-99998);
+        f  = file ID;
+        o0 = File Name (text);
+        o1 = Segment Count (numeric);
+        o2 = Time Stamp (numeric);
+        o3 = Sender (text);
+        o4 = Addressee (text);
+        o5 = File Size (numeric);
+        o6 = Checksum (numeric).
+
+        Parameters t, s and f are required for a Macro Control Block, all other parametrs are optional.
+        To use a comma character ',' on text options, replace it with the character 255: "\xff".
+
+        */ 
+        switch($type){
+            case "PDF417":
+                $pdf->write2DBarcode($code, 'PDF417', $x, $y, $width, $height, $style, 'N');
+                break;
+            case "DATAMATRIX":
+
+                //$this->pdf->Cell( $width,10,$code);
+                //echo $this->left($code,3);
+                if($this->left($code,3)=="QR:"){
+
+                    $code=  $this->right($code,strlen($code)-3);
+
+                    $pdf->write2DBarcode($code, 'QRCODE', $x, $y, $width, $height, $style, 'N');
+                }
+                else
+                    $pdf->write2DBarcode($code, 'DATAMATRIX', $x, $y, $width, $height, $style, 'N');
+                break;
+            case "CODE128":
+                $pdf->write1DBarcode($code, 'C128',  $x, $y, $width, $height, $modulewidth, $style, 'N');
+
+                // $this->pdf->write1DBarcode($code, 'C128', $x, $y, $width, $height,"", $style, 'N');
+                break;
+            case  "EAN8":
+                $pdf->write1DBarcode($code, 'EAN8', $x, $y, $width, $height, $modulewidth,$style, 'N');
+                break;
+            case  "EAN13":
+                $pdf->write1DBarcode($code, 'EAN13', $x, $y, $width, $height, $modulewidth,$style, 'N');
+                break;
+            case  "CODE39":
+                $pdf->write1DBarcode($code, 'C39', $x, $y, $width, $height, $modulewidth,$style, 'N');
+                break;
+            case  "CODE93":
+                $pdf->write1DBarcode($code, 'C93', $x, $y, $width, $height, $modulewidth,$style, 'N');
+                break;
+        }
+
+
+    }
+
+
     function numberToText($valor = 0, $maiusculas = false) {
 
         $singular = array("centavo", "", "mil", "milhão", "bilhão", "trilhão", "quatrilhão"); 
