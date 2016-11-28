@@ -1,17 +1,17 @@
 <?php
 namespace JasperPHP;
 use JasperPHP; 
-use JasperPHP\ado\TTransaction;
-//use TTransaction;
+//use JasperPHP\ado\TTransaction;
+use TTransaction;
 /**
 * classe TLabel
-* classe para construÁ„o de rÛtulos de texto
+* classe para constru√ß√£o de r√≥tulos de texto
 *
 * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 * @version  2015.03.11
 * @access   restrict
 * 
-* 2015.03.11 -- criaÁ„o
+* 2015.03.11 -- cria√ß√£o
 **/
 class Report extends Element
 {
@@ -47,7 +47,7 @@ class Report extends Element
         $this->name = get_class($this);
         $this->objElement =  $ObjElement;
         
-        // atribui o conte˙do do label
+        // atribui o conte√∫do do label
         $attributes = $ObjElement->attributes;
         //var_dump($attributes);
         foreach($attributes as $att => $value){
@@ -73,14 +73,14 @@ class Report extends Element
             // registra mensagem de log
             TTransaction::log($this->sql);
 
-            // executa instruÁ„o de SELECT
+            // executa instru√ß√£o de SELECT
             $result= $conn->Query($this->sql);
             return $result;
         }
         else
         {
-            // se n„o tiver transaÁ„o, retorna uma exceÁ„o
-            throw new Exception('N„o h· transaÁ„o ativa!!');
+            // se n√£o tiver transa√ß√£o, retorna uma exce√ß√£o
+            throw new Exception('N√£o h√° transa√ß√£o ativa!!');
         }
     }
 
@@ -399,7 +399,7 @@ class Report extends Element
                 $this->generateAreaChart($arraydata, $this->y_axis,$arraydata["type"]);
             }
             elseif($arraydata["type"]=="Barcode"){
-
+                
                 $this->showBarcode($arraydata, $this->y_axis);
             }
             elseif($arraydata["type"]=="CrossTab"){
@@ -452,7 +452,7 @@ class Report extends Element
                     $arraydata["valign"]="T";                
 
 
-                while($pdf->GetStringWidth(utf8_decode(utf8_decode($txt))) >  $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a na„o ser que de problema seu bosta
+                while($pdf->GetStringWidth(utf8_decode(($txt))) >  $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a na√£o ser que de problema seu bosta
                     if($txt!=$pdf->getAliasNbPages() && $txt!=' '.$pdf->getAliasNbPages()){
                         $txt=substr($txt,0,-1);                                  
                     }
@@ -585,7 +585,7 @@ class Report extends Element
     public function formatText($txt,$pattern) {
         if($txt!='')
         {
-            $nome_meses = array('Janeiro','Janeiro','Fevereiro','MarÁo','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
+            $nome_meses = array('Janeiro','Janeiro','Fevereiro','Mar√ßo','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
             if($pattern=="###0")
                 return number_format($txt,0,"","");
             elseif($pattern=="#,##0")
@@ -866,7 +866,7 @@ class Report extends Element
             return str_ireplace(array('$'.$matchesV[0][0]."()"),array(call_user_func_array(array($this,$funcName),array($val,true))),$text);
 
         }else{
-            return str_ireplace(array('$F{'.$field.'}'),array(utf8_encode($val)),$text); 
+            return str_ireplace(array('$F{'.$field.'}'),array(($val)),$text); 
         }
     }
     public function variable_calculation($k,$out,$row){
@@ -1183,6 +1183,7 @@ class Report extends Element
                     $pdf->write2DBarcode($code, 'DATAMATRIX', $x, $y, $width, $height, $style, 'N');
                 break;
             case "CODE128":
+                
                 $pdf->write1DBarcode($code, 'C128',  $x, $y, $width, $height, $modulewidth, $style, 'N');
 
                 // $this->pdf->write1DBarcode($code, 'C128', $x, $y, $width, $height,"", $style, 'N');
@@ -1207,9 +1208,9 @@ class Report extends Element
 
     function numberToText($valor = 0, $maiusculas = false) {
 
-        $singular = array("centavo", "", "mil", "milh„o", "bilh„o", "trilh„o", "quatrilh„o"); 
-        $plural = array("centavos", "", "mil", "milhıes", "bilhıes", "trilhıes", 
-            "quatrilhıes"); 
+        $singular = array("centavo", "", "mil", "milh√£o", "bilh√£o", "trilh√£o", "quatrilh√£o"); 
+        $plural = array("centavos", "", "mil", "milh√µes", "bilh√µes", "trilh√µes", 
+            "quatrilh√µes"); 
 
         $c = array("", "cem", "duzentos", "trezentos", "quatrocentos", 
             "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"); 

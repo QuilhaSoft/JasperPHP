@@ -1,13 +1,13 @@
 <?php
 /*
  * classe TConnection
- * gerencia conexões com bancos de dados através de arquivos de configuração.
+ * gerencia conexÃµes com bancos de dados atravÃ©s de arquivos de configuraÃ§Ã£o.
  *
  * @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
  * @version  2015.03.10
  * @access   restrict
  * 
- * 2015.03.10 -- criação
+ * 2015.03.10 -- criaÃ§Ã£o
 **/
 namespace JasperPHP\ado;
 use PDO;
@@ -16,30 +16,30 @@ final class TConnection
 {
     //const db='';
     /*
-     * método __construct()
-     * não existirão instâncias de TConnection, por isto estamos marcando-o como private
+     * mÃ©todo __construct()
+     * nÃ£o existirÃ£o instÃ¢ncias de TConnection, por isto estamos marcando-o como private
      */
     private function __construct() {}
     
     /*
-     * método open()
+     * mÃ©todo open()
      * recebe o nome do banco de dados e instancia o objeto PDO correspondente
      */
     public static function open($name)
     {
-        // verifica se existe arquivo de configuração para este banco de dados
+        // verifica se existe arquivo de configuraÃ§Ã£o para este banco de dados
         if (file_exists("config/{$name}.ini"))
         {
-            // lê o INI e retorna um array
+            // lÃª o INI e retorna um array
             $db = parse_ini_file("config/{$name}.ini");
         }
         else
         {
-            // se não existir, lança um erro
-            throw new Exception("Arquivo '$name' não encontrado");
+            // se nÃ£o existir, lanÃ§a um erro
+            throw new Exception("Arquivo '$name' nÃ£o encontrado");
         }
         //SELF::db = $db;
-        // lê as informações contidas no arquivo
+        // lÃª as informaÃ§Ãµes contidas no arquivo
         $user = isset($db['user']) ? $db['user'] : NULL;
         $pass = isset($db['pass']) ? $db['pass'] : NULL;
         $name = isset($db['name']) ? $db['name'] : NULL;
@@ -57,7 +57,7 @@ final class TConnection
                 break;
             case 'mysql':
                 $port = $port ? $port : '3306';
-                $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}", $user, $pass);
+                $conn = new PDO("mysql:host={$host};port={$port};dbname={$name};charset=utf8", $user, $pass);
                 break;
             case 'sqlite':
                 $conn = new PDO("sqlite:{$name}");
@@ -72,7 +72,7 @@ final class TConnection
                 $conn = new PDO("mssql:host={$host},1433;dbname={$name}", $user, $pass);
                 break;
         }
-        // define para que o PDO lance exceções na ocorrência de erros
+        // define para que o PDO lance exceÃ§Ãµes na ocorrÃªncia de erros
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // retorna o objeto instanciado.
         return $conn;

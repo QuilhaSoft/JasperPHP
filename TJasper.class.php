@@ -7,13 +7,13 @@ use JasperPHP\ado\TLoggerHTML;
 //use PHPexcel as PHPexcel;
 /**
 * classe TJasper
-* encapsula uma ação
+* encapsula uma aÃ§Ã£o
 *
 * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 * @version  2015.03.11
 * @access   restrict
 * 
-* 2015.03.11 -- criação
+* 2015.03.11 -- criaÃ§Ã£o
 **/
 class TJasper
 {
@@ -21,9 +21,9 @@ class TJasper
 	private $type;
 
 	/**
-	* método __construct()
-	* instancia uma nova ação
-	* @param $action = método a ser executado
+	* mÃ©todo __construct()
+	* instancia uma nova aÃ§Ã£o
+	* @param $action = mÃ©todo a ser executado
 	*/
 	public function __construct($jrxml,$param)
 	{

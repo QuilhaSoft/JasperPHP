@@ -3,13 +3,13 @@ namespace JasperPHP;
 use JasperPHP\Element;
 /**
  * classe TLabel
- * classe para construção de rótulos de texto
+ * classe para construÃ§Ã£o de rÃ³tulos de texto
  *
  * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
  * @version  2015.03.11
  * @access   restrict
  * 
- * 2015.03.11 -- criação
+ * 2015.03.11 -- criaÃ§Ã£o
 **/
 class Background extends Element
 {

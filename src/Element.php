@@ -2,13 +2,13 @@
 namespace JasperPHP;
 	/**
 	* classe TElement
-	* classe para abstração de tags HTML
+	* classe para abstraÃ§Ã£o de tags HTML
 	*
 	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 	* @version  2015.03.11
 	* @access   restrict
 	* 
-	* 2015.03.11 -- criação
+	* 2015.03.11 -- criaÃ§Ã£o
 	**/
 	class Element
 	{
@@ -23,7 +23,7 @@ namespace JasperPHP;
 			if(isset($ObjElement)) {
 				$this->name = get_class($this);
 				$this->objElement =  $ObjElement;
-				// atribui o conteúdo do label
+				// atribui o conteÃºdo do label
 				$attributes = $ObjElement->attributes();
 				foreach($attributes as $att => $value){
 					$this->$att = $value; 
@@ -43,26 +43,26 @@ namespace JasperPHP;
 		}
 
 		/**
-		* método __set()
-		* intercepta as atribuições à propriedades do objeto
+		* mÃ©todo __set()
+		* intercepta as atribuiÃ§Ãµes Ã  propriedades do objeto
 		* @param $name      = nome da propriedade
 		* @param $value     = valor
 		*//* 
 		public function __set($name, $value)
 		{
-		// armazena os valores atribuídos
+		// armazena os valores atribuÃ­dos
 		// ao array properties
 		$this->properties[$name] = $value;
 		}
 		/**
-		* método __get()
-		* intercepta as atribuições à propriedades do objeto
+		* mÃ©todo __get()
+		* intercepta as atribuiÃ§Ãµes Ã  propriedades do objeto
 		* @param $name      = nome da propriedade
 		* @param $value     = valor
 		*//* 
 		public function __get($name)
 		{
-		// armazena os valores atribuídos
+		// armazena os valores atribuÃ­dos
 		// ao array properties
 		if(array_key_exists($name,$this->properties)){
 		return $this->properties[$name];
@@ -74,7 +74,7 @@ namespace JasperPHP;
 
 
 		/**
-		* método add()
+		* mÃ©todo add()
 		* adiciona um elemento filho
 		* @param $child = objeto filho
 		*/
@@ -157,12 +157,12 @@ namespace JasperPHP;
    
 
 		/**
-		* método generate()
-		* exibe a tag na tela, juntamente com seu conteúdo
+		* mÃ©todo generate()
+		* exibe a tag na tela, juntamente com seu conteÃºdo
 		*/
 		public function generate($obj = null)
 		{
-			// se possui conteúdo
+			// se possui conteÃºdo
 			if ($this->children)
 			{
 				// percorre todos objetos filhos

@@ -6,13 +6,13 @@ use \PHPExcel_Settings;
 use \PHPExcel_CachedObjectStorageFactory;
 	/*
 	* classe TConnection
-	* gerencia conexıes com bancos de dados atravÈs de arquivos de configuraÁ„o.
+	* gerencia conex√µes com bancos de dados atrav√©s de arquivos de configura√ß√£o.
 	*
 	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 	* @version  2015.03.10
 	* @access   restrict
 	* 
-	* 2015.03.10 -- criaÁ„o
+	* 2015.03.10 -- cria√ß√£o
 	**/
 
 	final class Excel
@@ -20,8 +20,8 @@ use \PHPExcel_CachedObjectStorageFactory;
 		static private $xlsOutPut;
 		static private $intructions;
 		/*
-		* mÈtodo __construct()
-		* n„o existir„o inst‚ncias de TConnection, por isto estamos marcando-o como private
+		* m√©todo __construct()
+		* n√£o existir√£o inst√¢ncias de TConnection, por isto estamos marcando-o como private
 		*/
 		private function __construct() {
 
@@ -48,7 +48,7 @@ use \PHPExcel_CachedObjectStorageFactory;
 
 
 		/*
-		* mÈtodo open()
+		* m√©todo open()
 		* recebe o nome do banco de dados e instancia o objeto PDO correspondente
 		*/
 		public static function get()

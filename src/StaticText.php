@@ -3,13 +3,13 @@ namespace JasperPHP;
 use \JasperPHP;
 	/**
 	* classe TLabel
-	* classe para construção de rótulos de texto
+	* classe para construÃ§Ã£o de rÃ³tulos de texto
 	*
 	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 	* @version  2015.03.11
 	* @access   restrict
 	* 
-	* 2015.03.11 -- criação
+	* 2015.03.11 -- criaÃ§Ã£o
 	**/
 	class StaticText extends Element
 	{
@@ -153,7 +153,7 @@ use \JasperPHP;
 			preg_match_all("/V{(\w+)}/",$printWhenExpression ,$matchesV);
 			if($matchesP>0){
 				foreach($matchesP[1] as $macthP){
-					$printWhenExpression = str_ireplace(array('$P{'.$macthP.'}','"'),array(utf8_encode($obj->arrayParameter[$macthP]),''),$printWhenExpression); 
+					$printWhenExpression = str_ireplace(array('$P{'.$macthP.'}','"'),array(($obj->arrayParameter[$macthP]),''),$printWhenExpression); 
 				}
 			}if($matchesF>0){
 				foreach($matchesF[1] as $macthF){

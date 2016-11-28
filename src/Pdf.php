@@ -10,7 +10,7 @@ use \TCPDF;
 	* @version  2015.03.10
 	* @access   restrict
 	* 
-	* 2015.03.10 -- criaÁ„o
+	* 2015.03.10 -- cria√ß√£o
 	**/
 
 	final class Pdf
@@ -19,8 +19,8 @@ use \TCPDF;
 		static private $fontdir;
 		static private $intructions;
 		/*
-		* mÈtodo __construct()
-		* n„o existir„o inst‚ncias de TConnection, por isto estamos marcando-o como private
+		* m√©todo __construct()
+		* n√£o existir√£o inst√¢ncias de TConnection, por isto estamos marcando-o como private
 		*/
 		private function __construct() {
 
@@ -50,7 +50,7 @@ use \TCPDF;
 		}
 
 		/*
-		* mÈtodo open()
+		* m√©todo open()
 		* recebe o nome do banco de dados e instancia o objeto PDO correspondente
 		*/
 		public static function get()

@@ -3,13 +3,13 @@ namespace JasperPHP;
 use JasperPHP;
 /**
 * classe TLabel
-* classe para construção de rótulos de texto
+* classe para construÃ§Ã£o de rÃ³tulos de texto
 *
 * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
 * @version  2015.03.11
 * @access   restrict
 * 
-* 2015.03.11 -- criação
+* 2015.03.11 -- criaÃ§Ã£o
 **/
 class ComponentElement extends Element
 {
@@ -37,7 +37,7 @@ class ComponentElement extends Element
             preg_match_all("/P{(\w+)}/",$text ,$matchesP);
             if($matchesP){
                 foreach($matchesP[1] as $macthP){
-                    $text = str_ireplace(array('$P{'.$macthP.'}'),array(utf8_encode($obj->arrayParameter[$macthP])),$text); 
+                    $text = str_ireplace(array('$P{'.$macthP.'}'),array(($obj->arrayParameter[$macthP])),$text); 
                 } 
             }
             preg_match_all("/V{(\w+)}/",$text ,$matchesV);

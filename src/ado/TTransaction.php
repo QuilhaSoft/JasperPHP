@@ -1,40 +1,40 @@
 <?php
 /*
  * classe TTransaction
- * esta classe provÍ os mÈtodos necess·rios manipular transaÁıes
+ * esta classe prov√™ os m√©todos necess√°rios manipular transa√ß√µes
  *
  * @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
  * @version  2015.03.10
  * @access   restrict
  * 
- * 2015.03.10 -- criaÁ„o
+ * 2015.03.10 -- cria√ß√£o
 **/
 
 namespace JasperPHP\ado;
 
 final class TTransaction
 {
-    private static $conn;   // conex„o ativa
+    private static $conn;   // conex√£o ativa
     private static $logger; // objeto de LOG
     
     /*
-     * mÈtodo __construct()
-     * Est· declarado como private para impedir que se crie inst‚ncias de TTransaction
+     * m√©todo __construct()
+     * Est√° declarado como private para impedir que se crie inst√¢ncias de TTransaction
      */
     private function __construct() {}
     
     /*
-     * mÈtodo open()
-     * Abre uma transaÁ„o e uma conex„o ao BD
+     * m√©todo open()
+     * Abre uma transa√ß√£o e uma conex√£o ao BD
      * @param $database = nome do banco de dados
      */
     public static function open($database)
     {
-        // abre uma conex„o e armazena na propriedade est·tica $conn
+        // abre uma conex√£o e armazena na propriedade est√°tica $conn
         if (empty(self::$conn))
         {
             self::$conn = TConnection::open($database);
-            // inicia a transaÁ„o
+            // inicia a transa√ß√£o
             self::$conn->beginTransaction();
             // desliga o log de SQL
             self::$logger = NULL;
@@ -42,47 +42,47 @@ final class TTransaction
     }
     
     /*
-     * mÈtodo get()
-     * retorna a conex„o ativa da transaÁ„o
+     * m√©todo get()
+     * retorna a conex√£o ativa da transa√ß√£o
      */
     public static function get()
     {
-        // retorna a conex„o ativa
+        // retorna a conex√£o ativa
         return self::$conn;
     }
     
     /*
-     * mÈtodo rollback()
-     * desfaz todas operaÁıes realizadas na transaÁ„o
+     * m√©todo rollback()
+     * desfaz todas opera√ß√µes realizadas na transa√ß√£o
      */
     public static function rollback()
     {
         if (self::$conn)
         {
-            // desfaz as operaÁıes realizadas durante a transaÁ„o
+            // desfaz as opera√ß√µes realizadas durante a transa√ß√£o
             self::$conn->rollback();
             self::$conn = NULL;
         }
     }
     
     /*
-     * mÈtodo close()
-     * Aplica todas operaÁıes realizadas e fecha a transaÁ„o
+     * m√©todo close()
+     * Aplica todas opera√ß√µes realizadas e fecha a transa√ß√£o
      */
     public static function close()
     {
         if (self::$conn)
         {
-            // aplica as operaÁıes realizadas
-            // durante a transaÁ„o
+            // aplica as opera√ß√µes realizadas
+            // durante a transa√ß√£o
             self::$conn->commit();
             self::$conn = NULL;
         }
     }
     
     /*
-     * mÈtodo setLogger()
-     * define qual estratÈgia (algoritmo de LOG ser· usado)
+     * m√©todo setLogger()
+     * define qual estrat√©gia (algoritmo de LOG ser√° usado)
      */
     public static function setLogger(TLogger $logger)
     {
@@ -90,9 +90,9 @@ final class TTransaction
     }
     
     /*
-     * mÈtodo log()
+     * m√©todo log()
      * armazena uma mensagem no arquivo de LOG
-     * baseada na estratÈgia ($logger) atual
+     * baseada na estrat√©gia ($logger) atual
      */
     public static function log($message)
     {
