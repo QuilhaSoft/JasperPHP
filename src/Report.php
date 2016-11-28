@@ -1,8 +1,8 @@
 <?php
 namespace JasperPHP;
 use JasperPHP; 
-//use JasperPHP\ado\TTransaction;
-use TTransaction;
+use JasperPHP\ado\TTransaction;
+//use TTransaction;
 /**
 * classe TLabel
 * classe para construção de rótulos de texto
