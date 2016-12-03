@@ -86,10 +86,10 @@ $jasper->outpage();
 
 ```
 # Como instalar e usar este exemplo
-Defina as configurações do seu banco de dados em config\dev.ini
+Defina as configurações do seu banco de dados em config\dev.ini<br>
 URL de exemplo:<br>
 http://localhost/vendor/rctnet/JasperPHP/Tjasper.class.php?locacoes_dia_repasse=20&eventos_mes_ref=0816<br>
 os parametros passados pela URL serao os paramatros condigurados dentro do arquivo jrxml.<br>
-OBS.: este projeto depende de tecnickcom/tcpdf":"6.2.*" e deve estar disponivel em autoload pelo seu composer
+OBS.: este projeto depende de tecnickcom/tcpdf":"6.2.*" e deve estar disponivel em autoload pelo seu composer<br>
 # Usando o compser
 Adicione rctnet/jasperphp:"dev-master" ao seu composer e atualize seu autoload
