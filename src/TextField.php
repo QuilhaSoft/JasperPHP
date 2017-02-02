@@ -149,10 +149,6 @@ use \JasperPHP;
 			JasperPHP\Pdf::addInstruction(array("type"=>"SetFont","font"=>$font."",
 				"pdfFontName"=>$data->textElement->font["pdfFontName"]."","fontstyle"=>$fontstyle."","fontsize"=>$fontsize+0,"hidden_type"=>"font"));
 			$patternExpression =  $this->objElement->patternExpression;
-            $writeHTML=false; 
-            if($data->textElement['markup']=='html')
-                $writeHTML=true;
-            
 			switch ($this->objElement->textFieldExpression) {
 
 				case 'new java.util.Date()':
@@ -187,11 +183,10 @@ use \JasperPHP;
 						}
 
 					}
-					preg_match_all("/F{[^}]*}/",$text ,$matchesF);
+					preg_match_all("/F{(\w+)}/",$text ,$matchesF);
 					if($matchesF){
-						foreach($matchesF[0] as $macthF){
-                            $macth =   str_ireplace(array("F{","}"),"",$macthF);
-							$text = $obj->getValOfField($macth,$rowData,$text,$writeHTML);
+						foreach($matchesF[1] as $macthF){
+							$text = $obj->getValOfField($macthF,$rowData,$text);
 						}
 					}
 					

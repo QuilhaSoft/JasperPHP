@@ -1,8 +1,8 @@
 <?php
 namespace JasperPHP;
 use JasperPHP; 
-//use JasperPHP\ado\TTransaction;
-use TTransaction;
+use JasperPHP\ado\TTransaction;
+//use TTransaction;
 /**
 * classe TLabel
 * classe para construção de rótulos de texto
@@ -46,7 +46,7 @@ class Report extends Element
 
         $this->name = get_class($this);
         $this->objElement =  $ObjElement;
-
+        
         // atribui o conteúdo do label
         $attributes = $ObjElement->attributes;
         //var_dump($attributes);
@@ -92,7 +92,7 @@ class Report extends Element
         $this->arrayPageSetting["pageWidth"]=$xml_path["pageWidth"];
         $this->arrayPageSetting["pageHeight"]=$xml_path["pageHeight"];
         if(isset($xml_path["orientation"])) {
-            $this->arrayPageSetting["orientation"]=mb_substr($xml_path["orientation"],0,1);
+            $this->arrayPageSetting["orientation"]=substr($xml_path["orientation"],0,1);
         }
         $this->arrayPageSetting["columnWidth"]=$xml_path["columnWidth"];
         $this->arrayPageSetting["leftMargin"]=$xml_path["leftMargin"];
@@ -291,30 +291,30 @@ class Report extends Element
             elseif($arraydata["type"]=="Image") {
                 //echo $arraydata["path"];
                 $path=$arraydata["path"];
-                $imgtype=mb_substr($path,-3);
+                $imgtype=substr($path,-3);
                 $arraydata["link"]=$arraydata["link"]."";
                 if($imgtype=='jpg')
                     $imgtype="JPEG";
                 elseif($imgtype=='png'|| $imgtype=='PNG')
                     $imgtype="PNG";
-                // echo $path;
-                if(file_exists($path)  || mb_substr($path,0,4)=='http' ){  
-                    //echo $path;
+                   // echo $path;
+                if(file_exists($path)  || substr($path,0,4)=='http' ){  
+                     //echo $path;
                     $pdf->Image($path,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,
                         $arraydata["width"],$arraydata["height"],$imgtype,$arraydata["link"]);            
 
 
                 }
-                elseif(mb_substr($path,0,21)==  "data:image/jpg;base64"){
+                elseif(substr($path,0,21)==  "data:image/jpg;base64"){
                     $imgtype="JPEG";
-                    //echo $path;
+                   //echo $path;
                     $img=  str_replace('data:image/jpg;base64,', '', $path);
                     $imgdata = base64_decode($img);
                     $pdf->Image('@'.$imgdata,$arraydata["x"]+$this->arrayPageSetting["leftMargin"],$arraydata["y"]+$this->y_axis,$arraydata["width"],
                         $arraydata["height"],'',$arraydata["link"]); 
 
                 }
-                elseif(mb_substr($path,0,22)==  "data:image/png;base64,"){
+                elseif(substr($path,0,22)==  "data:image/png;base64,"){
                     $imgtype="PNG";
                     // $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
@@ -399,7 +399,7 @@ class Report extends Element
                 $this->generateAreaChart($arraydata, $this->y_axis,$arraydata["type"]);
             }
             elseif($arraydata["type"]=="Barcode"){
-
+                
                 $this->showBarcode($arraydata, $this->y_axis);
             }
             elseif($arraydata["type"]=="CrossTab"){
@@ -431,8 +431,7 @@ class Report extends Element
             //print_r($arraydata);
 
 
-            if($arraydata["writeHTML"]==true) {
-                //echo  ($txt);
+            if($arraydata["writeHTML"]==1) {
                 $pdf->writeHTML($txt,true, 0, true, true);
                 $pdf->Ln();
                 /*if($this->currentband=='detail'){
@@ -455,7 +454,7 @@ class Report extends Element
 
                 while($pdf->GetStringWidth(utf8_decode(($txt))) >  $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
                     if($txt!=$pdf->getAliasNbPages() && $txt!=' '.$pdf->getAliasNbPages()){
-                        $txt=mb_substr($txt,0,-1);                                  
+                        $txt=substr($txt,0,-1);                                  
                     }
                 } 
 
@@ -615,10 +614,7 @@ class Report extends Element
                 return number_format($txt,4,",","");
 
             elseif($pattern=="xx/xx"  && $txt !="")
-                return mb_substr($txt,0,2)."/".mb_substr($txt,2,2);
-
-            elseif($pattern=="xx.xx"  && $txt !="")
-                return mb_substr($txt,0,2).".".mb_substr($txt,2,2);
+                return substr($txt,0,2)."/".substr($txt,2,2);
 
             elseif(($pattern=="dd/MM/yyyy" || $pattern=="ddMMyyyy") && $txt !="")
                 return date("d/m/Y",strtotime($txt));
@@ -638,12 +634,8 @@ class Report extends Element
                 return date("d-m-Y H:i:s",strtotime($txt));
             elseif($pattern=="H:m:s" && $txt !="")
                 return date("H:i:s",strtotime($txt));
-            elseif(($pattern=="dFyyyy") && $txt !="")
+            elseif(($pattern=="d F yyyy" ||$pattern=="dFyyyy") && $txt !="")
                 return date("d ",strtotime($txt))." de ".$nome_meses[date("n",strtotime($txt))]." de ".date("Y",strtotime($txt));
-            elseif(($pattern=="dFbyyyy") && $txt !="")
-                return date("d",strtotime($txt))."/".$nome_meses[date("n",strtotime($txt))]."/".date("Y",strtotime($txt));
-            elseif(($pattern=="dFByyyy") && $txt !="")
-                return date("d",strtotime($txt))."/".mb_strtoupper($nome_meses[date("n",strtotime($txt))])."/".date("Y",strtotime($txt));
             elseif($pattern!="" && $txt !=""){
                 return date($pattern,strtotime($txt));
             }else
@@ -845,14 +837,10 @@ class Report extends Element
             $ans = $ans+0;
             return str_ireplace(array('$V{'.$variable.'}.toString()'),array(number_format($ans,2,',','.')),$text);
         } elseif(preg_match_all("/V{".$variable."}\.numberToText/",$text,$matchesV)>0){
-            return str_ireplace(array('$V{'.$variable.'}.numberToText()'),array($this->numberToText($ans,false)),$text); 
+            return str_ireplace(array('$V{'.$variable.'}.numberToText()'),array($this->numberToText($ans,true)),$text); 
         }elseif(preg_match_all("/V{".$variable."}\.(\w+)/",$text,$matchesV)>0){
             $funcName  = $matchesV[1][0];
-            if(method_exists($this,$funcName)){
-                return str_ireplace(array('$V{'.$variable.'}'),array(call_user_func_array(array($this,$funcName),array($ans,true))),$text);
-            }else{
-                return str_ireplace(array('$V{'.$variable.'}'),array(call_user_func($funcName,$ans)),$text);
-            }
+            return str_ireplace(array('$V{'.$variable.'}'),array(call_user_func_array(array($this,$funcName),array($val,true))),$text);
         } elseif($variable == "MASTER_TOTAL_PAGES"){
             return str_ireplace(array('$V{'.$variable.'}'),array('$this->getAliasNbPages()'),$text);
         }elseif($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE"){
@@ -861,54 +849,25 @@ class Report extends Element
             return str_ireplace(array('$V{'.$variable.'}'),array($ans),$text); 
         }
     }
-    public function getValOfField($field,$row,$text,$htmlentities = false){
+    public function getValOfField($field,$row,$text){
         error_reporting(0);
-        $fieldParts = explode("-&gt;",$field);
-        $obj = $row;  
-        foreach($fieldParts as $part)
-        {
-            if(preg_match_all("/\w+/",$part,$matArray))
-            {
-                if(count($matArray[0])>1){
-                    $objArrayName = $matArray[0][0];
-                    $objCounter = $matArray[0][1];
-                    $obj =  $obj->$objArrayName;
-                    $obj = $obj[$objCounter];
-                }else{               
-                    $obj = $obj->$part;    
-                }
-            }  
-        } 
-        $val = $obj;
+        $val = ($row->$field)?$row->$field:'';
         error_reporting(5);
-        $fieldRegExp = str_ireplace("[","\[",$field);
-        if(preg_match_all("/F{".$fieldRegExp."}\.toString/",$text,$matchesV)>0){
+        if(preg_match_all("/F{".$field."}\.toString/",$text,$matchesV)>0){
             $val = $val+0;
             return str_ireplace(array('$F{'.$field.'}.toString()'),array(number_format($val,2,',','.')),$text);
-        } elseif(preg_match_all("/F{".$fieldRegExp."}\.numberToText/",$text,$matchesV)>0){
-            return str_ireplace(array('$F{'.$field.'}.numberToText()'),array($this->numberToText($val,false)),$text); 
-        }elseif(preg_match_all("/F{".$fieldRegExp."}\.(\w+)\((\w+)\)/",$text,$matchesV)>0){
+        } elseif(preg_match_all("/F{".$field."}\.numberToText/",$text,$matchesV)>0){
+            return str_ireplace(array('$F{'.$field.'}.numberToText()'),array($this->numberToText($val,true)),$text); 
+        }elseif(preg_match_all("/F{".$field."}\.(\w+)\((\w+)\)/",$text,$matchesV)>0){
             $funcName  = $matchesV[1][0];
-            //return str_ireplace(array('$'.$matchesV[0][0]),array(call_user_func_array(array($this,$funcName),array($val,$matchesV[2][0]))),$text);
-            if(method_exists($this,$funcName)){
-                return str_ireplace(array('$'.$matchesV[0][0]),array(call_user_func_array(array($this,$funcName),array($val,$matchesV[2][0]))),$text);
-            }else{
-                return str_ireplace(array('$'.$matchesV[0][0]),array(call_user_func($funcName,$val)),$text);
-            }
-
-        }elseif(preg_match_all("/F{".$fieldRegExp."}\.(\w+)/",$text,$matchesV)>0){
+            return str_ireplace(array('$'.$matchesV[0][0]),array(call_user_func_array(array($this,$funcName),array($val,$matchesV[2][0]))),$text);
+        }elseif(preg_match_all("/F{".$field."}\.(\w+)/",$text,$matchesV)>0){
             $funcName  = $matchesV[1][0];
-            if(method_exists($this,$funcName)){
-                return str_ireplace(array('$'.$matchesV[0][0]."()"),array(call_user_func_array(array($this,$funcName),array($val,true))),$text);
-            }else{
-                return str_ireplace(array('$'.$matchesV[0][0]."()"),array(call_user_func($funcName,$val)),$text);
-            }
-            
+            return str_ireplace(array('$'.$matchesV[0][0]."()"),array(call_user_func_array(array($this,$funcName),array($val,true))),$text);
 
         }else{
             return str_ireplace(array('$F{'.$field.'}'),array(($val)),$text); 
         }
-        
     }
     public function variable_calculation($k,$out,$row){
         preg_match_all("/P{(\w+)}/",$out['target'] ,$matchesP);
@@ -951,7 +910,7 @@ class Report extends Element
                         $value=$this->time_to_sec($value);
 
                         $value+=$this->time_to_sec($newValue);
-                        //$sum=$sum+mb_substr($table["$out[target]"],0,2)*3600+mb_substr($table["$out[target]"],3,2)*60+mb_substr($table["$out[target]"],6,2);
+                        //$sum=$sum+substr($table["$out[target]"],0,2)*3600+substr($table["$out[target]"],3,2)*60+substr($table["$out[target]"],6,2);
                         // }
                         //$sum= floor($sum / 3600).":".floor($sum%3600 / 60);
                         //if($sum=="0:0"){$sum="00:00";}
@@ -1105,12 +1064,12 @@ class Report extends Element
     }
     function right($value, $count) {
 
-        return mb_substr($value, ($count*-1));
+        return substr($value, ($count*-1));
 
     }
 
     function left($string, $count) {
-        return mb_substr($string, 0, $count);
+        return substr($string, 0, $count);
     }
 
     public function Rotate($type, $x=-1, $y=-1)
@@ -1224,7 +1183,7 @@ class Report extends Element
                     $pdf->write2DBarcode($code, 'DATAMATRIX', $x, $y, $width, $height, $style, 'N');
                 break;
             case "CODE128":
-
+                
                 $pdf->write1DBarcode($code, 'C128',  $x, $y, $width, $height, $modulewidth, $style, 'N');
 
                 // $this->pdf->write1DBarcode($code, 'C128', $x, $y, $width, $height,"", $style, 'N');
@@ -1249,8 +1208,8 @@ class Report extends Element
 
     function numberToText($valor = 0, $maiusculas = false) {
 
-        $singular = array("centavo", "", " mil", "milhão", "bilhão", "trilhão", "quatrilhão"); 
-        $plural = array("centavos", "", " mil", "milhões", "bilhões", "trilhões", 
+        $singular = array("centavo", "", "mil", "milhão", "bilhão", "trilhão", "quatrilhão"); 
+        $plural = array("centavos", "", "mil", "milhões", "bilhões", "trilhões", 
             "quatrilhões"); 
 
         $c = array("", "cem", "duzentos", "trezentos", "quatrocentos", 
@@ -1281,11 +1240,11 @@ class Report extends Element
             $r = $rc.(($rc && ($rd || $ru)) ? " e " : "").$rd.(($rd && 
                 $ru) ? " e " : "").$ru; 
             $t = count($inteiro)-1-$i; 
-            $r .= $r ? ($valor > 1 ? $plural[$t] : $singular[$t]) : ""; 
+            $r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : ""; 
             if ($valor == "000")$z++; elseif ($z > 0) $z--; 
             if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " de " : "").$plural[$t]; 
             if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && 
-                ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : "") . $r; 
+                ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r; 
         } 
 
         if(!$maiusculas){ 
