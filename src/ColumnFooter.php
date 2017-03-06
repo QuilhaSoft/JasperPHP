@@ -15,12 +15,13 @@ use \JasperPHP;
 	{
 		public function generate($obj = null)
 		{
-            $height = (string)$this->children['0']->objElement['height'];
-			if($this->children['0']->objElement->splitType=='Stretch' || $this->children['0']->objElement->splitType=='Prevent'){
-				JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$height));
-			}
-			parent::generate($obj);
-			JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$height));
+             $height = (string)$child->objElement['height'];
+           if($this->children['0']->objElement['splitType']=='Stretch' || $this->children['0']->objElement['splitType']=='Prevent'){
+                JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$this->children['0']->objElement['height']));
+            }
+            parent::generate($obj);
+            //var_dump($this->children['0']);
+            JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$this->children['0']->objElement['height']));
 		}
 	}
 ?>
