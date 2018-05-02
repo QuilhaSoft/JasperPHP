@@ -14,7 +14,7 @@ namespace JasperPHP;
 	{
 		private $properties;    // propriedades da TAG 
 		protected $objElement;
-		protected $children;
+		public $children;
 
 
 
@@ -32,7 +32,7 @@ namespace JasperPHP;
                                 
                     $obj = ($obj=='break')?'Breaker':$obj;
 
-					$className = "JasperPHP\\".$obj;
+					$className = "JasperPHP\\".ucfirst($obj);
 					if(class_exists($className)){
 						$this->add(new $className($value));
 					}
@@ -89,7 +89,7 @@ namespace JasperPHP;
 
 		public function getChildByClassName($childClassName){
 			foreach($this->children as $Child){
-				if(get_class($Child)==$childClassName)return $Child;
+				if(get_class($Child)=='JasperPHP\\'.$childClassName)return $Child;
 			}
 		}
 		public function recommendFont($utfstring,$defaultfont,$pdffont=""){
