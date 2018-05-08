@@ -162,9 +162,9 @@ final class Pdf {
                     $arraydata["valign"] = "T";
 
                 // $text = $txt[0];
-                while ($pdf->GetStringWidth((mb_convert_encoding($txt, 'utf-8'))) > $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
+                while ($pdf->GetStringWidth($txt) > $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
                     if ($txt != $pdf->getAliasNbPages() && $txt != ' ' . $pdf->getAliasNbPages()) {
-                        $txt = mb_substr($txt, 0, -1);
+                        $txt = mb_substr($txt, 0, -1,'UTF-8');
                     }
                 }
 

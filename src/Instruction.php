@@ -205,6 +205,7 @@ class Instruction {
 
     public function breaker($arraydata) {
         JasperPHP\Pdf::print_expression($arraydata);
+        $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
         if (JasperPHP\Pdf::$print_expression_result == true) {
             if ($pageFooter)
                 $pageFooter->generate($this->jasperObj);
