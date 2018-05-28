@@ -1,8 +1,8 @@
 {
     "name": "quilhasoft/jasperphp",
     "type": "library",
-    "description": "Biblioteca puro PHP para geração de relatorios lendo o formato jrxml",
-    "keywords": ["relatorio", "jrxml", "jaspersoft", "pdf"],
+    "description": "Pure PHP library to read JRXML files made with 'JasperSoft Studio' and generate reports in PDF",
+    "keywords": ["report", "jrxml", "jaspersoft", "pdf"],
     "licence": "MIT",
     "authors": [
         {
