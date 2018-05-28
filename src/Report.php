@@ -134,33 +134,37 @@ class Report extends Element {
     }
 
     public function queryString_handler($xml_path) {
-        $this->sql = $xml_path->queryString;
-        if (isset($this->arrayParameter)) {
-            foreach ($this->arrayParameter as $v => $a) {
-                if (is_array($a)) {
-                    foreach ($a as $x) {
-                        // se for um inteiro
-                        if (is_integer($x)) {
-                            $foo[] = $x;
-                        } else if (is_string($x)) {
-                            // se for string, adiciona aspas
-                            $foo[] = "'$x'";
+        //echo "'" . strlen(trim($xml_path->queryString)) . "'";
+        $this->sql = (string)$xml_path->queryString;
+        if (strlen(trim($xml_path->queryString))>0) {
+            
+            if (isset($this->arrayParameter)) {
+                foreach ($this->arrayParameter as $v => $a) {
+                    if (is_array($a)) {
+                        foreach ($a as $x) {
+                            // se for um inteiro
+                            if (is_integer($x)) {
+                                $foo[] = $x;
+                            } else if (is_string($x)) {
+                                // se for string, adiciona aspas
+                                $foo[] = "'$x'";
+                            }
                         }
+                        // converte o array em string separada por ","
+                        $result = '(' . implode(',', $foo) . ')';
+                        $this->sql = str_replace('$P{' . $v . '}', $result, $this->sql);
+                    } else {
+                        /* if (is_integer($a))
+                          {
+                          $x = $a ;
+                          }
+                          else if (is_string($a))
+                          {
+                          // se for string, adiciona aspas
+                          $x= "'$a'";
+                          } */
+                        $this->sql = str_replace('$P{' . $v . '}', $a, $this->sql);
                     }
-                    // converte o array em string separada por ","
-                    $result = '(' . implode(',', $foo) . ')';
-                    $this->sql = str_replace('$P{' . $v . '}', $result, $this->sql);
-                } else {
-                    /* if (is_integer($a))
-                      {
-                      $x = $a ;
-                      }
-                      else if (is_string($a))
-                      {
-                      // se for string, adiciona aspas
-                      $x= "'$a'";
-                      } */
-                    $this->sql = str_replace('$P{' . $v . '}', $a, $this->sql);
                 }
             }
         }
@@ -455,7 +459,6 @@ class Report extends Element {
         return mb_substr($string, 0, $count);
     }
 
-
     public static function formatText($txt, $pattern) {
         if ($txt != '') {
             $nome_meses = array('Janeiro', 'Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
@@ -586,9 +589,9 @@ class Report extends Element {
     }
 
     public function generate($obj = NULL) {
-
-        $this->dbData = $this->getDbData();
-
+        if (strlen(trim($this->sql))>0) {
+            $this->dbData = $this->getDbData();
+        }
         // exibe a tag
         parent::generate($this);
         return $this->arrayVariable;
@@ -600,4 +603,5 @@ class Report extends Element {
         JasperPHP\Pdf::runInstructions();
         //$this->runInstructions($instructions);
     }
+
 }
