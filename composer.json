@@ -1,13 +1,13 @@
 {
-    "name": "rctnet/jasperphp",
+    "name": "quilhasoft/jasperphp",
     "type": "library",
-    "description": "Conjunto de classes para geração de relatorios lendo o formato jrxml",
-    "keywords": ["relatorio", "jrxml", "jaspersoft", "pdf"],
+    "description": "Pure PHP library to read JRXML files made with 'JasperSoft Studio' and generate reports in PDF",
+    "keywords": ["report", "jrxml", "jaspersoft", "pdf"],
     "licence": "MIT",
     "authors": [
         {
             "name": "Rogerio Muniz de Castro",
-            "email": "rogerio@ciatec.net"
+            "email": "rogerio@quilhasoft.net"
         }
     ],
     "autoload": {
