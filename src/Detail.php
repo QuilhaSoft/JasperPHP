@@ -85,7 +85,7 @@ class Detail extends Element {
                         }
                     }
                 }
-                $row =( is_array($dbData) )?(array_key_exists($rowIndex, $dbData))?$dbData[$rowIndex]: null : $dbData->fetchObject($recordObject);
+                $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
                 $rowIndex++;
             }
 
@@ -94,5 +94,3 @@ class Detail extends Element {
     }
 
 }
-
-?>

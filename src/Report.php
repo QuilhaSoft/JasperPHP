@@ -4,8 +4,8 @@ namespace JasperPHP;
 
 use JasperPHP;
 use NumberFormatter;
-//use JasperPHP\ado\TTransaction;
-use TTransaction;
+use JasperPHP\ado\TTransaction;
+//use TTransaction;
 
 /**
  * classe TLabel
