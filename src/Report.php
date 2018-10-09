@@ -235,7 +235,7 @@ class Report extends Element {
 
     public function getValOfField($field, $row, $text, $htmlentities = false) {
         error_reporting(0);
-        $fieldParts = explode("-&gt;", $field);
+        $fieldParts = strpos($field,"->")?explode("->", $field):explode("-&gt;", $field);
         $obj = $row;
         foreach ($fieldParts as $part) {
             if (preg_match_all("/\w+/", $part, $matArray)) {

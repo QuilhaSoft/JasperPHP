@@ -73,8 +73,9 @@ class TJasper
 		$this->report->arrayVariable[$name]['initialValue'] = $value ;
 	}
 }
-require('autoloader.php') ;
+require('autoloader.php');
+require('../../tecnickcom/tcpdf/tcpdf.php'); // apontar para o caminho do tcpf previamente instalado , 
+//                                          // caso tenha instalado via composer e o mesmo esteja precarregado não precisa
 TTransaction::open('dev');
 $jasper = new TJasper('template.jrxml',$_GET);
 $jasper->outpage();
-?>
