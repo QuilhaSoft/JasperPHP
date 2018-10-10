@@ -94,6 +94,7 @@ Biblioteca produzida interiramente em php, ou seja se a nessecidade de um servid
     </tr>
 
 </table>
+* Subreports are supported recursively and unlimited
 
 #Código de exemplo
 ```php
