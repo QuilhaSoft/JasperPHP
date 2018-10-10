@@ -4,7 +4,7 @@ Library pure php, without a java server or Jasper Server
 # Suported tags
 <table>
     <tr>
-        <td>TAG/componente</td>
+        <td>TAG/component</td>
         <td>Status</td>
     </tr>
     <tr>
