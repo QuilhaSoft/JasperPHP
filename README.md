@@ -87,100 +87,98 @@ $jasper->outpage();
 ```
 # Suported tags
 <table>
-          <tr>
-            <th>TAG/componente</th>
-            <th>Status</th>
-        </tr>
-    
-    
-        <tr>
-            <td colspan="2">Basic Elements</td>
-            
-        </tr>
-        <tr>
-            <td>Text Field</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Static Text</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Image</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Break</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Rectangle</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Line</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>SubReport*</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Barcode</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td colspan="2">Composite Elements</td>
-            
-        </tr>
-        <tr>
-            <td>Page Number</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Total Pages</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Corrent Date</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Page X of Y</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td colspan="2">Bands</td>
-        </tr>
-        <tr>
-            <td>Title</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Page Header</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Detail</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Column Header</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Column Footer</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Page Footer</td>
-            <td>OK</td>
-        </tr>
-        <tr>
-            <td>Background</td>
-            <td>OK</td>
-        </tr>
-    
+    <tr>
+        <td>TAG/componente</td>
+        <td>Status</td>
+    </tr>
+    <tr>
+        <td colspan="2">Basic Elements</td>
+
+    </tr>
+    <tr>
+        <td>Text Field</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Static Text</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Image</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Break</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Rectangle</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Line</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>SubReport*</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Barcode</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td colspan="2">Composite Elements</td>
+
+    </tr>
+    <tr>
+        <td>Page Number</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Total Pages</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Corrent Date</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page X of Y</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td colspan="2">Bands</td>
+    </tr>
+    <tr>
+        <td>Title</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page Header</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Detail</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Column Header</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Column Footer</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page Footer</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Background</td>
+        <td>OK</td>
+    </tr>
+
 </table>
 
 
