@@ -30,6 +30,7 @@ class Report extends Element {
     public $returnedValues = array();
     public $objElement;
     public $defaultFolder = 'app.jrxml';
+    public $rowData;
 
     public function __construct($xmlFile = null, $param) {
         //$this->fontdir = "app.phpEx/Jsp/tcpdf/fonts";

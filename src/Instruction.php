@@ -26,6 +26,7 @@ class Instruction {
 
     public function PreventY_axis($arraydata) {
         //$pdf = \JasperPHP\Pdf;
+        $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
         $preventY_axis = JasperPHP\Pdf ::$y_axis + $arraydata['y_axis'];
         $pageheight = JasperPHP\Pdf::$arrayPageSetting["pageHeight"];
         $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
@@ -45,7 +46,11 @@ class Instruction {
             JasperPHP\Pdf::$currrentPage++;
             JasperPHP\Pdf::addInstruction(array("type" => "AddPage"));
             JasperPHP\Pdf::addInstruction(array("type" => "setPage", "value" => JasperPHP\Pdf::$currrentPage, 'resetMargins' => false));
-
+            $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
+            if (JasperPHP\Pdf::$print_expression_result == true) {
+                if ($pageHeader)
+                    $pageHeader->generate($this->jasperObj);
+            }
             JasperPHP\Pdf::runInstructions();
         }
     }
@@ -213,6 +218,11 @@ class Instruction {
             JasperPHP\Pdf::$currrentPage++;
             JasperPHP\Pdf::addInstruction(array("type" => "AddPage"));
             JasperPHP\Pdf::addInstruction(array("type" => "setPage", "value" => JasperPHP\Pdf::$currrentPage, 'resetMargins' => false));
+            $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
+            //if (JasperPHP\Pdf::$print_expression_result == true) {
+                if ($pageHeader)
+                    $pageHeader->generate($this->jasperObj);
+            //}
             JasperPHP\Pdf::runInstructions();
         }
     }
