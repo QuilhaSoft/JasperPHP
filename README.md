@@ -93,7 +93,6 @@ $jasper->outpage();
     </tr>
     <tr>
         <td colspan="2">Basic Elements</td>
-
     </tr>
     <tr>
         <td>Text Field</td>
@@ -129,7 +128,6 @@ $jasper->outpage();
     </tr>
     <tr>
         <td colspan="2">Composite Elements</td>
-
     </tr>
     <tr>
         <td>Page Number</td>
