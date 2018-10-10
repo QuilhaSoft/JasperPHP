@@ -86,7 +86,7 @@ $jasper->outpage();
 
 ```
 # Suported tags
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>TAG/componente</th>
