@@ -93,7 +93,7 @@ $jasper->outpage();
             <th>Status</th>
         </tr>
     </thead>
-    <tbody>
+    
         <tr>
             <td colspan="2">Basic Elements</td>
             
@@ -181,7 +181,7 @@ $jasper->outpage();
             <td>Background</td>
             <td>OK</td>
         </tr>
-    </tbody>
+    
 </table>
 
 
