@@ -1,7 +1,103 @@
 # JasperPHP
-Projeto para gerar relatórios criados com o o aplicativo JasperSoft Studio<br>
-Biblioteca produzida interiramente em php, ou seja se a nessecidade de um servidor java
+Project to generate reports created with the JasperSoft Studio application<br>
+Library pure php, without a java server or Jasper Server
+# Suported tags
+<table>
+    <tr>
+        <td>TAG/componente</td>
+        <td>Status</td>
+    </tr>
+    <tr>
+        <td colspan="2">Basic Elements</td>
+    </tr>
+    <tr>
+        <td>Text Field</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Static Text</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Image</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Break</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Rectangle</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Line</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>SubReport*</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Barcode</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td colspan="2">Composite Elements</td>
+    </tr>
+    <tr>
+        <td>Page Number</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Total Pages</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Corrent Date</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page X of Y</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td colspan="2">Bands</td>
+    </tr>
+    <tr>
+        <td>Title</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page Header</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Detail</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Column Header</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Column Footer</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Page Footer</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Background</td>
+        <td>OK</td>
+    </tr>
 
+</table>
+* Subreports are supported recursively and unlimited
+<br>
+
+#Código de exemplo
 ```php
 <?php
 use JasperPHP\Report;
@@ -85,6 +181,7 @@ $jasper->outpage();
 ?>
 
 ```
+
 # Como instalar e usar este exemplo
 Defina as configurações do seu banco de dados em config\dev.ini<br>
 URL de exemplo:<br>
