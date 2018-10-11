@@ -86,7 +86,7 @@ Library pure php, without a java server or Jasper Server
 </lu>
 <br>
 
-# Código de exemplo
+# Generic sample
 ```php
 <?php
 use JasperPHP\Report;
