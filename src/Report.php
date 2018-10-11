@@ -3,13 +3,12 @@
 namespace JasperPHP;
 
 use JasperPHP;
-use NumberFormatter;
 use JasperPHP\ado\TTransaction;
 //use TTransaction;
 
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
+ * classe Report
+ * classe para construção de relatorio
  *
  * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
  * @version  2015.03.11
@@ -546,11 +545,6 @@ class Report extends Element {
 
         $z = 0;
         $rt = "";
-        //$fmt_en_US = new NumberFormatter( 'en_US',  NumberFormatter::DECIMAL );
-        //$fmt_pt_BR = new NumberFormatter( 'de_DE', NumberFormatter::DECIMAL );
-        //$valorStr = $valor;
-        //$valoren = $fmt_en_US->parse($valor);
-        //$valorbr = $fmt_pt_BR->parse($valor);
         $valor = ($valor) ? $valor : 0;
         $valor = (strpos($valor, ',') == false ) ? number_format($valor, 2, '.', '.') : number_format(str_replace(',', '.', str_replace(".", "", $valor)), 2, '.', '.');
         $inteiro = explode(".", $valor);
