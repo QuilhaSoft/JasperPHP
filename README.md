@@ -97,7 +97,7 @@ use JasperPHP\ado\TLoggerHTML;
 //use PHPexcel as PHPexcel;
 /**
 * classe TJasper
-* encapsula uma ação
+* 
 *
 * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.net>
 * @version  2015.03.11
