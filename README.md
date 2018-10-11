@@ -1,6 +1,6 @@
 # JasperPHP
 Project to generate reports created with the JasperSoft Studio application<br>
-Library pure php, without a java server or Jasper Server
+Library pure PHP, without a java server or Jasper Server
 # Supported tags/components
 <table>
     <tr>
