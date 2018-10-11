@@ -187,7 +187,7 @@ $jasper->outpage();
 
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
-View file src\ad\TConection.php to define database type<br>
+View file src\ado\TConection.php to define database type<br>
 Sample URL:<br>
 http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?locacoes_dia_repasse=20&eventos_mes_ref=0816<br>
 URL params passed into URL are the params defined into xmlr file.<br>
