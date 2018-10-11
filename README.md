@@ -1,7 +1,7 @@
 # JasperPHP
 Project to generate reports created with the JasperSoft Studio application<br>
 Library pure php, without a java server or Jasper Server
-# Suported tags/conponents
+# Supported tags/components
 <table>
     <tr>
         <td>TAG/component</td>
@@ -10,7 +10,7 @@ Library pure php, without a java server or Jasper Server
         <td>Status</td>
     </tr>
     <tr>
-        <td colspan="4">Basic Elements</td>
+        <td colspan="4">Basic elements</td>
     </tr>
     <tr>
         <td>Text Field</td>
@@ -37,7 +37,7 @@ Library pure php, without a java server or Jasper Server
         <td>OK</td>
     </tr>
     <tr>
-        <td colspan="4">Composite Elements</td>
+        <td colspan="4">Composite elements</td>
     </tr>
     <tr>
         <td>Page Number</td>
@@ -103,7 +103,7 @@ use JasperPHP\ado\TLoggerHTML;
 * @version  2015.03.11
 * @access   restrict
 * 
-* 2015.03.11 -- criação
+* 2015.03.11 -- create
 **/
 class TJasper
 {
@@ -111,11 +111,12 @@ class TJasper
     private $type;
 
     /**
-    * método __construct()
-    * instancia uma nova ação
-    * @param $action = método a ser executado
+    * method __construct()
+    * 
+    * @param $jrxml = a source xmlr filename
+    * @param $param = a array whith params
     */
-    public function __construct($jrxml,$param)
+    public function __construct($jrxml,array $param)
     {
         $xmlFile=  $jrxml;
         $this->type = (array_key_exists('type',$param))?$param['type']:'pdf';
@@ -133,6 +134,13 @@ class TJasper
                 break;
         }
     }
+    
+    /**
+    * method outpage()
+    * 
+    * @param $type = a type of output. ALERT: xls is experimental
+    */
+
     public function outpage($type='pdf'){
         $this->report->generate();
         $this->report->out();
@@ -159,6 +167,13 @@ class TJasper
         }
         
     }
+    /**
+    * method setVariable()
+     * insert variable into report after output
+    * 
+    * @param $name = name of variable
+    * @param $value = value of variable
+    */
     public function setVariable($name,$value){
         $this->report->arrayVariable[$name]['initialValue'] = $value ;
     }
@@ -171,11 +186,11 @@ $jasper->outpage();
 
 ```
 
-# Como instalar e usar este exemplo
-Defina as configurações do seu banco de dados em config\dev.ini<br>
-URL de exemplo:<br>
+# How to use this sample
+Define database conections params into file config\dev.ini<br>
+View file src\ad\TConection.php to define database type<br>
+Sample URL:<br>
 http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?locacoes_dia_repasse=20&eventos_mes_ref=0816<br>
-Os parametros passados pela URL serao os paramatros configurados dentro do arquivo jrxml.<br>
-OBS.: este projeto depende de tecnickcom/tcpdf":"6.2.*" e deve estar disponivel em autoload pelo seu composer<br>
-# Usando o compser
-Adicione "quilhasoft/jasperphp":"dev-master" ao seu composer e atualize seu autoload
+URL params passed into URL are the params defined into xmlr file.<br>
+# Using composer
+Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
