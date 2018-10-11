@@ -1,90 +1,74 @@
 # JasperPHP
 Project to generate reports created with the JasperSoft Studio application<br>
 Library pure php, without a java server or Jasper Server
-# Suported tags
+# Suported tags/conponents
 <table>
     <tr>
-        <td>tag/component</td>
+        <td>TAG/component</td>
+        <td>Status</td>
+        <td>TAG/component</td>
         <td>Status</td>
     </tr>
     <tr>
-        <td colspan="2">Basic Elements</td>
+        <td colspan="4">Basic Elements</td>
     </tr>
     <tr>
         <td>Text Field</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Static Text</td>
         <td>OK</td>
     </tr>
     <tr>
         <td>Image</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Break</td>
         <td>OK</td>
     </tr>
     <tr>
         <td>Rectangle</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Line</td>
         <td>OK</td>
     </tr>
     <tr>
         <td>SubReport*</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Barcode</td>
         <td>OK</td>
     </tr>
     <tr>
-        <td colspan="2">Composite Elements</td>
+        <td colspan="4">Composite Elements</td>
     </tr>
     <tr>
         <td>Page Number</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Total Pages</td>
         <td>OK</td>
     </tr>
     <tr>
         <td>Corrent Date</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Page X of Y</td>
         <td>OK</td>
     </tr>
     <tr>
-        <td colspan="2">Bands</td>
+        <td colspan="4">Bands</td>
     </tr>
     <tr>
         <td>Title</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Page Header</td>
         <td></td>
     </tr>
     <tr>
         <td>Detail</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Column Header</td>
         <td>OK</td>
     </tr>
     <tr>
         <td>Column Footer</td>
         <td>OK</td>
-    </tr>
-    <tr>
         <td>Page Footer</td>
         <td>OK</td>
     </tr>
@@ -95,9 +79,14 @@ Library pure php, without a java server or Jasper Server
 
 </table>
 * Subreports are supported recursively and unlimited
+
+# Other features
+<lu>
+    <li>active record</li>
+</lu>
 <br>
 
-#Código de exemplo
+# Generic sample
 ```php
 <?php
 use JasperPHP\Report;
