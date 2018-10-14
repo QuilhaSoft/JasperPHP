@@ -189,6 +189,10 @@ $jasper->outpage();
 
 ```
 
+# Requirements
+. PHP 5.2+
+. "tecnickcom/tcpdf":"6.2.*"
+
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
 View file src\ado\TConection.php to define database type<br>
