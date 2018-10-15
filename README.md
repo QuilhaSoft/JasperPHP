@@ -204,7 +204,7 @@ Add "quilhasoft/jasperphp":"dev-master" into your composer config file and updat
 
 # Live samples<br>
 . A basic test <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php</a><br>
-. A burne test, 201 pages, hosted in a default hostgator server <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml</a>
+. A burn test, 201 pages, hosted in a default hostgator server <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml</a>
 
 ## License
 
