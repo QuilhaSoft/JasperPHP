@@ -4,6 +4,7 @@ namespace JasperPHP;
 
 use JasperPHP;
 use JasperPHP\ado\TTransaction;
+
 //use TTransaction;
 
 /**
@@ -18,8 +19,8 @@ use JasperPHP\ado\TTransaction;
  * */
 class Report extends Element {
 
+    public $defaultFolder = 'app.jrxml';
     public $dbData;
-    //public $fontdir;
     public $arrayVariable;
     public $arrayfield;
     public $arrayParameter;
@@ -28,11 +29,10 @@ class Report extends Element {
     public $print_expression_result;
     public $returnedValues = array();
     public $objElement;
-    public $defaultFolder = 'app.jrxml';
+    
     public $rowData;
 
     public function __construct($xmlFile = null, $param) {
-        //$this->fontdir = "app.phpEx/Jsp/tcpdf/fonts";
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         $xmlFile = file_get_contents($this->defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
         $keyword = "<queryString>
@@ -112,9 +112,13 @@ class Report extends Element {
     }
 
     public function parameter_handler($xml_path, $param) {
-        foreach ($xml_path->parameter as $parameter) {
-            $paraName = (string) $parameter["name"];
-            $this->arrayParameter[$paraName] = array_key_exists($paraName, $param) ? $param[$paraName] : '';
+        if ($xml_path->parameter) {
+            foreach ($xml_path->parameter as $parameter) {
+                $paraName = (string) $parameter["name"];
+                $this->arrayParameter[$paraName] = array_key_exists($paraName, $param) ? $param[$paraName] : '';
+            }
+        } else {
+            $this->arrayParameter = array();
         }
     }
 
@@ -135,9 +139,9 @@ class Report extends Element {
 
     public function queryString_handler($xml_path) {
         //echo "'" . strlen(trim($xml_path->queryString)) . "'";
-        $this->sql = (string)$xml_path->queryString;
-        if (strlen(trim($xml_path->queryString))>0) {
-            
+        $this->sql = (string) $xml_path->queryString;
+        if (strlen(trim($xml_path->queryString)) > 0) {
+
             if (isset($this->arrayParameter)) {
                 foreach ($this->arrayParameter as $v => $a) {
                     if (is_array($a)) {
@@ -235,7 +239,7 @@ class Report extends Element {
 
     public function getValOfField($field, $row, $text, $htmlentities = false) {
         error_reporting(0);
-        $fieldParts = strpos($field,"->")?explode("->", $field):explode("-&gt;", $field);
+        $fieldParts = strpos($field, "->") ? explode("->", $field) : explode("-&gt;", $field);
         $obj = $row;
         foreach ($fieldParts as $part) {
             if (preg_match_all("/\w+/", $part, $matArray)) {
@@ -584,7 +588,7 @@ class Report extends Element {
     }
 
     public function generate($obj = NULL) {
-        if (strlen(trim($this->sql))>0) {
+        if (strlen(trim($this->sql)) > 0) {
             $this->dbData = $this->getDbData();
         }
         // exibe a tag

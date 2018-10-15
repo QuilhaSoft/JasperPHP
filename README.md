@@ -201,3 +201,11 @@ http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?locacoes_dia_repa
 URL params passed into URL are the params defined into xmlr file.<br>
 # Using composer
 Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
+
+# Live samples<br>
+. A basic test <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php</a>
+. A burne test, 201 pages, hosted in a default hostgator server <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml</a>
+
+## License
+
+* MIT License

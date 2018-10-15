@@ -2,18 +2,19 @@
 use JasperPHP\Report;
 use JasperPHP\Report2XLS;
 use JasperPHP\ado\TTransaction;
+use JasperPHP\ado\TLogger;
 use JasperPHP\ado\TLoggerHTML;
 
-//use PHPexcel as PHPexcel;
+//use PHPexcel as PHPexcel; // experimental
 /**
 * classe TJasper
-* encapsula uma ação
 *
 * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
-* @version  2015.03.11
+* @version  2018.10.15
 * @access   restrict
 * 
-* 2015.03.11 -- criação
+* 2015.03.11 -- create
+* 2018.10.15 -- revision and internationalize, add TLogger classes
 **/
 class TJasper
 {
@@ -21,11 +22,12 @@ class TJasper
 	private $type;
 
 	/**
-	* método __construct()
-	* instancia uma nova ação
-	* @param $action = método a ser executado
+	* method __construct()
+         * 
+	* @param $jrxml = a jrxml file name
+	* @param $param = a array with params to use into jrxml report
 	*/
-	public function __construct($jrxml,$param)
+	public function __construct($jrxml, array $param)
 	{
 		$xmlFile=  $jrxml;
 		$this->type = (array_key_exists('type',$param))?$param['type']:'pdf';
@@ -33,12 +35,12 @@ class TJasper
 		switch ($this->type)
 		{
 			case 'pdf': 
-				$this->report =new JasperPHP\Report($xmlFile,$param);
+				$this->report = new JasperPHP\Report($xmlFile,$param);
 				JasperPHP\Pdf::prepare($this->report);
 				break;
 			case 'xls':
 				JasperPHP\Excel::prepare();
-				$this->report =new JasperPHP\Report2XLS($xmlFile,$param);
+				$this->report = new JasperPHP\Report2XLS($xmlFile,$param);
 				
 				break;
 		}
@@ -50,7 +52,7 @@ class TJasper
 		{
 			case 'pdf':
 				$pdf  = JasperPHP\Pdf::get();
-				$pdf->Output('Relatorio.pdf',"I");
+				$pdf->Output('report.pdf',"I");
 				break;
 			case 'xls':
 				header('Content-Type: application/vnd.ms-excel');
@@ -74,8 +76,11 @@ class TJasper
 	}
 }
 require('autoloader.php');
-require('../../tecnickcom/tcpdf/tcpdf.php'); // apontar para o caminho do tcpf previamente instalado , 
-//                                          // caso tenha instalado via composer e o mesmo esteja precarregado não precisa
+require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , 
+                                            // on composer instalation is not necessaty 
+
+$report_name = isset($_GET['report'])?$_GET['report']:'testReport.jrxml';  // sql into testReport.txt report do not select any table.
 TTransaction::open('dev');
-$jasper = new TJasper('template.jrxml',$_GET);
+TTransaction::setLogger(new TLoggerHTML('log.html'));
+$jasper = new TJasper($report_name,$_GET);
 $jasper->outpage();

@@ -154,7 +154,7 @@ class TextField extends Element {
                 $text = date("Y-m-d H:i:s");
                 break;
             case '"Page "+$V{PAGE_NUMBER}+" of"':
-                $text = 'Pagina ' . JasperPHP\Pdf::getPageNo() . ' de';
+                $text = 'Page ' . JasperPHP\Pdf::getPageNo() . ' of';
                 break;
             case '$V{PAGE_NUMBER}':
                 if (isset($data["evaluationTime"]) && $data["evaluationTime"] == "Report" && !isset($rowData['counter'])) {
