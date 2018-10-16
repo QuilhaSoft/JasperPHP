@@ -203,9 +203,10 @@ URL params passed into URL are the params defined into xmlr file.<br>
 Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
 
 # Live samples<br>
-. A basic test <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php</a><br>
-. A burn test, 201 pages, hosted in a default hostgator server <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml</a>
-
+. A basic test: <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php</a><br>
+. A burn test, 201 pages, hosted in a default hostgator server: <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml</a>
+. Brasilian payment method "boleto" in "carne":<a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasper.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasper.php</a>
+. Brasilian payment method "boleto" in A4 :<a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasperA4.php'>http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasper.php</a>
 ## License
 
 * MIT License
