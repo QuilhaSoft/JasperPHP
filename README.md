@@ -197,7 +197,7 @@ $jasper->outpage();
 Define database conections params into file config\dev.ini<br>
 View file src\ado\TConection.php to define database type<br>
 Sample URL:<br>
-http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?locacoes_dia_repasse=20&eventos_mes_ref=0816<br>
+http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?param1=foo&param2=bar<br>
 URL params passed into URL are the params defined into xmlr file.<br>
 # Using composer
 Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
