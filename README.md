@@ -179,6 +179,9 @@ class TJasper
     }
 }
 require('autoloader.php') ;
+require('../../tecnickcom/tcpdf/tcpdf.php'); // apontar para o caminho do tcpf previamente instalado , 
+//                                          // caso tenha instalado via composer e o mesmo esteja precarregado não precisa
+
 TTransaction::open('dev');
 $jasper = new TJasper('template.jrxml',$_GET);
 $jasper->outpage();
@@ -186,11 +189,26 @@ $jasper->outpage();
 
 ```
 
+# Requirements
+* PHP 5.2+
+* "tecnickcom/tcpdf":"6.2.*"
+
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
 View file src\ado\TConection.php to define database type<br>
 Sample URL:<br>
-http://localhost/vendor/quilhasoft/JasperPHP/Tjasper.class.php?locacoes_dia_repasse=20&eventos_mes_ref=0816<br>
+http://localhost/vendor/quilhasoft/JasperPHP/TJasper.class.php?param1=foo&param2=bar<br>
 URL params passed into URL are the params defined into xmlr file.<br>
 # Using composer
 Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
+
+# Live samples<br>
+* A basic test: <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php'>Here</a><br>
+* A burn test, 201 pages, hosted in a default hostgator server: <a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP/TJasper.class.php?report=cities/region.jrxml'>Here</a><br>
+* Brasilian payment method "boleto" in "carne":<a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasper.php'>Here</a><br>
+* Brasilian payment method "boleto" in A4 :<a href='http://quilhasoft.net/Jasper/vendor/quilhasoft/JasperPHP-OpenBoleto/itauJasperA4.php'>Here</a><br>
+ ** Brasilian boleto project disponible in QuilhaSoft/JasperPHP-OpenBoleto.
+
+## License
+
+* MIT License

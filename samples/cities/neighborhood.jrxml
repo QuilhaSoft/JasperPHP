@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-10-15T15:41:40 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Codigo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT Id, Codigo, Nome, Uf FROM Bairro WHERE  Codigo LIKE '$P{Codigo}%']]>
+	</queryString>
+	<field name="Id" class="java.lang.String"/>
+	<field name="Codigo" class="java.lang.String"/>
+	<field name="Nome" class="java.lang.String"/>
+	<field name="Uf" class="java.lang.String"/>
+	<variable name="Variable_1" class="java.lang.String"/>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{totalRows}>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="160" y="0" width="70" height="20" uuid="03de2072-fec6-42d1-9849-31e895a14a2f"/>
+				<text><![CDATA[Id neighborhood]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="140" height="20" uuid="9daa66ca-31ab-4cf8-aeb0-26ac4940318d"/>
+				<text><![CDATA[Neighborhood Name]]></text>
+			</staticText>
+			<line>
+				<reportElement x="160" y="0" width="410" height="1" uuid="fb342428-3f88-4e2d-8592-5b1c842e4b91"/>
+			</line>
+			<line>
+				<reportElement x="160" y="15" width="410" height="1" uuid="ac27fbe0-07e2-44be-8746-6d663fa74c47"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="160" y="0" width="70" height="20" uuid="d100e7a2-dd98-4b89-96a4-0bc52f4dc392"/>
+				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="0" width="250" height="20" uuid="6380ff6e-6953-419c-a92d-48fe3273cab5"/>
+				<textFieldExpression><![CDATA[$F{Nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

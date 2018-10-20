@@ -19,7 +19,6 @@ use \JasperPHP;
 				JasperPHP\Pdf::addInstruction(array ("type"=>"PreventY_axis","y_axis"=>$this->children['0']->objElement['height']));
 			}
 			parent::generate($obj);
-            //var_dump($this->children['0']);
 			JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$this->children['0']->objElement['height']));
 		}
 	}
