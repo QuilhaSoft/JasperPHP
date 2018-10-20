@@ -46,12 +46,14 @@ class Instruction {
             JasperPHP\Pdf::$currrentPage++;
             JasperPHP\Pdf::addInstruction(array("type" => "AddPage"));
             JasperPHP\Pdf::addInstruction(array("type" => "setPage", "value" => JasperPHP\Pdf::$currrentPage, 'resetMargins' => false));
+            JasperPHP\Pdf::runInstructions();
             $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
             if (JasperPHP\Pdf::$print_expression_result == true) {
                 if ($pageHeader)
                     $pageHeader->generate($this->jasperObj);
             }
             JasperPHP\Pdf::runInstructions();
+            
         }
     }
 

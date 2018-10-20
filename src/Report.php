@@ -228,10 +228,9 @@ class Report extends Element {
                 return str_ireplace(array('$V{' . $variable . '}'), array(call_user_func($funcName, $ans)), $text);
             }
         } elseif ($variable == "MASTER_TOTAL_PAGES") {
-            return str_ireplace(array('$V{' . $variable . '}'), array('$this->getAliasNbPages()'), $text);
+            return str_ireplace(array('$V{MASTER_TOTAL_PAGES}'), array('{:ptp:}'), $text);
         } elseif ($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE") {
             return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Pdf::getPageNo()), $text);
-            ;
         } else {
             return str_ireplace(array('$V{' . $variable . '}'), array($ans), $text);
         }

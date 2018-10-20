@@ -52,7 +52,7 @@ final class Pdf {
         self::$pdfOutPut->setPrintFooter(false);
         self::$pdfOutPut->AddPage();
         self::$pdfOutPut->setPage(1, true);
-        self::$y_axis = (int)$report->arrayPageSetting["topMargin"];
+        self::$y_axis = (int) $report->arrayPageSetting["topMargin"];
 
         if (self::$fontdir == "")
             self::$fontdir = dirname(__FILE__) . "/tcpdf/fonts";
@@ -88,7 +88,6 @@ final class Pdf {
         $instructions = self::$intructions;
         self::$intructions = array();
         //$maxheight = null;
-        $instruction = new \JasperPHP\Instruction($JasperObj);
         foreach ($instructions as $arraydata) {
             //self::rotate($arraydata["rotation"]);
             if (array_key_exists("rotation", $arraydata)) {
@@ -114,7 +113,8 @@ final class Pdf {
             }
 
             $methodName = $arraydata["type"];
-            $methodName = $methodName == 'break'? 'breaker':$methodName;
+            $methodName = $methodName == 'break' ? 'breaker' : $methodName;
+            $instruction = new \JasperPHP\Instruction($JasperObj);
             if (method_exists($instruction, $methodName)) {
                 $instruction->$methodName($arraydata);
             }
@@ -164,7 +164,7 @@ final class Pdf {
                 // $text = $txt[0];
                 while ($pdf->GetStringWidth($txt) > $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
                     if ($txt != $pdf->getAliasNbPages() && $txt != ' ' . $pdf->getAliasNbPages()) {
-                        $txt = mb_substr($txt, 0, -1,'UTF-8');
+                        $txt = mb_substr($txt, 0, -1, 'UTF-8');
                     }
                 }
 
@@ -204,6 +204,7 @@ final class Pdf {
         }
         //$JasperObj->print_expression_result = false;
     }
+
     public static function rotate($type, $x = -1, $y = -1) {
         $pdf = self::$pdfOutPut;
         if ($type == "")
@@ -244,6 +245,4 @@ final class Pdf {
         } else
             self::$print_expression_result = true;
     }
-
-
 }
