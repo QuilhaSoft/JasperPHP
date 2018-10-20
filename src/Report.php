@@ -468,28 +468,54 @@ class Report extends Element {
             if ($pattern == "###0")
                 return number_format($txt, 0, "", "");
             elseif ($pattern == "#,##0")
-                return number_format($txt, 0, ",", ".");
+                return number_format($txt, 0, ".", ",");
             elseif ($pattern == "###0.0")
-                return number_format($txt, 1, ",", "");
-            elseif ($pattern == "#.##0.0" || $pattern == "#,##0.0;-#,##0.0")
-                return number_format($txt, 1, ",", ".");
+                return number_format($txt, 1, ".", "");
+            elseif ($pattern == "#,##0.0" || $pattern == "#,##0.0;-#,##0.0")
+                return number_format($txt, 1, ".", ",");
             elseif ($pattern == "###0.00" || $pattern == "###0.00;-###0.00")
-                return number_format($txt, 2, ",", "");
+                return number_format($txt, 2, ".", "");
             elseif ($pattern == "#,##0.00" || $pattern == "#,##0.00;-#,##0.00")
-                return number_format($txt, 2, ",", ".");
+                return number_format($txt, 2, ".", ",");
             elseif ($pattern == "###0.00;(###0.00)")
-                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ",", "") . ")" : number_format($txt, 2, ",", ""));
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ".", "") . ")" : number_format($txt, 2, ".", ""));
             elseif ($pattern == "#,##0.00;(#,##0.00)")
-                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ",", ".") . ")" : number_format($txt, 2, ",", "."));
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ".", ",") . ")" : number_format($txt, 2, ".", ","));
             elseif ($pattern == "#,##0.00;(-#,##0.00)")
-                return ($txt < 0 ? "(" . number_format($txt, 2, ",", ".") . ")" : number_format($txt, 2, ",", "."));
+                return ($txt < 0 ? "(" . number_format($txt, 2, ".", ",") . ")" : number_format($txt, 2, ".", ","));
             elseif ($pattern == "###0.000")
-                return number_format($txt, 3, ",", "");
+                return number_format($txt, 3, ".", "");
             elseif ($pattern == "#,##0.000")
-                return number_format($txt, 3, ",", ".");
+                return number_format($txt, 3, ".", ",");
             elseif ($pattern == "#,##0.0000")
-                return number_format($txt, 4, ",", ".");
+                return number_format($txt, 4, ".", ",");
             elseif ($pattern == "###0.0000")
+                return number_format($txt, 4, ".", "");
+            
+            // latin formats
+            elseif ($pattern == "#.##0")
+                return number_format($txt, 0, ".", ",");
+            elseif ($pattern == "###0,0")
+                return number_format($txt, 1, ",", "");
+            elseif ($pattern == "#.##0,0" || $pattern == "#.##0,0;-#.##0,0")
+                return number_format($txt, 1, ",", ".");
+            elseif ($pattern == "###0,00" || $pattern == "###0,00;-###0,00")
+                return number_format($txt, 2, ",", "");
+            elseif ($pattern == "#.##0,00" || $pattern == "#.##0,00;-#.##0,00")
+                return number_format($txt, 2, ",", ".");
+            elseif ($pattern == "###0,00;(###0,00)")
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ",", "") . ")" : number_format($txt, 2, ",", ""));
+            elseif ($pattern == "#.##0,00;(#.##0,00)")
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ",", ".") . ")" : number_format($txt, 2, ",", "."));
+            elseif ($pattern == "#.##0,00;(-#.##0,00)")
+                return ($txt < 0 ? "(" . number_format($txt, 2, ",", ".") . ")" : number_format($txt, 2, ",", "."));
+            elseif ($pattern == "###0,000")
+                return number_format($txt, 3, ",", "");
+            elseif ($pattern == "#,##0,000")
+                return number_format($txt, 3, ",", ".");
+            elseif ($pattern == "#,##0,0000")
+                return number_format($txt, 4, ",", ".");
+            elseif ($pattern == "###0,0000")
                 return number_format($txt, 4, ",", "");
 
             elseif ($pattern == "xx/xx" && $txt != "")
