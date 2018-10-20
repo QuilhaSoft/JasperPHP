@@ -179,8 +179,8 @@ class TJasper
     }
 }
 require('autoloader.php') ;
-require('../../tecnickcom/tcpdf/tcpdf.php'); // apontar para o caminho do tcpf previamente instalado , 
-//                                          // caso tenha instalado via composer e o mesmo esteja precarregado não precisa
+require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , 
+                                            // on composer instalation is not necessaty 
 
 TTransaction::open('dev');
 $jasper = new TJasper('template.jrxml',$_GET);
