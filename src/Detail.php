@@ -23,9 +23,16 @@ class Detail extends Element {
             $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
             $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
             $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
+            
             $row = is_array($dbData) ? $dbData[0] : $dbData->fetchObject($recordObject);
             while ($row) {
                 $row->rowIndex = $rowIndex;
+                $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
+                $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
+                $obj->arrayVariable['REPORT_COUNT']['calculation'] = null;
+                $obj->arrayVariable['totalRows']["ans"] = $totalRows;
+                $obj->arrayVariable['totalRows']["target"] = $totalRows;
+                $obj->arrayVariable['totalRows']["calculation"] = null;
                 $row->totalRows = $totalRows;
                 $obj->variables_calculation($obj, $row);
                 $background = $obj->getChildByClassName('Background');
