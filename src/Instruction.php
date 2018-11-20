@@ -18,6 +18,7 @@ use \JasperPHP\Pdf;
 class Instruction {
 
     private $jasperObj;
+    private $print_expression_result;
 
     public function __construct(\JasperPHP\Report $jasperObj) {
 
@@ -53,7 +54,6 @@ class Instruction {
                     $pageHeader->generate($this->jasperObj);
             }
             JasperPHP\Pdf::runInstructions();
-            
         }
     }
 
@@ -125,7 +125,7 @@ class Instruction {
     public function MultiCell($arraydata) {
 
         //if($fielddata==true) {
-        JasperPHP\Pdf::checkoverflow($arraydata, $arraydata["txt"], null);
+        $this->checkoverflow($arraydata, $arraydata["txt"], null);
         //}
     }
 
@@ -211,9 +211,9 @@ class Instruction {
     }
 
     public function breaker($arraydata) {
-        JasperPHP\Pdf::print_expression($arraydata);
+        $this->print_expression($arraydata);
         $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
-        if (JasperPHP\Pdf::$print_expression_result == true) {
+        if ($this->print_expression_result == true) {
             if ($pageFooter)
                 $pageFooter->generate($this->jasperObj);
             JasperPHP\Pdf::addInstruction(array("type" => "resetY_axis"));
@@ -222,16 +222,16 @@ class Instruction {
             JasperPHP\Pdf::addInstruction(array("type" => "setPage", "value" => JasperPHP\Pdf::$currrentPage, 'resetMargins' => false));
             $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
             //if (JasperPHP\Pdf::$print_expression_result == true) {
-                if ($pageHeader)
-                    $pageHeader->generate($this->jasperObj);
+            if ($pageHeader)
+                $pageHeader->generate($this->jasperObj);
             //}
             JasperPHP\Pdf::runInstructions();
         }
     }
 
     public function Line($arraydata) {
-        JasperPHP\Pdf::print_expression($arraydata);
-        if (JasperPHP\Pdf::$print_expression_result == true) {
+        $this->print_expression($arraydata);
+        if ($this->print_expression_result == true) {
             JasperPHP\Pdf::$pdfOutPut->Line($arraydata["x1"] + JasperPHP\Pdf::$arrayPageSetting["leftMargin"], $arraydata["y1"] + JasperPHP\Pdf::$y_axis, $arraydata["x2"] + JasperPHP\Pdf::$arrayPageSetting["leftMargin"], $arraydata["y2"] + JasperPHP\Pdf::$y_axis, $arraydata["style"]);
         }
     }
@@ -376,4 +376,121 @@ class Instruction {
         }
     }
 
+    public function checkoverflow($obj) {
+        $pdf = JasperPHP\Pdf::$pdfOutPut;
+        $JasperObj = $this->jasperObj;
+        // var_dump($obj->children); 
+        $txt = (string) $obj['txt'];
+        //$newfont = $JasperObj->recommendFont($txt, null, null);
+        //$pdf->SetFont($newfont,$pdf->getFontStyle(),$this->defaultFontSize);
+        $this->print_expression($obj);
+        $arraydata = $obj;
+        $pdf->SetXY($arraydata["x"] + JasperPHP\Pdf::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Pdf::$y_axis);
+        if ($this->print_expression_result == true) {
+            $angle = $this->rotate($arraydata);
+            if ($angle != 0) {
+                $pdf->StartTransform();
+                $pdf->Rotate($angle);
+            }
+            // echo $arraydata["link"];
+            if ($arraydata["link"]) {
+                //print_r($arraydata);
+                //$this->debughyperlink=true;
+                //  echo $arraydata["link"].",print:".$this->print_expression_result;
+                //$arraydata["link"] = $JasperObj->analyse_expression($arraydata["link"], "");
+                //$this->debughyperlink=false;
+            }
+            //print_r($arraydata);
+
+
+            if ($arraydata["writeHTML"] == true) {
+                //echo  ($txt);
+                $pdf->writeHTML($txt, true, 0, true, true);
+                $pdf->Ln();
+                /* if($this->currentband=='detail'){
+                  if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
+                  $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                  else{
+                  if($this->maxpagey['page_'.($pdf->getPage()-1)]<$pdf->GetY())
+                  $this->maxpagey['page_'.($pdf->getPage()-1)]=$pdf->GetY();
+                  }
+                  } */
+            } elseif ($arraydata["poverflow"] == "false" && $arraydata["soverflow"] == "false") {
+                if ($arraydata["valign"] == "M")
+                    $arraydata["valign"] = "C";
+                if ($arraydata["valign"] == "")
+                    $arraydata["valign"] = "T";
+
+                // $text = $txt[0];
+                while ($pdf->GetStringWidth($txt) > $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
+                    if ($txt != $pdf->getAliasNbPages() && $txt != ' ' . $pdf->getAliasNbPages()) {
+                        $txt = mb_substr($txt, 0, -1, 'UTF-8');
+                    }
+                }
+
+                $x = $pdf->GetX();
+                $y = $pdf->GetY();
+                $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
+                $text = $pattern != '' ? $JasperObj->formatText($txt, $pattern) : $txt;
+                $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T", $arraydata["valign"]);
+            } elseif ($arraydata["poverflow"] == "true") {
+                if ($arraydata["valign"] == "C")
+                    $arraydata["valign"] = "M";
+                if ($arraydata["valign"] == "")
+                    $arraydata["valign"] = "T";
+
+                $x = $pdf->GetX();
+                $yAfter = $pdf->GetY();
+                $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
+                //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
+                $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
+                        , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
+                if (($yAfter + $arraydata["height"]) <= JasperPHP\Pdf::$arrayPageSetting["pageHeight"]) {
+                    JasperPHP\Pdf::$y_axis = $pdf->GetY() - 20;
+                }
+            } elseif ($arraydata["soverflow"] == "true") {
+
+                if ($arraydata["valign"] == "M")
+                    $arraydata["valign"] = "C";
+                if ($arraydata["valign"] == "")
+                    $arraydata["valign"] = "T";
+
+                $pdf->Cell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"] . "", 0, true, "T", $arraydata["valign"]);
+                $pdf->Ln();
+            }
+            else {
+                $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, true, true, $maxheight);
+            }
+        }
+    }
+
+    public function print_expression($data) {
+        $expression = $data["printWhenExpression"];
+        $this->print_expression_result = false;
+        if ($expression != "") {
+            //echo      'if('.$expression.'){$this->print_expression_result=true;}';
+            //$expression=$this->analyse_expression($expression);
+            error_reporting(0);
+            eval('if(' . $expression . '){$this->print_expression_result=true;}');
+            error_reporting(5);
+        } else
+            $this->print_expression_result = true;
+    }
+
+    public function rotate($arraydata) {
+        $pdf = JasperPHP\Pdf::$pdfOutPut;
+        if (array_key_exists("rotation", $arraydata)) {
+            $type = (string) $arraydata["rotation"];
+            if ($type == "")
+                $angle = 0;
+            elseif ($type == "Left")
+                $angle = 90;
+            elseif ($type == "Right")
+                $angle = 270;
+            elseif ($type == "UpsideDown")
+                $angle = 180;
+
+            return $angle;
+        }
+    }
 }
