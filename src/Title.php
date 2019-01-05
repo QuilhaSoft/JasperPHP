@@ -19,8 +19,9 @@ class Title extends Element {
         $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
         $recordObject = array_key_exists('recordObj', $arrayVariable) ? $arrayVariable['recordObj']['initialValue'] : "stdClass";
         // echo  $recordObject;
-        $row = $dbData->fetchObject($recordObject);
-        $obj->rowData = $row;
+        //var_dump($obj);
+        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $obj->rowData;
+        //$obj->rowData = $row;
         if ($row) {
             switch ($row) {
                 case (is_object($row)):

@@ -481,6 +481,7 @@ class Instruction {
         $pdf = JasperPHP\Pdf::$pdfOutPut;
         if (array_key_exists("rotation", $arraydata)) {
             $type = (string) $arraydata["rotation"];
+            $angle = null;
             if ($type == "")
                 $angle = 0;
             elseif ($type == "Left")

@@ -19,9 +19,10 @@ class Subreport extends Element {
     public $returnValues;
 
     public function generate($obj = null) {
+        $this->returnValues = array();
         $row = is_object($obj) ? $_POST : $obj[1];
         $obj = is_array($obj) ? $obj[0] : $obj;
-        $xmlfile = (string) $this->objElement->subreportExpression;
+        $xmlFile = (string) $this->objElement->subreportExpression;
         //$rowArray =is_array($row)?$row:get_object_vars($row);
         if (is_array($row)) {
             $rowArray = $row;
@@ -33,9 +34,11 @@ class Subreport extends Element {
             }
         }
         $newParameters = ($rowArray) ? array_merge($obj->arrayParameter, $rowArray) : $obj->arrayParameter;
-        $report = new JasperPHP\Report($xmlfile, $newParameters);
+        $GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
+        $report = $GLOBALS['reports'][$xmlFile];
+
         //$this->children= array($report);
-        $report->generate();
+        $report->generate($newParameters);
         foreach ($this->objElement->returnValue as $r) {
             $this->returnValues[] = $r;
         }

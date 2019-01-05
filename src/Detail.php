@@ -17,14 +17,12 @@ use \JasperPHP;
 class Detail extends Element {
 
     public function generate($obj = null) {
-        $dbData = strlen(trim($obj->sql)) > 0 ? $obj->getDbData() : $obj->dbData;
+        $dbData = $obj->dbData;
         if ($this->children) {
             $rowIndex = 1;
             $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
-            $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
-            $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
-            
-            $row = is_array($dbData) ? $dbData[0] : $dbData->fetchObject($recordObject);
+
+            $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
             while ($row) {
                 $row->rowIndex = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
@@ -92,6 +90,9 @@ class Detail extends Element {
                         }
                     }
                 }
+                $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
+                $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
+
                 $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
                 $rowIndex++;
             }

@@ -25,6 +25,7 @@ final class Pdf {
     static public $currrentPage = 1;
     static public $y_axis;
     static public $arrayPageSetting;
+    static public $print_expression_result;
 
     /*
      * método __construct()
