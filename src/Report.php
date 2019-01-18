@@ -32,8 +32,10 @@ class Report extends Element {
     public $rowData;
 
     public function __construct($xmlFile = null) {
-        $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
-        $xmlFile = file_get_contents( DIRECTORY_SEPARATOR . $xmlFile);
+        if(file_exists($xmlFile)) {
+            $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
+            $xmlFile = file_get_contents(DIRECTORY_SEPARATOR . $xmlFile);
+        }
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
