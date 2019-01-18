@@ -13,8 +13,8 @@ use TTransaction;
  * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
  * @version  2015.03.11
  * @access   restrict
- * 
- * 
+ *
+ *
  * 2015.03.11 -- criação
  * */
 class Report extends Element {
@@ -33,7 +33,7 @@ class Report extends Element {
 
     public function __construct($xmlFile = null) {
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
-        $xmlFile = file_get_contents($this->defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
+        $xmlFile = file_get_contents( DIRECTORY_SEPARATOR . $xmlFile);
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
@@ -389,7 +389,7 @@ class Report extends Element {
                 }// finisish resettype=''
                 elseif ($out['resetType'] == 'Group') { //reset type='group'
                     if ($this->groupnochange >= 0) {
-                        
+
                     }
                     if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
                         $value += $this->time_to_sec($newValue);
