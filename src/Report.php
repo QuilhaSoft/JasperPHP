@@ -3,8 +3,8 @@
 namespace JasperPHP;
 
 use JasperPHP;
-//use JasperPHP\ado\TTransaction;
-use TTransaction;
+use JasperPHP\ado\TTransaction;
+//use TTransaction;
 
 /**
  * classe Report
@@ -31,18 +31,18 @@ class Report extends Element {
     public $objElement;
     public $rowData;
 
-    public function __construct($xmlFile = null) {
+    public function __construct($xmlFile = null,$param) {
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         $xmlFile = file_get_contents($this->defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
         $xml = simplexml_load_string($xmlFile);
-        $this->charge($xml);
+        $this->charge($xml,$param);
         //$this->objElement = $xml;
     }
 
-    public function charge($ObjElement) {
+    public function charge($ObjElement,$param) {
 
         $this->name = get_class($this);
         $this->objElement = $ObjElement;
@@ -62,11 +62,11 @@ class Report extends Element {
                 $this->add(new $className($value));
             }
         }
-        //$this->parameter_handler($ObjElement, $param);
+        $this->parameter_handler($ObjElement, $param);
         $this->field_handler($ObjElement);
-        //$this->variable_handler($ObjElement);
+        $this->variable_handler($ObjElement);
         $this->page_setting($ObjElement);
-        // $this->queryString_handler($ObjElement);
+         $this->queryString_handler($ObjElement);
     }
 
     public function getDbData() {
@@ -616,10 +616,10 @@ class Report extends Element {
         }
     }
 
-    public function generate($param = null) {
-        $this->parameter_handler($this->objElement, $param);
-        $this->variable_handler($this->objElement);
-        $this->queryString_handler($this->objElement);
+    public function generate() {
+        //$this->parameter_handler($this->objElement, $param);
+        //$this->variable_handler($this->objElement);
+        //$this->queryString_handler($this->objElement);
         //var_dump($this->objElement);
         if (strlen(trim($this->sql)) > 0) {
             $this->dbData = $this->getDbData();

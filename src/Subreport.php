@@ -34,11 +34,11 @@ class Subreport extends Element {
             }
         }
         $newParameters = ($rowArray) ? array_merge($obj->arrayParameter, $rowArray) : $obj->arrayParameter;
-        $GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
-        $report = $GLOBALS['reports'][$xmlFile];
+        //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
+        $report = new JasperPHP\Report($xmlFile,$newParameters);//$GLOBALS['reports'][$xmlFile];
 
         //$this->children= array($report);
-        $report->generate($newParameters);
+        $report->generate();
         foreach ($this->objElement->returnValue as $r) {
             $this->returnValues[] = $r;
         }

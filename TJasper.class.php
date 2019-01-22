@@ -38,7 +38,7 @@ class TJasper {
         switch ($this->type) {
             case 'pdf':
                 $GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports']))?$GLOBALS['reports'][$xmlFile]: new JasperPHP\Report($xmlFile);
-                $this->report = $GLOBALS['reports'][$xmlFile];
+                $this->report = new JasperPHP\Report($xmlFile,$param);// $GLOBALS['reports'][$xmlFile];
                 JasperPHP\Pdf::prepare($this->report);
                 break;
             case 'xls':
@@ -50,7 +50,7 @@ class TJasper {
     }
 
     public function outpage($type = 'pdf') {
-        $this->report->generate($this->param);
+        $this->report->generate();
         $this->report->out();
         switch ($this->type) {
             case 'pdf':
