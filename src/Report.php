@@ -36,6 +36,7 @@ class Report extends Element {
             $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
             $xmlFile = file_get_contents(DIRECTORY_SEPARATOR . $xmlFile);
         }
+        
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
