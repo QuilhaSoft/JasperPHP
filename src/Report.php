@@ -68,7 +68,7 @@ class Report extends Element {
         $this->field_handler($ObjElement);
         $this->variable_handler($ObjElement);
         $this->page_setting($ObjElement);
-         $this->queryString_handler($ObjElement);
+        $this->queryString_handler($ObjElement);
     }
 
     public function getDbData() {
