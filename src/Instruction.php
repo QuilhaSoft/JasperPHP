@@ -2,8 +2,7 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-use \JasperPHP\Pdf;
+use JasperPHP;
 
 /**
  * classe Instruction
@@ -12,7 +11,7 @@ use \JasperPHP\Pdf;
  * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
  * @version  2015.03.11
  * @access   restrict
- * 
+ *
  * 2015.03.11 -- criação
  * */
 class Instruction {
@@ -304,7 +303,7 @@ class Instruction {
         );
 
 
-        //[2D barcode section]        
+        //[2D barcode section]
         //DATAMATRIX
         //QRCODE,H or Q or M or L (H=high level correction, L=low level correction)
         // -------------------------------------------------------------------
@@ -382,12 +381,13 @@ class Instruction {
     public function checkoverflow($obj) {
         $pdf = JasperPHP\Pdf::$pdfOutPut;
         $JasperObj = $this->jasperObj;
-        // var_dump($obj->children); 
+        // var_dump($obj->children);
         $txt = (string) $obj['txt'];
         //$newfont = $JasperObj->recommendFont($txt, null, null);
         //$pdf->SetFont($newfont,$pdf->getFontStyle(),$this->defaultFontSize);
         $this->print_expression($obj);
         $arraydata = $obj;
+
         $pdf->SetXY($arraydata["x"] + JasperPHP\Pdf::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Pdf::$y_axis);
         if ($this->print_expression_result == true) {
             $angle = $this->rotate($arraydata);
@@ -406,6 +406,7 @@ class Instruction {
             //print_r($arraydata);
 
 
+            /* @var \TCPDF $pdf */
             if ($arraydata["writeHTML"] == true) {
                 //echo  ($txt);
                 $pdf->writeHTML($txt, true, 0, true, true);
@@ -435,7 +436,31 @@ class Instruction {
                 $y = $pdf->GetY();
                 $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
                 $text = $pattern != '' ? $JasperObj->formatText($txt, $pattern) : $txt;
-                $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T", $arraydata["valign"]);
+                if ($arraydata['multiCell']) {
+
+
+                    /*var_dump($x);
+                    var_dump($y);
+                    pr($arraydata);*/
+                    //var_dump($pdf->getPage()-1);
+                    //  var_dump($y);
+                    $pdf->MultiCell(
+                        $arraydata["width"],
+                        $arraydata["height"],
+                        (string) $obj['txt'],
+                        $arraydata["border"],
+                        $arraydata["align"],
+                        0,0,
+                        $x,
+                        $y,
+                        true,0
+                    );
+                } else {
+
+                    $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "",
+                        $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T",
+                        $arraydata["valign"]);
+                }
             } elseif ($arraydata["poverflow"] == "true") {
                 if ($arraydata["valign"] == "C")
                     $arraydata["valign"] = "M";
@@ -447,7 +472,7 @@ class Instruction {
                 $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
-                        , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
+                    , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
                 if (($yAfter + $arraydata["height"]) <= JasperPHP\Pdf::$arrayPageSetting["pageHeight"]) {
                     JasperPHP\Pdf::$y_axis = $pdf->GetY() - 20;
                 }
