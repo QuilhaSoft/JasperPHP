@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-10-10T10:38:07 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MYSQL.xml"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="empresas_codigo" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{empresas_codigo}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="locacoes_dia_repasse" class="java.lang.String"/>
+	<parameter name="eventos_mes_ref" class="java.lang.String"/>
+	<parameter name="rd_filtrar_pagos" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT p.proprietarios_codigo, 
+p.proprietarios_nome,
+cc.cc_terceiros_codigo,
+cc.bancos_codigo,
+cc.cc_terceiros_agencia,
+cc.cc_terceiros_conta,
+cc.cc_terceiros_tipo,
+cc.cc_terceiros_titular,
+cc.cc_terceiros_cnpjcpf,
+l.locacoes_codigo,
+b.bancos_nome
+FROM locacoes l
+ JOIN imoveis_proprietarios ip ON ip.imoveis_codigo = l.imoveis_codigo
+ JOIN cc_terceiros cc ON cc.cc_terceiros_codigo = ip.cc_terceiros_codigo
+ JOIN proprietarios p ON p.proprietarios_codigo = ip.proprietarios_codigo 
+ JOIN bancos b ON b.bancos_codigo = cc.bancos_codigo
+ WHERE l.motivos_rescisao_codigo IS NULL AND  l.locacoes_dia_repasse =  $P{locacoes_dia_repasse}
+ $P{rd_filtrar_pagos} 
+ GROUP BY p.proprietarios_codigo,cc.cc_terceiros_conta]]>
+	</queryString>
+	<field name="proprietarios_codigo" class="java.lang.Integer"/>
+	<field name="proprietarios_nome" class="java.lang.String"/>
+	<field name="bancos_codigo" class="java.lang.Integer"/>
+	<field name="cc_terceiros_agencia" class="java.lang.String"/>
+	<field name="cc_terceiros_conta" class="java.lang.String"/>
+	<field name="locacoes_codigo" class="java.lang.Integer"/>
+	<field name="bancos_nome" class="java.lang.String"/>
+	<field name="cc_terceiros_titular" class="java.lang.String"/>
+	<field name="cc_terceiros_tipo" class="java.lang.String"/>
+	<field name="cc_terceiros_cnpjcpf" class="java.lang.String"/>
+	<field name="cc_terceiros_codigo" class="java.lang.String"/>
+	<title>
+		<band height="24">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="370" y="0" width="100" height="14" uuid="b800fb54-f9e9-45d3-aa58-83be22f288da">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="60" height="14" uuid="914d893a-3d28-4e7e-9188-7a92439e732e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="530" y="0" width="44" height="14" uuid="bf87de04-8d4e-4aba-8769-908d465660d2"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="39" height="14" uuid="27d6dbae-0922-42e5-bdaf-d5789a9b4ece">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Rel/1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="14" width="149" height="6" uuid="3f9204f2-ecbf-4dba-875f-e37f03c0e4ed"/>
+				<text><![CDATA[Detalhamento de Repasse]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="320" y="14" width="150" height="6" uuid="8e84f5df-ea6a-40af-a315-ae1ffa4fdbcc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dia do repasse : "+$P{locacoes_dia_repasse}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="0" width="50" height="14" uuid="7ddab86b-d090-4e6e-93f0-826d1eb0b22a"/>
+				<text><![CDATA[Emissão:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="470" y="14" width="104" height="6" uuid="af891640-fc89-4e73-8295-003cb105ec35"/>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Mes REF.:"+$P{eventos_mes_ref}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="40" y="0" width="280" height="14" uuid="0ceb00f2-bf79-4129-bce5-0ac3fbf53e64"/>
+				<subreportParameter name="empresas_codigo">
+					<subreportParameterExpression><![CDATA[$P{empresas_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["empresas_nomefantasia.jrxml"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="1" y="23" width="575" height="1" uuid="d787490e-3b50-41bf-b6bb-c430f56c7416"/>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="3" width="50" height="14" uuid="69f4e46d-da2a-44f4-9927-ded9ad64f70d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Locador:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="3" width="320" height="14" uuid="e5ab31d0-78f1-44cb-8c32-10154f44434b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["("+$F{proprietarios_codigo}+")  "+$F{proprietarios_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="297" y="17" width="66" height="14" uuid="e84351be-06e1-4fba-971f-c000d68badc5"/>
+				<textFieldExpression><![CDATA[$F{cc_terceiros_agencia}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="17" width="50" height="14" uuid="fd37b4f4-833e-4207-98b7-863f4a6c3efa"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="17" width="35" height="14" uuid="5c202af7-e355-45d6-8b88-2d3520198b14"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Tipo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="399" y="17" width="74" height="14" uuid="67c2ea53-bb66-4e5a-b3e3-3ec864c9b900"/>
+				<textFieldExpression><![CDATA[$F{cc_terceiros_conta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="17" width="40" height="14" uuid="7b28c441-e437-4788-ae1a-afe6b6299420"/>
+				<textFieldExpression><![CDATA[$F{cc_terceiros_tipo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="363" y="17" width="36" height="14" uuid="591386fe-ca88-40f1-a923-14ee36dc4b17"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Conta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="17" width="30" height="14" uuid="342326df-92fd-4037-b9e3-4c2b4b5c9767"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Ag:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="17" width="217" height="14" uuid="dc178d02-01e9-4dfb-91cf-80fc45b6be56"/>
+				<textFieldExpression><![CDATA["("+$F{bancos_codigo}+") "+$F{bancos_nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="31" width="50" height="14" uuid="712220c4-55ca-43c3-8950-c33a3f819a9e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Titular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="31" width="217" height="14" uuid="a689f28a-ed1b-4969-87b1-43df0c656b29"/>
+				<textFieldExpression><![CDATA[$F{cc_terceiros_titular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="267" y="31" width="30" height="14" uuid="f1ef80e4-ef72-436d-ad90-c9d22d6b26d7"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="297" y="31" width="123" height="14" uuid="55fe5e2a-4553-48aa-ac99-71f4ed5323bf"/>
+				<textFieldExpression><![CDATA[$F{cc_terceiros_cnpjcpf}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="131">
+			<subreport>
+				<reportElement x="7" y="10" width="550" height="100" uuid="e1c4ddad-c26b-4494-b933-36106200e55f"/>
+				<subreportParameter name="proprietarios_codigo">
+					<subreportParameterExpression><![CDATA[$F{proprietarios_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cc_terceiros_codigo">
+					<subreportParameterExpression><![CDATA[$F{cc_terceiros_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="eventos_mes_ref">
+					<subreportParameterExpression><![CDATA[$P{eventos_mes_ref}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="locacoes_dia_repasse">
+					<subreportParameterExpression><![CDATA[$P{locacoes_dia_repasse}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["rel01Files/imoveis.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="2" width="429" height="10" uuid="30bee12b-6c21-4697-bf1c-6c260a837581"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[QuilhaSoft.com.br]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="0" width="574" height="1" uuid="a8a8e584-b747-4d20-a622-546110c84392"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

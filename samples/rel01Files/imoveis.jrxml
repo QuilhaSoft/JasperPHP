@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-08-24T15:57:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="imoveis" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MYSQL.xml"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="locacoes_dia_repasse" class="java.lang.String"/>
+	<parameter name="eventos_mes_ref" class="java.lang.String"/>
+	<parameter name="proprietarios_codigo" class="java.lang.Integer"/>
+	<parameter name="cc_terceiros_codigo" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT p.proprietarios_codigo, 
+p.proprietarios_nome,
+im.imoveis_codigo,
+im.imoveis_referencia,
+l.locacoes_codigo,
+ip.imoveis_proprietarios_part_prop
+FROM locacoes l
+JOIN imoveis im ON im.imoveis_codigo = l.imoveis_codigo
+ JOIN imoveis_proprietarios ip ON ip.imoveis_codigo = im.imoveis_codigo
+ JOIN proprietarios p ON p.proprietarios_codigo = ip.proprietarios_codigo 
+ WHERE l.motivos_rescisao_codigo IS NULL 
+ AND  l.locacoes_dia_repasse =  $P{locacoes_dia_repasse} 
+ AND ip.proprietarios_codigo =  $P{proprietarios_codigo} 
+ AND ip.cc_terceiros_codigo  =  $P{cc_terceiros_codigo}]]>
+	</queryString>
+	<field name="proprietarios_codigo" class="java.lang.String"/>
+	<field name="proprietarios_nome" class="java.lang.String"/>
+	<field name="imoveis_codigo" class="java.lang.String"/>
+	<field name="imoveis_referencia" class="java.lang.String"/>
+	<field name="locacoes_codigo" class="java.lang.Integer"/>
+	<field name="imoveis_proprietarios_part_prop" class="java.lang.Float"/>
+	<variable name="total_imovel" class="java.lang.Float">
+		<variableExpression><![CDATA[$V{total_imovel}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="20" width="543" height="18" uuid="974724aa-7947-4226-8e7b-7a046e709dea"/>
+				<subreportParameter name="locacoes_codigo">
+					<subreportParameterExpression><![CDATA[$F{locacoes_codigo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["rel01Files/locatarios.jrxml"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="476" y="4" width="67" height="16" uuid="4c9036af-858c-4452-a6ff-3be16c7b3bfa"/>
+				<textFieldExpression><![CDATA[$F{imoveis_proprietarios_part_prop}+"%"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="409" y="4" width="67" height="16" uuid="aa9be1a5-b3c6-4132-9a27-4654592a5dce"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Participação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="4" width="50" height="16" uuid="0a3adb17-767e-4651-beb6-7fd8f65a6599"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Imovel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="4" width="359" height="16" uuid="a9855693-f2e5-44c1-a182-74cb352624c0"/>
+				<textFieldExpression><![CDATA["("+$F{imoveis_codigo}+") "+$F{imoveis_referencia}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="56">
+			<subreport>
+				<reportElement x="20" y="10" width="550" height="30" uuid="9ec8ef6c-60d8-46cc-95d2-0a6d156732e3"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total" toVariable="total_imovel" calculation="Sum"/>
+				<subreportExpression><![CDATA["rel01Files/eventos.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="61">
+			<line>
+				<reportElement x="1" y="60" width="574" height="1" uuid="114b2073-993c-4a5f-b81e-069c58e97cce"/>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement x="490" y="22" width="70" height="14" uuid="212d6b55-2345-4730-93d0-06334aeaa9ef"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_imovel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="490" height="14" uuid="00236a04-b0be-44bd-9dac-be6fc3f8ef59">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Total ------------------------------------------------------------------------------------------------------------------------------------------------------------------]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

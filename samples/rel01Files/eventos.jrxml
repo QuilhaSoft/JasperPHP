@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-08-29T11:11:20 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="eventos" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="007023c9-04d9-4335-ba8e-cd79a2cbd957">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<parameter name="locacoes_codigo" class="java.lang.Integer"/>
+	<parameter name="eventos_mes_ref" class="java.lang.String"/>
+	<parameter name="proprietarios_codigo" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT et.eventos_tipo_nome,
+ev.eventos_historico,
+ev.eventos_data,
+rp.eventos_dc,
+if(rp.eventos_dc = "D",ROUND((rp.eventos_valor/100)*imoveis_proprietarios_part_prop),NULL) as eventos_valor_D,
+if(rp.eventos_dc = "C",ROUND((rp.eventos_valor/100)*imoveis_proprietarios_part_prop),NULL) as eventos_valor_C,
+ip.proprietarios_codigo,
+proprietarios_pfpj,
+ev.eventos_mes_ref,
+rp.locacoes_codigo,
+ev.eventos_tipo_codigo,
+imoveis_proprietarios_part_prop
+FROM razao_proprietarios rp
+JOIN locacoes l ON l.locacoes_codigo = rp.locacoes_codigo
+JOIN imoveis_proprietarios ip ON ip.imoveis_codigo = l.imoveis_codigo
+JOIN proprietarios p ON ip.proprietarios_codigo  = p.proprietarios_codigo
+JOIN eventos ev ON ev.eventos_codigo = rp.eventos_codigo
+JOIN eventos_tipo et ON et.eventos_tipo_codigo = ev.eventos_tipo_codigo
+WHERE rp.locacoes_codigo = $P{locacoes_codigo}
+AND ev.eventos_mes_ref = $P{eventos_mes_ref}
+AND ip.proprietarios_codigo  = $P{proprietarios_codigo} 
+ORDER BY rp.eventos_dc]]>
+	</queryString>
+	<field name="eventos_tipo_nome" class="java.lang.String"/>
+	<field name="eventos_historico" class="java.lang.String"/>
+	<field name="eventos_dc" class="java.lang.String"/>
+	<field name="eventos_data" class="java.sql.Date"/>
+	<field name="eventos_valor_D" class="java.lang.Float"/>
+	<field name="eventos_valor_C" class="java.lang.Float"/>
+	<field name="proprietarios_codigo" class="java.lang.String"/>
+	<field name="proprietarios_pfpj" class="java.lang.String"/>
+	<field name="eventos_mes_ref" class="java.lang.String"/>
+	<field name="eventos_tipo_codigo" class="java.lang.String"/>
+	<field name="locacoes_codigo" class="java.lang.String"/>
+	<field name="imoveis_proprietarios_part_prop" class="java.lang.String"/>
+	<variable name="total_credito" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{eventos_valor_C}]]></variableExpression>
+	</variable>
+	<variable name="total_debito" class="java.lang.Float" incrementType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{eventos_valor_D}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.lang.Float">
+		<variableExpression><![CDATA[$V{total_credito}-$V{total_debito}]]></variableExpression>
+	</variable>
+	<variable name="recordObj" class="java.lang.String">
+		<initialValueExpression><![CDATA[Evento]]></initialValueExpression>
+	</variable>
+	<columnHeader>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="420" y="0" width="70" height="13" uuid="7a4884a4-9f54-4a15-a29f-da3196befbb1"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Credito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="490" y="0" width="70" height="13" uuid="6edcb544-bfee-44e9-823a-0d71a57ed001"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Debito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="60" height="13" uuid="60a17ece-7c16-4c60-9d5d-90061104b92f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="110" height="15" uuid="fb069efd-fe89-4ebd-9881-3be94db93da1"/>
+				<textFieldExpression><![CDATA[$F{eventos_tipo_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="250" height="15" uuid="1500f56a-23c4-4c2f-afb1-563fc7e5b2da"/>
+				<textFieldExpression><![CDATA[$F{eventos_historico}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="360" y="0" width="60" height="15" uuid="421426c7-0b10-4998-8b64-1a1b81bcb0bb"/>
+				<textFieldExpression><![CDATA[$F{eventos_data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="420" y="0" width="70" height="15" uuid="6f208c67-ad33-4da1-a770-94bc965876e2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{eventos_valor_C}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="490" y="0" width="70" height="15" uuid="dfd7ac1b-30b4-49ce-8d16-8894fb942db5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{eventos_valor_D}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="16" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="420" y="0" width="70" height="16" uuid="b6b38333-ca0d-46d4-bca5-a9fdbfa7c0d7"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{total_credito}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="490" y="0" width="70" height="16" uuid="17f1531e-760f-4a37-910b-169354939de8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{total_debito}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="420" y="0" width="140" height="1" uuid="8bb8c9e9-2013-49ec-98f9-ec2a92ea33c5"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

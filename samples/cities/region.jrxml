@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-10-20T17:21:24 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="report" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT Id as IdRegiao,Nome FROM Regiao WHERE Id in ('1')]]>
+	</queryString>
+	<field name="IdRegiao" class="java.lang.String"/>
+	<field name="Nome" class="java.lang.String"/>
+	<variable name="Variable_1" class="java.lang.String"/>
+	<pageHeader>
+		<band height="38">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="300" y="0" width="100" height="10" uuid="b800fb54-f9e9-45d3-aa58-83be22f288da">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="60" height="10" uuid="914d893a-3d28-4e7e-9188-7a92439e732e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="520" y="0" width="50" height="10" uuid="bf87de04-8d4e-4aba-8769-908d465660d2">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="0" width="39" height="10" uuid="27d6dbae-0922-42e5-bdaf-d5789a9b4ece">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[1==1]]></printWhenExpression>
+				</reportElement>
+				<text><![CDATA[Rel/2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="11" width="149" height="9" uuid="3f9204f2-ecbf-4dba-875f-e37f03c0e4ed">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Cities burn test]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="0" width="50" height="10" uuid="7ddab86b-d090-4e6e-93f0-826d1eb0b22a"/>
+				<text><![CDATA[Generate at:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="575" height="1" uuid="d787490e-3b50-41bf-b6bb-c430f56c7416"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="40" splitType="Prevent">
+			<staticText>
+				<reportElement x="70" y="0" width="59" height="20" uuid="e2a9a333-bfb7-4af5-a4f1-213481c8e63e"/>
+				<text><![CDATA[Regiao]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="-1" width="70" height="21" uuid="996ef238-df4c-4820-87af-f6d5fa70d313"/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="20" width="69" height="20" uuid="9d2bbacc-29a8-480b-9826-ac9c4f41e93d"/>
+				<textFieldExpression><![CDATA[$F{IdRegiao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="20" width="59" height="20" uuid="3d77cd66-71ff-4b42-8960-6747b6efd7a1"/>
+				<textFieldExpression><![CDATA[$F{Nome}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="15" width="575" height="1" uuid="86eccb1c-dd85-43f6-97e1-95ab6c5cc906"/>
+			</line>
+		</band>
+		<band height="102">
+			<subreport>
+				<reportElement x="70" y="30" width="374" height="50" uuid="c5603283-6ca2-4255-8145-0a6db59ce7ac"/>
+				<subreportParameter name="IdRegiao">
+					<subreportParameterExpression><![CDATA[$F{IdRegiao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["cities/states.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>
