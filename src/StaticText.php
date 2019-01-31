@@ -35,7 +35,7 @@ use \JasperPHP;
 			$height=$data->reportElement["height"];
 			$stretchoverflow="false";
 			$printoverflow="false";
-			$writeHTML = '';
+			$writeHTML = false;
 			$isPrintRepeatedValues  = '';
 			$valign = '';
 			//$data->hyperlinkReferenceExpression=$this->analyse_expression($data->hyperlinkReferenceExpression);
@@ -170,6 +170,7 @@ use \JasperPHP;
 			JasperPHP\Pdf::addInstruction(array("type"=>"MultiCell","width"=>$data->reportElement["width"],"height"=>$height,
 				"txt"=>$txtEnc,"border"=>$border,"align"=>$align,"fill"=>$fill,"hidden_type"=>"statictext",
 				"printWhenExpression"=>$printWhenExpression."",
+				"multiCell"=>false,
 				"soverflow"=>$stretchoverflow,"poverflow"=>$printoverflow,"rotation"=>$rotation,"valign"=>$valign,"link"=>null,
 				"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,
                 'writeHTML'=>$writeHTML));

@@ -436,30 +436,12 @@ class Instruction {
                 $y = $pdf->GetY();
                 $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
                 $text = $pattern != '' ? $JasperObj->formatText($txt, $pattern) : $txt;
-                if ($arraydata['multiCell']) {
+                if ($arraydata['multiCell'] === true) {
 
-
-                    /*var_dump($x);
-                    var_dump($y);
-                    pr($arraydata);*/
-                    //var_dump($pdf->getPage()-1);
-                    //  var_dump($y);
                     $pdf->MultiCell(
-                        $arraydata["width"],
-                        $arraydata["height"],
-                        (string) $obj['txt'],
-                        $arraydata["border"],
-                        $arraydata["align"],
-                        0,0,
-                        $x,
-                        $y,
-                        true,0
-                    );
+                            $arraydata["width"], $arraydata["height"], $text, $arraydata["border"], $arraydata["align"], 0, 0, $x, $y, true, 0);
                 } else {
-
-                    $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "",
-                        $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T",
-                        $arraydata["valign"]);
+                    $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T", $arraydata["valign"]);
                 }
             } elseif ($arraydata["poverflow"] == "true") {
                 if ($arraydata["valign"] == "C")
@@ -472,7 +454,7 @@ class Instruction {
                 $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
-                    , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
+                        , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
                 if (($yAfter + $arraydata["height"]) <= JasperPHP\Pdf::$arrayPageSetting["pageHeight"]) {
                     JasperPHP\Pdf::$y_axis = $pdf->GetY() - 20;
                 }
@@ -522,4 +504,5 @@ class Instruction {
             return $angle;
         }
     }
+
 }

@@ -33,9 +33,10 @@ class Report extends Element {
 
 
     public function __construct($xmlFile = null,$param) {
-        if(file_exists($xmlFile)) {
-            $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
-            $xmlFile = file_get_contents(DIRECTORY_SEPARATOR . $xmlFile);
+        $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
+        if(file_exists($this->defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
+            
+            $xmlFile = file_get_contents($this->defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
         }
         $keyword = "<queryString>
         <![CDATA[";
@@ -247,6 +248,7 @@ class Report extends Element {
         error_reporting(0);
         $fieldParts = strpos($field, "->") ? explode("->", $field) : explode("-&gt;", $field);
         $obj = $row;
+        
         foreach ($fieldParts as $part) {
             if (preg_match_all("/\w+/", $part, $matArray)) {
                 if (count($matArray[0]) > 1) {
@@ -259,6 +261,7 @@ class Report extends Element {
                 }
             }
         }
+        
         $val = $obj;
         error_reporting(5);
         $fieldRegExp = str_ireplace("[", "\[", $field);
@@ -619,7 +622,7 @@ class Report extends Element {
         }
     }
 
-    public function generate() {
+    public function generate($obj = null) {
         //$this->parameter_handler($this->objElement, $param);
         //$this->variable_handler($this->objElement);
         //$this->queryString_handler($this->objElement);

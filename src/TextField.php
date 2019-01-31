@@ -16,8 +16,7 @@ use JasperPHP;
  * */
 class TextField extends Element {
 
-    public function generate($obj = null)
-    {
+    public function generate($obj = null) {
         $rowData = is_array($obj) ? $obj[1] : null;
         $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
@@ -40,7 +39,7 @@ class TextField extends Element {
         $isPrintRepeatedValues = '';
         $valign = '';
         $data->hyperlinkReferenceExpression = $data->hyperlinkReferenceExpression;
-
+        $multiCell = false;
         //SimpleXML object (1 item) [0] // ->codeExpression[0] ->attributes('xsi', true) ->schemaLocation ->attributes('', true) ->type ->drawText ->checksumRequired barbecue:
         //SimpleXMLElement Object ( [@attributes] => Array ( [hyperlinkType] => Reference [hyperlinkTarget] => Blank ) [reportElement] => SimpleX
         //print_r( $data["@attributes"]);
@@ -230,8 +229,7 @@ class TextField extends Element {
                 preg_match_all("/P{(\w+)}/", $text, $matchesP);
                 if ($matchesP) {
                     foreach ($matchesP[1] as $macthP) {
-                        $text = str_ireplace(array('$P{' . $macthP . '}'), array(($obj->arrayParameter[$macthP])),
-                            $text);
+                        $text = str_ireplace(array('$P{' . $macthP . '}'), array(($obj->arrayParameter[$macthP])), $text);
                     }
                 }
                 preg_match_all("/V{(\w+)}/", $text, $matchesV);
@@ -255,7 +253,6 @@ class TextField extends Element {
             $writeHTML = 1;
         } elseif ($data->textElement['markup'] == 'rtf') {
             $multiCell = true;
-
         } else {
             $text = str_ireplace(array('"+', '+"', '"'), array('', '', ''), $text);
         }
@@ -274,10 +271,10 @@ class TextField extends Element {
                 $printWhenExpression = str_ireplace(array('$P{' . $macthP . '}', '"'), array($obj->arrayParameter[$macthP], ''), $printWhenExpression);
             }
         }if ($matchesF > 0) {
-        foreach ($matchesF[1] as $macthF) {
-            $printWhenExpression = $obj->getValOfField($macthF, $rowData, $printWhenExpression);
+            foreach ($matchesF[1] as $macthF) {
+                $printWhenExpression = $obj->getValOfField($macthF, $rowData, $printWhenExpression);
+            }
         }
-    }
         if ($matchesV > 0) {
             foreach ($matchesV[1] as $macthV) {
                 $printWhenExpression = $obj->getValOfVariable($macthV, $printWhenExpression);
@@ -299,4 +296,5 @@ class TextField extends Element {
 
         parent::generate($obj);
     }
+
 }

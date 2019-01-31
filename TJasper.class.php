@@ -37,7 +37,6 @@ class TJasper {
         $this->param = $param;
         switch ($this->type) {
             case 'pdf':
-                $GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports']))?$GLOBALS['reports'][$xmlFile]: new JasperPHP\Report($xmlFile);
                 $this->report = new JasperPHP\Report($xmlFile,$param);// $GLOBALS['reports'][$xmlFile];
                 JasperPHP\Pdf::prepare($this->report);
                 break;
@@ -85,7 +84,7 @@ require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly i
 // on composer instalation is not necessaty 
 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
-TTransaction::open('jsp');
+TTransaction::open('dev');
 TTransaction::setLogger(new TLoggerHTML('log.html'));
 $jasper = new TJasper($report_name, $_GET);
 $jasper->outpage();
