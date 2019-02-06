@@ -19,7 +19,7 @@ use JasperPHP\ado\TTransaction;
  * */
 class Report extends Element {
 
-    public $defaultFolder = 'app.jrxml';
+    public static $defaultFolder = 'app.jrxml';
     public $dbData;
     public $arrayVariable;
     public $arrayfield;
@@ -34,9 +34,9 @@ class Report extends Element {
 
     public function __construct($xmlFile = null,$param) {
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
-        if(file_exists($this->defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
+        if(file_exists(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
             
-            $xmlFile = file_get_contents($this->defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
+            $xmlFile = file_get_contents(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
         }
         $keyword = "<queryString>
         <![CDATA[";
