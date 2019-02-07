@@ -1,5 +1,4 @@
 <?php
-
 namespace JasperPHP;
 
 use \JasperPHP;
@@ -14,15 +13,18 @@ use \JasperPHP;
  * 
  * 2015.03.11 -- criaÃ§Ã£o
  * */
-class Subreport extends Element {
+class Subreport extends Element
+{
 
     public $returnValues;
 
-    public function generate($obj = null) {
+    public function generate($obj = null)
+    {
         $this->returnValues = array();
         $row = is_object($obj) ? $_POST : $obj[1];
         $obj = is_array($obj) ? $obj[0] : $obj;
         $xmlFile = (string) $this->objElement->subreportExpression;
+        $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         //$rowArray =is_array($row)?$row:get_object_vars($row);
         if (is_array($row)) {
             $rowArray = $row;
@@ -35,8 +37,7 @@ class Subreport extends Element {
         }
         $newParameters = ($rowArray) ? array_merge($obj->arrayParameter, $rowArray) : $obj->arrayParameter;
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
-        $report = new JasperPHP\Report($xmlFile,$newParameters);//$GLOBALS['reports'][$xmlFile];
-
+        $report = new JasperPHP\Report($xmlFile, $newParameters); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
         $report->generate();
         foreach ($this->objElement->returnValue as $r) {
@@ -44,7 +45,6 @@ class Subreport extends Element {
         }
         $obj->setReturnVariables($this, $report->arrayVariable);
     }
-
 }
 
 ?>

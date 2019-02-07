@@ -3,8 +3,8 @@
 namespace JasperPHP;
 
 use JasperPHP;
-use JasperPHP\ado\TTransaction;
-//use TTransaction;
+//use JasperPHP\ado\TTransaction;
+use TTransaction;
 
 /**
  * classe Report
@@ -34,7 +34,6 @@ class Report extends Element {
 
     public function __construct($xmlFile = null,$param) {
         if(file_exists(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
-            $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
             $xmlFile = file_get_contents(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
         }
         $keyword = "<queryString>
