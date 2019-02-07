@@ -33,9 +33,8 @@ class Report extends Element {
 
 
     public function __construct($xmlFile = null,$param) {
-        $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         if(file_exists(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
-            
+            $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
             $xmlFile = file_get_contents(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
         }
         $keyword = "<queryString>
