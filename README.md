@@ -2,7 +2,7 @@
 Project to generate reports created with the JasperSoft Studio application<br>
 Library pure PHP, without a java server or Jasper Server
 
-Donate funds to support us
+Consider donating funds to support us
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
 
