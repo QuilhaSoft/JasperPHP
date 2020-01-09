@@ -3,8 +3,8 @@
 namespace JasperPHP;
 
 use JasperPHP;
-//use JasperPHP\ado\TTransaction;
-use TTransaction;
+use JasperPHP\ado\TTransaction;
+//use TTransaction;
 
 /**
  * classe Report
@@ -31,22 +31,21 @@ class Report extends Element {
     public $objElement;
     public $rowData;
 
-
-    public function __construct($xmlFile = null,$param) {
-       if(file_exists(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile)) {
-            $xmlFile = file_get_contents(self::$defaultFolder.DIRECTORY_SEPARATOR.$xmlFile);
+    public function __construct($xmlFile = null, $param) {
+        if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {
+            $xmlFile = file_get_contents(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
         } elseif (file_exists($xmlFile)) {
             $xmlFile = file_get_contents($xmlFile);
-        }	        
+        }
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
         $xml = simplexml_load_string($xmlFile);
-        $this->charge($xml,$param);
+        $this->charge($xml, $param);
         //$this->objElement = $xml;
     }
 
-    public function charge($ObjElement,$param) {
+    public function charge($ObjElement, $param) {
 
         $this->name = get_class($this);
         $this->objElement = $ObjElement;
@@ -248,7 +247,7 @@ class Report extends Element {
         error_reporting(0);
         $fieldParts = strpos($field, "->") ? explode("->", $field) : explode("-&gt;", $field);
         $obj = $row;
-        
+
         foreach ($fieldParts as $part) {
             if (preg_match_all("/\w+/", $part, $matArray)) {
                 if (count($matArray[0]) > 1) {
@@ -261,7 +260,7 @@ class Report extends Element {
                 }
             }
         }
-        
+
         $val = $obj;
         error_reporting(5);
         $fieldRegExp = str_ireplace("[", "\[", $field);
@@ -395,7 +394,7 @@ class Report extends Element {
                 }// finisish resettype=''
                 elseif ($out['resetType'] == 'Group') { //reset type='group'
                     if ($this->groupnochange >= 0) {
-
+                        
                     }
                     if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
                         $value += $this->time_to_sec($newValue);
@@ -562,7 +561,7 @@ class Report extends Element {
                 return date($pattern, strtotime($txt));
             } else
                 return $txt;
-        }else {
+        } else {
             return $txt;
         }
     }
