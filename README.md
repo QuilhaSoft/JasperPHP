@@ -66,11 +66,18 @@ Consider donating funds to support us
         <td></td>
     </tr>
     <tr>
+        <td>Group</td>
+        <td>OK</td>
+        <td>Sumary</td>
+        <td>OK</td>
+    </tr>
+    <tr>
         <td>Detail</td>
         <td>OK</td>
         <td>Column Header</td>
         <td>OK</td>
     </tr>
+    
     <tr>
         <td>Column Footer</td>
         <td>OK</td>
