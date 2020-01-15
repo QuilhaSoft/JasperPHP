@@ -14,7 +14,7 @@ use \JasperPHP;
  * 
  * 2015.03.11 -- criação
  * */
-class ColumnFooter extends Element {
+class GroupHeader extends Element {
 
     public function generate($obj = null) {
         $row = is_array($obj) ? $obj[1] : array();
@@ -29,9 +29,9 @@ class ColumnFooter extends Element {
                 $printWhenExpression = (string) $child->objElement->printWhenExpression;
                 if ($printWhenExpression != '') {
 
-                    $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
+                    $printWhenExpression = $obj->get_expression($printWhenExpression,$row);
+                    //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
                     eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
-                    
                 } else {
                     $print_expression_result = true;
                 }
@@ -39,7 +39,7 @@ class ColumnFooter extends Element {
                     if ($this->children['0']->objElement['splitType'] == 'Stretch' || $this->children['0']->objElement['splitType'] == 'Prevent') {
                         JasperPHP\Pdf::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
                     }
-                    parent::generate($obj);
+                    parent::generate(array($obj, $row));
                     //var_dump($this->children['0']);
                     JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $this->children['0']->objElement['height']));
                 }
@@ -48,5 +48,3 @@ class ColumnFooter extends Element {
     }
 
 }
-
-?>

@@ -84,18 +84,6 @@ class ComponentElement extends Element
             //                            echo "Barcode: $code,position: $textposition <br/><br/>";
             JasperPHP\Pdf::addInstruction(array("type"=>"Barcode","barcodetype"=>$barcodemethod,"x"=>$x,"y"=>$y,"width"=>$width,"height"=>$height,'textposition'=>$textposition,'code'=>$code,'modulewidth'=>$modulewidth));
 
-            /*
-            <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" 
-            * xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" 
-            * type="2of7" drawText="false" checksumRequired="false">
-            <jr:codeExpression><![CDATA["1234"]]></jr:codeExpression>
-            </jr:barbecue>
-            * <jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" 
-            * xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd"
-            *  textPosition="bottom">
-            <jr:codeExpression><![CDATA[]]></jr:codeExpression>
-            </jr:Code128>
-            */
 
 
         }

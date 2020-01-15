@@ -1,6 +1,9 @@
 <?php
+
 namespace JasperPHP;
+
 use \JasperPHP;
+
 /**
  * classe TLabel
  * classe para construção de rótulos de texto
@@ -10,19 +13,19 @@ use \JasperPHP;
  * @access   restrict
  * 
  * 2015.03.11 -- criação
-**/
-class PageFooter extends Element
-{
-	public function generate($obj = null)
-	{
+ * */
+class PageFooter extends Element {
+
+    public function generate($obj = null) {
         $rowData = is_array($obj) ? $obj[1] : null;
         $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
-        $height = (string)$this->children['0']->objElement['height'];
-		JasperPHP\Pdf::addInstruction(array ("type"=>"resetY_axis"));
-		JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>($obj->arrayPageSetting["pageHeight"]-$obj->arrayPageSetting["topMargin"]-$this->children['0']->height-$obj->arrayPageSetting["bottomMargin"])));
-		parent::generate(array($obj,$rowData));
-                
-		JasperPHP\Pdf::addInstruction(array ("type"=>"SetY_axis","y_axis"=>$height));
-	}
+        $height = (string) $this->children['0']->objElement['height'];
+        JasperPHP\Pdf::addInstruction(array("type" => "resetY_axis"));
+        JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => ($obj->arrayPageSetting["pageHeight"] - $obj->arrayPageSetting["topMargin"] - $this->children['0']->height - $obj->arrayPageSetting["bottomMargin"])));
+        parent::generate(array($obj, $rowData));
+
+        JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+    }
+
 }

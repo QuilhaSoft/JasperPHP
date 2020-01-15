@@ -23,7 +23,9 @@ class Detail extends Element {
             $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
 
             $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
+
             while ($row) {
+
                 $row->rowIndex = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
@@ -33,6 +35,18 @@ class Detail extends Element {
                 $obj->arrayVariable['totalRows']["calculation"] = null;
                 $row->totalRows = $totalRows;
                 $obj->variables_calculation($obj, $row);
+                if (count($obj->arrayGroup) > 0) {
+                    foreach ($obj->arrayGroup as $group) {
+                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
+                        $groupExpression = $matchesF[1][0];
+                        if ($rowIndex == 1 || $group->resetVariables == 'true') {
+                            $groupHeader = new GroupHeader($group->groupHeader);
+                            $groupHeader->generate(array($obj, $row));
+                            $group->resetVariables = 'false';
+                        }
+                    }
+                }
+
                 $background = $obj->getChildByClassName('Background');
 
                 if ($background)
@@ -43,30 +57,11 @@ class Detail extends Element {
                     // se for objeto
                     if (is_object($child)) {
                         $print_expression_result = false;
-                        //var_dump((string)$child->objElement->printWhenExpression);
-                        //echo     (string)$child->objElement['printWhenExpression']."oi";
                         $printWhenExpression = (string) $child->objElement->printWhenExpression;
                         if ($printWhenExpression != '') {
 
+                            $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
 
-                            //echo $printWhenExpression;
-                            preg_match_all("/P{(\w+)}/", $printWhenExpression, $matchesP);
-                            preg_match_all("/F{(\w+)}/", $printWhenExpression, $matchesF);
-                            preg_match_all("/V{(\w+)}/", $printWhenExpression, $matchesV);
-                            if ($matchesP > 0) {
-                                foreach ($matchesP[1] as $macthP) {
-                                    $printWhenExpression = str_ireplace(array('$P{' . $macthP . '}', '"'), array($obj->arrayParameter[$macthP], ''), $printWhenExpression);
-                                }
-                            }if ($matchesF > 0) {
-                                foreach ($matchesF[1] as $macthF) {
-                                    $printWhenExpression = $obj->getValOfField($macthF, $row, $printWhenExpression);
-                                }
-                            }
-                            if ($matchesV > 0) {
-                                foreach ($matchesV[1] as $macthV) {
-                                    $printWhenExpression = $obj->getValOfVariable($macthV, $printWhenExpression);
-                                }
-                            }
                             //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
                             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
                         } else {
@@ -94,6 +89,21 @@ class Detail extends Element {
                 $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
 
                 $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
+                //echo $rowIndex;
+                if (count($obj->arrayGroup) > 0) {
+                    foreach ($obj->arrayGroup as $group) {
+                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
+                        $groupExpression = $matchesF[1][0];
+                        if ($obj->rowData->$groupExpression != $row->$groupExpression) {
+                            $groupFooter = new GroupFooter($group->groupFooter);
+                            $groupFooter->generate(array($obj, $obj->rowData));
+                            $group->resetVariables = 'true';
+                        }
+                    }
+                }
+
+
+                $obj->rowData = $row;
                 $rowIndex++;
             }
 

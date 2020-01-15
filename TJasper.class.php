@@ -5,6 +5,7 @@ use JasperPHP\Report2XLS;
 use JasperPHP\ado\TTransaction;
 use JasperPHP\ado\TLogger;
 use JasperPHP\ado\TLoggerHTML;
+//use \NumberFormatter;
 
 //use PHPexcel as PHPexcel; // experimental
 /**

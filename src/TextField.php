@@ -211,10 +211,10 @@ class TextField extends Element {
                 $text = 'Page ' . JasperPHP\Pdf::getPageNo() . ' of';
                 break;
             case '$V{PAGE_NUMBER}':
-                if (isset($data["evaluationTime"]) && $data["evaluationTime"] == "Report" && !isset($rowData['counter'])) {
+                if (!isset($rowData['counter'])) {
                     $text = '{:ptp:}';
                 } else {
-                    $text = '';
+                    $text = JasperPHP\Pdf::getPageNo();
                 }
                 break;
             case '" " + $V{PAGE_NUMBER}':
@@ -226,25 +226,26 @@ class TextField extends Element {
                 break;
 
             default:
-                preg_match_all("/P{(\w+)}/", $text, $matchesP);
-                if ($matchesP) {
-                    foreach ($matchesP[1] as $macthP) {
-                        $text = str_ireplace(array('$P{' . $macthP . '}'), array(($obj->arrayParameter[$macthP])), $text);
-                    }
-                }
-                preg_match_all("/V{(\w+)}/", $text, $matchesV);
-                if ($matchesV) {
-                    foreach ($matchesV[1] as $macthV) {
-                        $text = $obj->getValOfVariable($macthV, $text);
-                    }
-                }
-                preg_match_all("/F{[^}]*}/", $text, $matchesF);
-                if ($matchesF) {
-                    foreach ($matchesF[0] as $macthF) {
-                        $macth = str_ireplace(array("F{", "}"), "", $macthF);
-                        $text = $obj->getValOfField($macth, $rowData, $text, $writeHTML);
-                    }
-                }
+                $text = $obj->get_expression($text,$rowData,$writeHTML);
+//                preg_match_all("/P{(\w+)}/", $text, $matchesP);
+//                if ($matchesP) {
+//                    foreach ($matchesP[1] as $macthP) {
+//                        $text = str_ireplace(array('$P{' . $macthP . '}'), array(($obj->arrayParameter[$macthP])), $text);
+//                    }
+//                }
+//                preg_match_all("/V{(\w+)}/", $text, $matchesV);
+//                if ($matchesV) {
+//                    foreach ($matchesV[1] as $macthV) {
+//                        $text = $obj->getValOfVariable($macthV, $text);
+//                    }
+//                }
+//                preg_match_all("/F{[^}]*}/", $text, $matchesF);
+//                if ($matchesF) {
+//                    foreach ($matchesF[0] as $macthF) {
+//                        $macth = str_ireplace(array("F{", "}"), "", $macthF);
+//                        $text = $obj->getValOfField($macth, $rowData, $text, $writeHTML);
+//                    }
+//                }
 
                 break;
         }
@@ -262,24 +263,7 @@ class TextField extends Element {
         if ($printoverflow == "true") {
             $text = str_ireplace(array('+', '+', '"'), array('', '', ''), $text);
         }
-        $printWhenExpression = $data->reportElement->printWhenExpression;
-        preg_match_all("/P{(\w+)}/", $printWhenExpression, $matchesP);
-        preg_match_all("/F{(\w+)}/", $printWhenExpression, $matchesF);
-        preg_match_all("/V{(\w+)}/", $printWhenExpression, $matchesV);
-        if ($matchesP > 0) {
-            foreach ($matchesP[1] as $macthP) {
-                $printWhenExpression = str_ireplace(array('$P{' . $macthP . '}', '"'), array($obj->arrayParameter[$macthP], ''), $printWhenExpression);
-            }
-        }if ($matchesF > 0) {
-            foreach ($matchesF[1] as $macthF) {
-                $printWhenExpression = $obj->getValOfField($macthF, $rowData, $printWhenExpression);
-            }
-        }
-        if ($matchesV > 0) {
-            foreach ($matchesV[1] as $macthV) {
-                $printWhenExpression = $obj->getValOfVariable($macthV, $printWhenExpression);
-            }
-        }
+        $printWhenExpression = $obj->get_expression($data->reportElement->printWhenExpression, $rowData);
         JasperPHP\Pdf::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"] + 0, "height" => $height + 0, "txt" => $text . "",
             "border" => $border, "align" => $align, "fill" => $fill,
             "hidden_type" => "field", "soverflow" => $stretchoverflow, "poverflow" => $printoverflow,
