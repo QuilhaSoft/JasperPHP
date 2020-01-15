@@ -77,7 +77,6 @@ Consider donating funds to support us
         <td>Column Header</td>
         <td>OK</td>
     </tr>
-    
     <tr>
         <td>Column Footer</td>
         <td>OK</td>
