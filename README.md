@@ -87,7 +87,6 @@ Consider donating funds to support us
         <td>Background</td>
         <td>OK</td>
     </tr>
-
 </table>
 * Subreports are supported recursively and unlimited
 
