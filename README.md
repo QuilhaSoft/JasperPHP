@@ -51,7 +51,7 @@ Consider donating funds to support us
         <td>OK</td>
     </tr>
     <tr>
-        <td>Corrent Date</td>
+        <td>Current Date</td>
         <td>OK</td>
         <td>Page X of Y</td>
         <td>OK</td>
@@ -68,19 +68,19 @@ Consider donating funds to support us
     <tr>
         <td>Group</td>
         <td>OK</td>
-        <td>Sumary</td>
-        <td>OK</td>
-    </tr>
-    <tr>
         <td>Detail</td>
         <td>OK</td>
+    </tr>
+    <tr>
         <td>Column Header</td>
+        <td>OK</td>
+        <td>Column Footer</td>
         <td>OK</td>
     </tr>
     <tr>
-        <td>Column Footer</td>
-        <td>OK</td>
         <td>Page Footer</td>
+        <td>OK</td>
+        <td>Sumary</td>
         <td>OK</td>
     </tr>
     <tr>
