@@ -94,7 +94,7 @@ class Detail extends Element {
                     foreach ($obj->arrayGroup as $group) {
                         preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
                         $groupExpression = $matchesF[1][0];
-                        if ($obj->rowData->$groupExpression != $row->$groupExpression) {
+                        if (($obj->rowData->$groupExpression != $row->$groupExpression)  || ($obj->rowData->$groupExpression==NULL)) {
                             $groupFooter = new GroupFooter($group->groupFooter);
                             $groupFooter->generate(array($obj, $obj->rowData));
                             $group->resetVariables = 'true';
