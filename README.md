@@ -98,7 +98,7 @@ See more blog, forum and coming soon report template store in https://jasperphp.
     <li>sum, average,minimum, max of variables</li>
     <li>read and calculate subreport variables</li>
     <li>array of objects as input data</li>
-    <li>html textfield render with data replacement</li>
+    <li>textfield with html render with data replacement</li>
     <li>active record</li>
 </lu>
 <br>
