@@ -4,7 +4,6 @@ namespace JasperPHP;
 
 use JasperPHP;
 use JasperPHP\ado\TTransaction;
-
 //use TTransaction;
 
 /**
@@ -133,27 +132,6 @@ class Report extends Element {
         }
     }
 
-    public function get_expression($text, $row, $writeHTML = null) {
-        preg_match_all("/P{(\w+)}/", $text, $matchesP);
-        preg_match_all("/F{(\w+)}/", $text, $matchesF);
-        preg_match_all("/V{(\w+)}/", $text, $matchesV);
-        if ($matchesP > 0) {
-            foreach ($matchesP[1] as $macthP) {
-                $text = str_ireplace(array('$P{' . $macthP . '}', '"'), array($this->arrayParameter[$macthP], ''), $text);
-            }
-        }if ($matchesF > 0) {
-            foreach ($matchesF[1] as $macthF) {
-                $text = $this->getValOfField($macthF, $row, $text);
-            }
-        }
-        if ($matchesV > 0) {
-            foreach ($matchesV[1] as $macthV) {
-                $text = $this->getValOfVariable($macthV, $text, $writeHTML);
-            }
-        }
-        return $text;
-    }
-
     public function variable_handler($xml_path) {
         $this->arrayVariable = array();
         foreach ($xml_path->variable as $variable) {
@@ -253,6 +231,33 @@ class Report extends Element {
         }
     }
 
+    public function get_expression($text, $row, $writeHTML = null) {
+        preg_match_all("/P{(\w+)}/", $text, $matchesP);
+        if ($matchesP) {
+            foreach ($matchesP[1] as $macthP) {
+                $text = str_ireplace(array('$P{' . $macthP . '}', '"'), array($this->arrayParameter[$macthP], ''), $text);
+            }
+        }
+
+        preg_match_all("/V{(\w+)}/", $text, $matchesV);
+        if ($matchesV) {
+            foreach ($matchesV[1] as $macthV) {
+                $text = $this->getValOfVariable($macthV, $text, $writeHTML);
+            }
+        }
+        
+        preg_match_all("/F{[^}]*}/", $text, $matchesF);
+        if ($matchesF) {
+            //var_dump($matchesF);
+            foreach ($matchesF[0] as $macthF) {
+                $macth = str_ireplace(array("F{", "}"), "", $macthF);
+                $text = $this->getValOfField($macth, $row, $text, $writeHTML);
+            }
+        }
+
+        return $text;
+    }
+
     public function getValOfVariable($variable, $text) {
         $val = array_key_exists($variable, $this->arrayVariable) ? $this->arrayVariable[$variable] : array();
         $ans = array_key_exists('ans', $val) ? $val['ans'] : '';
@@ -282,7 +287,8 @@ class Report extends Element {
         error_reporting(0);
         $fieldParts = strpos($field, "->") ? explode("->", $field) : explode("-&gt;", $field);
         $obj = $row;
-
+        //var_dump($fieldParts);
+        // exit;
         foreach ($fieldParts as $part) {
             if (preg_match_all("/\w+/", $part, $matArray)) {
                 if (count($matArray[0]) > 1) {

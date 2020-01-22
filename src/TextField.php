@@ -20,7 +20,7 @@ class TextField extends Element {
         $rowData = is_array($obj) ? $obj[1] : null;
         $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
-        $text = $this->objElement->textFieldExpression;
+        $text = (string) $this->objElement->textFieldExpression;
         $arrayText = explode("+", $text);
         $align = "L";
         $fill = 0;
