@@ -10,7 +10,7 @@ Consider donating funds to support us
 See more blog, forum and coming soon report template store in https://jasperphp.com 
 
 #Export formats
- PDF
+ PDF <br>
  XLS
 
 # Supported tags/components
