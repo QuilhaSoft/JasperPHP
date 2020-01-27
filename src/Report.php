@@ -277,7 +277,7 @@ class Report extends Element {
         } elseif ($variable == "MASTER_TOTAL_PAGES") {
             return str_ireplace(array('$V{MASTER_TOTAL_PAGES}'), array('{:ptp:}'), $text);
         } elseif ($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE") {
-            return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Pdf::getPageNo()), $text);
+            return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Instructions::getPageNo()), $text);
         } else {
             return str_ireplace(array('$V{' . $variable . '}'), array($ans), $text);
         }
@@ -420,17 +420,17 @@ class Report extends Element {
     }
 
     public function getPageNo() {
-        $pdf = JasperPHP\Pdf::get();
+        $pdf = JasperPHP\Instructions::get();
         return $pdf->getPage();
     }
 
     public function getAliasNbPages() {
-        $pdf = JasperPHP\Pdf::get();
+        $pdf = JasperPHP\Instructions::get();
         return $pdf->getNumPages();
     }
 
     public function updatePageNo($s) {
-        $pdf = JasperPHP\Pdf::get();
+        $pdf = JasperPHP\Instructions::get();
         return str_replace('$this->PageNo()', $pdf->PageNo(), $s);
     }
 
@@ -592,7 +592,7 @@ class Report extends Element {
             return (($rt) ? ($rt) : "Zero");
         }
     }
-
+    
     public function generate($obj = null) {
         //$this->parameter_handler($this->objElement, $param);
         //$this->variable_handler($this->objElement);
@@ -608,8 +608,8 @@ class Report extends Element {
 
     public function out() {
 
-        $instructions = JasperPHP\Pdf::setJasperObj($this);
-        JasperPHP\Pdf::runInstructions();
+        $instructions = JasperPHP\Instructions::setJasperObj($this);
+        JasperPHP\Instructions::runInstructions();
         //$this->runInstructions($instructions);
     }
 

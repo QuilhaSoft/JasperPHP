@@ -73,17 +73,17 @@ class Line extends Element {
         }
         if ($print_expression_result == true) {
             if ($data->reportElement["width"][0] + 0 > $data->reportElement["height"][0] + 0) {    //width > height means horizontal line
-                JasperPHP\Pdf::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"] + 0, "y1" => $data->reportElement["y"] + 0,
+                JasperPHP\Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"] + 0, "y1" => $data->reportElement["y"] + 0,
                     "x2" => $data->reportElement["x"] + $data->reportElement["width"], "y2" => $data->reportElement["y"] + $data->reportElement["height"] - 1,
                     "hidden_type" => $hidden_type, "style" => $style, "forecolor" => $data->reportElement["forecolor"] . "",
                     "printWhenExpression" => $printWhenExpression));
             } elseif ($data->reportElement["height"][0] + 0 > $data->reportElement["width"][0] + 0) {        //vertical line
-                JasperPHP\Pdf::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"], "y1" => $data->reportElement["y"],
+                JasperPHP\Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"], "y1" => $data->reportElement["y"],
                     "x2" => $data->reportElement["x"] + $data->reportElement["width"] - 1, "y2" => $data->reportElement["y"] + $data->reportElement["height"], "hidden_type" => $hidden_type, "style" => $style,
                     "forecolor" => $data->reportElement["forecolor"] . "", "printWhenExpression" => $data->reportElement->printWhenExpression));
             }
-            JasperPHP\Pdf::addInstruction(array("type" => "SetDrawColor", "r" => 0, "g" => 0, "b" => 0, "hidden_type" => "drawcolor"));
-            JasperPHP\Pdf::addInstruction(array("type" => "SetFillColor", "r" => 255, "g" => 255, "b" => 255, "hidden_type" => "fillcolor"));
+            JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => 0, "g" => 0, "b" => 0, "hidden_type" => "drawcolor"));
+            JasperPHP\Instructions::addInstruction(array("type" => "SetFillColor", "r" => 255, "g" => 255, "b" => 255, "hidden_type" => "fillcolor"));
         }
         parent::generate($obj);
     }

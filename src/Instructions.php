@@ -3,10 +3,9 @@
 namespace JasperPHP;
 
 use \JasperPHP;
-use \TCPDF;
 
 /*
- * classe Pdf
+ * classe Instructions
  * 
  *
  * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
@@ -16,9 +15,9 @@ use \TCPDF;
  * 2015.03.10 -- criação
  * */
 
-final class Pdf {
+final class Instructions {
 
-    static public $pdfOutPut;
+    static public $objOutPut;
     static public $fontdir;
     static private $intructions;
     static public $JasperObj;
@@ -26,6 +25,9 @@ final class Pdf {
     static public $y_axis;
     static public $arrayPageSetting;
     static public $print_expression_result;
+    static private $instructionProcessor = '\JasperPHP\PdfProcessor';
+    static private $rowpos = 1;
+    
 
     /*
      * método __construct()
@@ -36,26 +38,12 @@ final class Pdf {
         
     }
 
-    public static function prepare($report) {
-        self::$arrayPageSetting = $report->arrayPageSetting;
-        if ($report->arrayPageSetting["orientation"] == "Landscape") {
-            self::$pdfOutPut = new TCPDF($report->arrayPageSetting["orientation"], 'pt', array(intval($report->arrayPageSetting["pageHeight"]), intval($report->arrayPageSetting["pageWidth"])), true);
-        } else {
-            self::$pdfOutPut = new TCPDF($report->arrayPageSetting["orientation"], 'pt', array(intval($report->arrayPageSetting["pageWidth"]), intval($report->arrayPageSetting["pageHeight"])), true);
-        }
-        self::$pdfOutPut->SetLeftMargin((int) $report->arrayPageSetting["leftMargin"]);
-        self::$pdfOutPut->SetRightMargin((int) $report->arrayPageSetting["rightMargin"]);
-        self::$pdfOutPut->SetTopMargin((int) $report->arrayPageSetting["topMargin"]);
-        self::$pdfOutPut->SetAutoPageBreak(true, (int) $report->arrayPageSetting["bottomMargin"] / 2);
-        //self::$pdfOutPut->AliasNumPage();
-        self::$pdfOutPut->setPrintHeader(false);
-        self::$pdfOutPut->setPrintFooter(false);
-        self::$pdfOutPut->AddPage();
-        self::$pdfOutPut->setPage(1, true);
-        self::$y_axis = (int) $report->arrayPageSetting["topMargin"];
+    public static function setProcessor($instructionProcessor) {
+        self::$instructionProcessor = $instructionProcessor;
+    }
 
-        if (self::$fontdir == "")
-            self::$fontdir = dirname(__FILE__) . "/tcpdf/fonts";
+    public static function prepare($report) {
+        self::$instructionProcessor::prepare($report);
     }
 
     public static function addInstruction($instruction) {
@@ -67,7 +55,7 @@ final class Pdf {
     }
 
     public static function get() {
-        return self::$pdfOutPut;
+        return self::$objOutPut;
     }
 
     public static function getInstructions() {
@@ -79,22 +67,26 @@ final class Pdf {
     }
 
     public static function getPageNo() {
-        return self::$pdfOutPut->PageNo();
+        return self::$instructionProcessor::PageNo();
     }
 
     public static function runInstructions() {
-        $pdf = self::$pdfOutPut;
+        $pdf = self::$objOutPut;
         $JasperObj = self::$JasperObj;
         $instructions = self::$intructions;
+        //var_dump($instructions);
         self::$intructions = array();
         //$maxheight = null;
         foreach ($instructions as $arraydata) {
             $methodName = $arraydata["type"];
             $methodName = $methodName == 'break' ? 'breaker' : $methodName;
-            $instruction = new \JasperPHP\Instruction($JasperObj);
+
+            //$instructionProcessorClass = '\JasperPHP\/' + ;
+            $instruction = new self::$instructionProcessor($JasperObj);
             if (method_exists($instruction, $methodName)) {
                 $instruction->$methodName($arraydata);
             }
         }
     }
+
 }

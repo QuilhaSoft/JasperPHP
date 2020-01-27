@@ -33,12 +33,12 @@ class Image extends Element
         // echo $text; 
         switch($data['scaleImage']) {
             case "FillFrame":
-                JasperPHP\Pdf::addInstruction(array("type"=>"Image","path"=>$text,"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,"width"=>$data->reportElement["width"]+0,
+                JasperPHP\Instructions::addInstruction(array("type"=>"Image","path"=>$text,"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,"width"=>$data->reportElement["width"]+0,
                     "height"=>$data->reportElement["height"]+0,"imgtype"=>$imagetype,"link"=>$data->hyperlinkReferenceExpression,
                     "hidden_type"=>"image","linktarget"=>$data["hyperlinkTarget"].""));
                 break;
             default:
-                JasperPHP\Pdf::addInstruction(array("type"=>"Image","path"=>$text,"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,"width"=>$data->reportElement["width"]+0,
+                JasperPHP\Instructions::addInstruction(array("type"=>"Image","path"=>$text,"x"=>$data->reportElement["x"]+0,"y"=>$data->reportElement["y"]+0,"width"=>$data->reportElement["width"]+0,
                     "height"=>$data->reportElement["height"]+0,"imgtype"=>$imagetype,"link"=>$data->hyperlinkReferenceExpression,
                     "hidden_type"=>"image","linktarget"=>$data["hyperlinkTarget"].""));
                 break;

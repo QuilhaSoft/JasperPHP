@@ -43,7 +43,7 @@ class Title extends Element {
                 $dataAndParameters = array_merge($_POST, $rowArray);
                 $height = (string) $this->children['0']->objElement['height'];
                 parent::generate(array($obj, $dataAndParameters));
-                JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+                JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
             }
         }
     }

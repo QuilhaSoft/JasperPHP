@@ -23,6 +23,6 @@ class PageHeader extends Element {
         $height = (string) $this->children['0']->objElement['height'];
         parent::generate(array($obj, $rowData));
 
-        JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
     }
 }

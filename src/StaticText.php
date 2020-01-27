@@ -131,11 +131,11 @@ class StaticText extends Element {
         if (isset($data->reportElement["key"])) {
             $height = $fontsize * $this->adjust;
         }
-        JasperPHP\Pdf::addInstruction(array("type" => "SetXY", "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0, "hidden_type" => "SetXY"));
-        JasperPHP\Pdf::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
-        JasperPHP\Pdf::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));
-        JasperPHP\Pdf::addInstruction(array("type" => "SetFillColor", 'backcolor' => $data->reportElement["backcolor"] . '', "r" => $fillcolor["r"], "g" => $fillcolor["g"], "b" => $fillcolor["b"], "hidden_type" => "fillcolor"));
-        JasperPHP\Pdf::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" => $data->textElement->font["pdfFontName"], "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetXY", "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0, "hidden_type" => "SetXY"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetFillColor", 'backcolor' => $data->reportElement["backcolor"] . '', "r" => $fillcolor["r"], "g" => $fillcolor["g"], "b" => $fillcolor["b"], "hidden_type" => "fillcolor"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" => $data->textElement->font["pdfFontName"], "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
         //"height"=>$data->reportElement["height"]
         //### UTF-8 characters, a must for me.    
         $txtEnc = $data->text;
@@ -152,7 +152,7 @@ class StaticText extends Element {
             $print_expression_result = true;
         }
         if ($print_expression_result == true) {
-            JasperPHP\Pdf::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"], "height" => $height,
+            JasperPHP\Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"], "height" => $height,
                 "txt" => $txtEnc, "border" => $border, "align" => $align, "fill" => $fill, "hidden_type" => "statictext",
                 "printWhenExpression" => $printWhenExpression . "",
                 "multiCell" => false,

@@ -157,13 +157,13 @@ class TextField extends Element {
         }
 
 
-        JasperPHP\Pdf::addInstruction(array(
+        JasperPHP\Instructions::addInstruction(array(
             "type" => "SetXY",
             "x" => $data->reportElement["x"] + 0,
             "y" => $data->reportElement["y"] + 0,
             "hidden_type" => "SetXY"
         ));
-        JasperPHP\Pdf::addInstruction(array(
+        JasperPHP\Instructions::addInstruction(array(
             "type" => "SetTextColor",
             "forecolor" => $data->reportElement["forecolor"],
             "r" => $textcolor["r"],
@@ -171,14 +171,14 @@ class TextField extends Element {
             "b" => $textcolor["b"],
             "hidden_type" => "textcolor"
         ));
-        JasperPHP\Pdf::addInstruction(array(
+        JasperPHP\Instructions::addInstruction(array(
             "type" => "SetDrawColor",
             "r" => $drawcolor["r"],
             "g" => $drawcolor["g"],
             "b" => $drawcolor["b"],
             "hidden_type" => "drawcolor"
         ));
-        JasperPHP\Pdf::addInstruction(array(
+        JasperPHP\Instructions::addInstruction(array(
             "type" => "SetFillColor",
             "backcolor" => $data->reportElement["backcolor"] . "",
             "r" => $fillcolor["r"],
@@ -187,7 +187,7 @@ class TextField extends Element {
             "hidden_type" => "fillcolor",
             "fill" => $fill
         ));
-        JasperPHP\Pdf::addInstruction(array(
+        JasperPHP\Instructions::addInstruction(array(
             "type" => "SetFont",
             "font" => $font . "",
             "pdfFontName" => $data->textElement->font["pdfFontName"] . "",
@@ -208,13 +208,13 @@ class TextField extends Element {
                 $text = date("Y-m-d H:i:s");
                 break;
             case '"Page "+$V{PAGE_NUMBER}+" of"':
-                $text = 'Page ' . JasperPHP\Pdf::getPageNo() . ' of';
+                $text = 'Page ' . JasperPHP\Instructions::getPageNo() . ' of';
                 break;
             case '$V{PAGE_NUMBER}':
                 if (!isset($rowData['counter'])) {
                     $text = '{:ptp:}';
                 } else {
-                    $text = JasperPHP\Pdf::getPageNo();
+                    $text = JasperPHP\Instructions::getPageNo();
                 }
                 break;
             case '" " + $V{PAGE_NUMBER}':
@@ -222,7 +222,7 @@ class TextField extends Element {
                 break;
 
             case '$V{CURRENT_PAGE_NUMBER}':
-                $text = $rowData['counter'] == true ? JasperPHP\Pdf::getPageNo() : '';
+                $text = $rowData['counter'] == true ? JasperPHP\Instructions::getPageNo() : '';
                 break;
 
             default:
@@ -264,7 +264,7 @@ class TextField extends Element {
             $text = str_ireplace(array('+', '+', '"'), array('', '', ''), $text);
         }
         $printWhenExpression = $obj->get_expression($data->reportElement->printWhenExpression, $rowData);
-        JasperPHP\Pdf::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"] + 0, "height" => $height + 0, "txt" => $text . "",
+        JasperPHP\Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"] + 0, "height" => $height + 0, "txt" => $text . "",
             "border" => $border, "align" => $align, "fill" => $fill,
             "hidden_type" => "field", "soverflow" => $stretchoverflow, "poverflow" => $printoverflow,
             "printWhenExpression" => $printWhenExpression . "",

@@ -70,16 +70,16 @@ class Detail extends Element {
                         $height = (string) $child->objElement['height'];
                         if ($print_expression_result == true) {
                             if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
-                                JasperPHP\Pdf::addInstruction(array("type" => "PreventY_axis", "y_axis" => $height));
+                                JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $height));
                             }
                             $child->generate(array($obj, $row));
                             if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
-                                JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+                                JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
                             }
                             if ($obj->arrayPageSetting['columnCount'] > 1) {
-                                JasperPHP\Pdf::addInstruction(array("type" => "ChangeCollumn"));
+                                JasperPHP\Instructions::addInstruction(array("type" => "ChangeCollumn"));
                                 if (is_int($rowIndex / $obj->arrayPageSetting['columnCount'])) {
-                                    JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+                                    JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
                                 }
                             }
                         }

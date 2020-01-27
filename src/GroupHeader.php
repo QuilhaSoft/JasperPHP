@@ -37,11 +37,11 @@ class GroupHeader extends Element {
                 }
                 if ($print_expression_result == true) {
                     if ($this->children['0']->objElement['splitType'] == 'Stretch' || $this->children['0']->objElement['splitType'] == 'Prevent') {
-                        JasperPHP\Pdf::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
+                        JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
                     }
                     parent::generate(array($obj, $row));
                     //var_dump($this->children['0']);
-                    JasperPHP\Pdf::addInstruction(array("type" => "SetY_axis", "y_axis" => $this->children['0']->objElement['height']));
+                    JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $this->children['0']->objElement['height']));
                 }
             }
         }

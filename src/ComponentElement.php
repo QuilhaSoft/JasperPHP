@@ -82,7 +82,7 @@ class ComponentElement extends Element
             if($modulewidth=="")
                 $modulewidth=1;
             //                            echo "Barcode: $code,position: $textposition <br/><br/>";
-            JasperPHP\Pdf::addInstruction(array("type"=>"Barcode","barcodetype"=>$barcodemethod,"x"=>$x,"y"=>$y,"width"=>$width,"height"=>$height,'textposition'=>$textposition,'code'=>$code,'modulewidth'=>$modulewidth));
+            JasperPHP\Instructions::addInstruction(array("type"=>"Barcode","barcodetype"=>$barcodemethod,"x"=>$x,"y"=>$y,"width"=>$width,"height"=>$height,'textposition'=>$textposition,'code'=>$code,'modulewidth'=>$modulewidth));
 
 
 

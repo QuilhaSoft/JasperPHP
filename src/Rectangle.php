@@ -73,7 +73,7 @@ class Rectangle extends Element {
 //                "height"=>$data->reportElement["height"]+0,"hidden_type"=>"rect",
 //                "fillcolor"=>$fillcolor."","mode"=>$data->reportElement["mode"]."",'border'=>0);
 //        else
-        JasperPHP\Pdf::addInstruction(array("type" => "RoundedRect", "x" => $data->reportElement["x"] + 0,
+        JasperPHP\Instructions::addInstruction(array("type" => "RoundedRect", "x" => $data->reportElement["x"] + 0,
             "y" => $data->reportElement["y"] + 0, "width" => $data->reportElement["width"] + 0,
             "height" => $data->reportElement["height"] + 0, "hidden_type" => "roundedrect", "radius" => $radius,
             "fillcolor" => $fillcolor,

@@ -1,12 +1,11 @@
 <?php
 
 use JasperPHP\Report;
-use JasperPHP\Report2XLS;
 use JasperPHP\ado\TTransaction;
 use JasperPHP\ado\TLogger;
 use JasperPHP\ado\TLoggerHTML;
-//use \NumberFormatter;
 
+//use \NumberFormatter;
 //use PHPexcel as PHPexcel; // experimental
 /**
  * classe TJasper
@@ -36,15 +35,14 @@ class TJasper {
         $this->type = (array_key_exists('type', $param)) ? $param['type'] : 'pdf';
         //error_reporting(0);
         $this->param = $param;
+        $this->report = new JasperPHP\Report($xmlFile, $param); // $GLOBALS['reports'][$xmlFile];
         switch ($this->type) {
             case 'pdf':
-                $this->report = new JasperPHP\Report($xmlFile,$param);// $GLOBALS['reports'][$xmlFile];
-                JasperPHP\Pdf::prepare($this->report);
+                JasperPHP\Instructions::prepare($this->report);
                 break;
             case 'xls':
-                JasperPHP\Excel::prepare();
-                $this->report = new JasperPHP\Report2XLS($xmlFile, $param);
-
+                JasperPHP\Instructions::setProcessor('\JasperPHP\XlsProcessor');
+                JasperPHP\Instructions::prepare($this->report);
                 break;
         }
     }
@@ -54,7 +52,7 @@ class TJasper {
         $this->report->out();
         switch ($this->type) {
             case 'pdf':
-                $pdf = JasperPHP\Pdf::get();
+                $pdf = JasperPHP\Instructions::get();
                 $pdf->Output('report.pdf', "I");
                 break;
             case 'xls':
@@ -68,7 +66,7 @@ class TJasper {
                 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
                 header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
                 header('Pragma: public'); // HTTP/1.0
-                $objWriter = PHPExcel_IOFactory::createWriter($this->report->wb, 'Excel5');
+                $objWriter = PHPExcel_IOFactory::createWriter(JasperPHP\Instructions::$objOutPut, 'Excel5');
                 $objWriter->save('php://output');
                 break;
         }
@@ -79,8 +77,10 @@ class TJasper {
     }
 
 }
+
 require('autoloader.php');
 require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
+require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
 //require('../TCPDF/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in stand alone instalations)
 // on production using composer instalation is not necessaty 
 

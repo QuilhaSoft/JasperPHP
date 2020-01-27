@@ -32,7 +32,7 @@ class Breaker extends Element {
             $print_expression_result = true;
         }
         if ($print_expression_result == true) {
-            JasperPHP\Pdf::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
+            JasperPHP\Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
         }
         parent::generate($obj);
     }
