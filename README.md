@@ -1,6 +1,6 @@
 ![alt text](https://jasperphp.com/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png) 
 
-#JasperPHP
+# JasperPHP
 Project to generate reports created with the JasperSoft Studio application<br>
 Pure PHP library, without a java server or Jasper Server
 
@@ -9,7 +9,7 @@ Consider donating funds to support us
 
 See more blog, forum and coming soon report template store in https://jasperphp.com 
 
-#Export formats
+# Export formats
  PDF <br>
  XLS
 
