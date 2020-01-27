@@ -26,7 +26,7 @@ final class Instructions {
     static public $arrayPageSetting;
     static public $print_expression_result;
     static private $instructionProcessor = '\JasperPHP\PdfProcessor';
-    static private $rowpos = 1;
+    
     
 
     /*
