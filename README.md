@@ -7,7 +7,11 @@ Pure PHP library, without a java server or Jasper Server
 Consider donating funds to support us
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
-See more blog, forum and coming soon report template store in https://jasperphp.com  
+See more blog, forum and coming soon report template store in https://jasperphp.com 
+
+#Export formats
+ PDF
+ XLS
 
 # Supported tags/components
 <table>
