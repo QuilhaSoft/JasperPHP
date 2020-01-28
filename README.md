@@ -212,6 +212,7 @@ $jasper->outpage();
 # Requirements
 * PHP 5.2+
 * "tecnickcom/tcpdf":"6.2.*"
+* "PHPOffice/PHPExcel" only of XLS export
 
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
