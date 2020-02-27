@@ -326,6 +326,8 @@ class Report extends Element {
             } else {
                 return str_ireplace(array('$' . $matchesV[0][0] . "()"), array(call_user_func($funcName, $val)), $text);
             }
+        } elseif (is_array($val)) {
+            return $val;
         } else {
             return str_ireplace(array('$F{' . $field . '}'), array(($val)), $text);
         }
