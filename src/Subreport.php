@@ -39,7 +39,12 @@ class Subreport extends Element
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
         $report = new JasperPHP\Report($xmlFile, $newParameters); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
-        $report->generate();
+        
+        if ( preg_match("#^\\\$F{#", $this->objElement->dataSourceExpression) === 1 ) {
+            $report->dbData = $obj->get_expression($this->objElement->dataSourceExpression,$row,null);
+        }
+
+        $report->generate(array());
         foreach ($this->objElement->returnValue as $r) {
             $this->returnValues[] = $r;
         }
