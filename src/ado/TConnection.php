@@ -1,45 +1,40 @@
 <?php
 /*
  * classe TConnection
- * gerencia conexões com bancos de dados através de arquivos de configuração.
+ * Manage conection with databases, based on configuration files
  *
- * @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
+ * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
  * @version  2015.03.10
  * @access   restrict
  * 
- * 2015.03.10 -- criação
+ * 2015.03.10 -- create
 **/
 namespace JasperPHP\ado;
 use PDO;
  
 final class TConnection
 {
-    //const db='';
     /*
-     * método __construct()
-     * não existirão instâncias de TConnection, por isto estamos marcando-o como private
+     * method __construct()
      */
     private function __construct() {}
     
     /*
-     * método open()
-     * recebe o nome do banco de dados e instancia o objeto PDO correspondente
+     * open a conection to a database
+     * @author Rogerio Muniz de Castro
+     * @param sring $name a name of configuration file without extention
+     * @return PDO object
      */
     public static function open($name)
     {
-        // verifica se existe arquivo de configuração para este banco de dados
         if (file_exists("config/{$name}.ini"))
         {
-            // lê o INI e retorna um array
             $db = parse_ini_file("config/{$name}.ini");
         }
         else
         {
-            // se não existir, lança um erro
             throw new Exception("Arquivo '$name' não encontrado");
         }
-        //SELF::db = $db;
-        // lê as informações contidas no arquivo
         $user = isset($db['user']) ? $db['user'] : NULL;
         $pass = isset($db['pass']) ? $db['pass'] : NULL;
         $name = isset($db['name']) ? $db['name'] : NULL;
@@ -47,7 +42,6 @@ final class TConnection
         $type = isset($db['type']) ? $db['type'] : NULL;
         $port = isset($db['port']) ? $db['port'] : NULL;
         
-        // descobre qual o tipo (driver) de banco de dados a ser utilizado
         switch ($type)
         {
             case 'pgsql':
@@ -72,13 +66,7 @@ final class TConnection
                 $conn = new PDO("mssql:host={$host},1433;dbname={$name}", $user, $pass);
                 break;
         }
-        // define para que o PDO lance exceções na ocorrência de erros
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // retorna o objeto instanciado.
         return $conn;
     }
-    function getParameters(){
-        //return $this->db;
-    }
 }
-?>

@@ -1,11 +1,11 @@
 <?php
 
 /*
- * CnabPHP - Geração de arquivos de remessa e retorno em PHP
+ * JasperPHP - Pure PHP library to read JRXML files made in "JasperSoft Studio" and generate reports
  *
  * LICENSE: The MIT License (MIT)
  *
- * Copyright (C) 2013 Ciatec.net
+ * Copyright (C) 2013 QuilhaSoft
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -30,9 +30,9 @@ namespace JasperPHP\ado;
 /**
  * Classe exception
  *
- * @package    OpenBoleto
- * @author     Daniel Garajau <http://github.com/kriansa>
- * @copyright  Copyright (c) 2013 Estrada Virtual (http://www.estradavirtual.com.br)
+ * @package    JasperPHP
+ * @author     Rogerio Muniz  <http://github.com/rctnet>
+ * @copyright  Copyright (c) 2019 QuilhaSoft Sistemas (http://www.quilhasoft.com.br)
  * @license    MIT License
  * @version    1.0
  */
