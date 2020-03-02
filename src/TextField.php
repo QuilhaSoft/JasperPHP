@@ -61,7 +61,7 @@ class TextField extends Element {
         if ($data->reportElement["mode"] == "Opaque") {
             $fill = 1;
         }
-        if (isset($data["isStretchWithOverflow"]) && $data["isStretchWithOverflow"] == "true") {
+        if (isset($data->reportElement["isStretchWithOverflow"]) && $data->reportElement["isStretchWithOverflow"] == "true") {
             $stretchoverflow = "true";
         }
         if (isset($data->reportElement["isPrintWhenDetailOverflows"]) && $data->reportElement["isPrintWhenDetailOverflows"] == "true") {
@@ -260,7 +260,7 @@ class TextField extends Element {
         if (isset($data->reportElement["isPrintRepeatedValues"]))
             $isPrintRepeatedValues = $data->reportElement["isPrintRepeatedValues"];
 
-        if ($printoverflow == "true") {
+        if ($printoverflow == "true" || $stretchoverflow == "true") {
             $text = str_ireplace(array('+', '+', '"'), array('', '', ''), $text);
         }
         $printWhenExpression = $obj->get_expression($data->reportElement->printWhenExpression, $rowData);

@@ -474,7 +474,7 @@ class PdfProcessor {
                 } else {
                     $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T", $arraydata["valign"]);
                 }
-            } elseif ($arraydata["poverflow"] == "true") {
+            } elseif ($arraydata["poverflow"] == "true" || $arraydata["soverflow"] == "true") {
                 if ($arraydata["valign"] == "C")
                     $arraydata["valign"] = "M";
                 if ($arraydata["valign"] == "")
@@ -489,15 +489,6 @@ class PdfProcessor {
                 if (($yAfter + $arraydata["height"]) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
                     JasperPHP\Instructions::$y_axis = $pdf->GetY() - 20;
                 }
-            } elseif ($arraydata["soverflow"] == "true") {
-
-                if ($arraydata["valign"] == "M")
-                    $arraydata["valign"] = "C";
-                if ($arraydata["valign"] == "")
-                    $arraydata["valign"] = "T";
-
-                $pdf->Cell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"] . "", 0, true, "T", $arraydata["valign"]);
-                $pdf->Ln();
             } else {
                 $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, true, true, $maxheight);
             }
