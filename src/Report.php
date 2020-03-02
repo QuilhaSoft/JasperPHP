@@ -297,7 +297,13 @@ class Report extends Element {
                     $obj = $obj->$objArrayName;
                     $obj = $obj[$objCounter];
                 } else {
-                    $obj = $obj->$part;
+                    preg_match_all("/(\w+)\(\)/", $part, $matchMethod);
+                    if ($matchMethod && array_key_exists(0, $matchMethod[1])) {
+                        $method = $matchMethod[1][0];
+                        $obj = $obj->$method();
+                    } else {
+                        $obj = $obj->$part;
+                    }
                 }
             }
         }
