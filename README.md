@@ -111,7 +111,6 @@ See more blog, forum and coming soon report template store in https://jasperphp.
 ```php
 <?php
 use JasperPHP\Report;
-use JasperPHP\Report2XLS;
 use JasperPHP\ado\TTransaction;
 use JasperPHP\ado\TLoggerHTML;
 
