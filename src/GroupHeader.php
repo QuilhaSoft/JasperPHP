@@ -36,7 +36,11 @@ class GroupHeader extends Element {
                     $print_expression_result = true;
                 }
                 if ($print_expression_result == true) {
-                    if ($this->children['0']->objElement['splitType'] == 'Stretch' || $this->children['0']->objElement['splitType'] == 'Prevent') {
+                        //  var_dump($this->children['0']->objElement);
+                         //                         exit;
+
+                    if ($this->children['0']->objElement->splitType == 'Stretch' || $this->children['0']->objElement->splitType == 'Prevent') {
+                  
                         JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
                     }
                     parent::generate(array($obj, $row));

@@ -456,7 +456,7 @@ class Report extends Element {
             $nome_meses = array('Janeiro', 'Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
             if ($pattern == "###0")
                 return number_format($txt, 0, "", "");
-            elseif ($pattern == "#,##0")
+            elseif ($pattern == "#.##0")
                 return number_format($txt, 0, ".", ",");
             elseif ($pattern == "###0.0")
                 return number_format($txt, 1, ".", "");

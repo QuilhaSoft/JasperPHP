@@ -17,10 +17,11 @@ use \JasperPHP;
 class PageHeader extends Element {
 
     public function generate($obj = null) {
-        $rowData = $obj->rowData;
+        $rowData = (array)$obj->rowData;
         $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
         $height = (string) $this->children['0']->objElement['height'];
+        
         parent::generate(array($obj, $rowData));
 
         JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));

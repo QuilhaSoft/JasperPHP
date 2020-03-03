@@ -67,7 +67,7 @@ final class Instructions {
     }
 
     public static function getPageNo() {
-        return self::$instructionProcessor::PageNo();
+        return self::$objOutPut->PageNo();
     }
 
     public static function runInstructions() {

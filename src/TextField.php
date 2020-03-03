@@ -207,8 +207,8 @@ class TextField extends Element {
             case 'new java.util.Date()':
                 $text = date("Y-m-d H:i:s");
                 break;
-            case '"Page "+$V{PAGE_NUMBER}+" of"':
-                $text = 'Page ' . JasperPHP\Instructions::getPageNo() . ' of';
+            case '"Page " + $V{PAGE_NUMBER}':
+                $text = 'Page ' . JasperPHP\Instructions::getPageNo();
                 break;
             case '$V{PAGE_NUMBER}':
                 if (!isset($rowData['counter'])) {
@@ -217,8 +217,8 @@ class TextField extends Element {
                     $text = JasperPHP\Instructions::getPageNo();
                 }
                 break;
-            case '" " + $V{PAGE_NUMBER}':
-                $text = ' {:ptp:}';
+            case '" of " + $V{PAGE_NUMBER}':
+                $text = 'of {:ptp:}';
                 break;
 
             case '$V{CURRENT_PAGE_NUMBER}':
@@ -255,7 +255,7 @@ class TextField extends Element {
         } elseif ($data->textElement['markup'] == 'rtf') {
             $multiCell = true;
         } else {
-            $text = str_ireplace(array('"+', '+"', '"'), array('', '', ''), $text);
+            $text = str_ireplace(array('"+','" +', '+"', '+ "', '"'), array('', '', ''), $text);
         }
         if (isset($data->reportElement["isPrintRepeatedValues"]))
             $isPrintRepeatedValues = $data->reportElement["isPrintRepeatedValues"];
