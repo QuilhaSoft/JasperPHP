@@ -61,7 +61,7 @@ class TextField extends Element {
         if ($data->reportElement["mode"] == "Opaque") {
             $fill = 1;
         }
-        if (isset($data->reportElement["isStretchWithOverflow"]) && $data->reportElement["isStretchWithOverflow"] == "true") {
+        if ((isset($this->textAdjust) && $this->textAdjust == "StretchHeight") || (isset($this->isStretchWithOverflow) && $this->isStretchWithOverflow == "true")) {
             $stretchoverflow = "true";
         }
         if (isset($data->reportElement["isPrintWhenDetailOverflows"]) && $data->reportElement["isPrintWhenDetailOverflows"] == "true") {
