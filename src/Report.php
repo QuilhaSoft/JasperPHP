@@ -482,7 +482,7 @@ class Report extends Element {
                 return number_format($txt, 4, ".", "");
 
             // latin formats
-            elseif ($pattern == "#.##0")
+            elseif ($pattern == "#,##0")
                 return number_format($txt, 0, ".", ",");
             elseif ($pattern == "###0,0")
                 return number_format($txt, 1, ",", "");
