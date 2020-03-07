@@ -207,26 +207,8 @@ class TextField extends Element {
             case 'new java.util.Date()':
                 $text = date("Y-m-d H:i:s");
                 break;
-            case '"Page " + $V{PAGE_NUMBER}':
-                $text = 'Page ' . JasperPHP\Instructions::getPageNo();
-                break;
-            case '$V{PAGE_NUMBER}':
-                if (!isset($rowData['counter'])) {
-                    $text = '{:ptp:}';
-                } else {
-                    $text = JasperPHP\Instructions::getPageNo();
-                }
-                break;
-            case '" of " + $V{PAGE_NUMBER}':
-                $text = 'of {:ptp:}';
-                break;
-
-            case '$V{CURRENT_PAGE_NUMBER}':
-                $text = $rowData['counter'] == true ? JasperPHP\Instructions::getPageNo() : '';
-                break;
-
             default:
-                $text = $obj->get_expression($text,$rowData,$writeHTML);
+                $text = $obj->get_expression($text,$rowData,$writeHTML,$this);
 //                preg_match_all("/P{(\w+)}/", $text, $matchesP);
 //                if ($matchesP) {
 //                    foreach ($matchesP[1] as $macthP) {

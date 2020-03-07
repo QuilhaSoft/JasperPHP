@@ -19,29 +19,15 @@ class Title extends Element {
         $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
         $recordObject = array_key_exists('recordObj', $arrayVariable) ? $arrayVariable['recordObj']['initialValue'] : "stdClass";
         $rowIndex = 0;
-        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $obj->rowData;
-        //$obj->rowData = $row;
-        if ($row) {
-            switch ($row) {
-                case (is_object($row)):
-                    $rowArray = get_object_vars($row);
-                    break;
-                case (method_exists($row, 'toArray')):
-                    $rowArray = $row->toArray();
-                    break;
-                default:
-                    $rowArray = array();
-                    break;
-            }
-        } else {
-            $rowArray = array();
+        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : array() : $obj->rowData;
+        if (!$row) {
+            $row = array();
         }
         foreach ($this->children as $child) {
             // se for objeto
             if (is_object($child)) {
-                $dataAndParameters = array_merge($_POST, $rowArray);
                 $height = (string) $this->children['0']->objElement['height'];
-                parent::generate(array($obj, $dataAndParameters));
+                parent::generate(array($obj, $row));
                 JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
             }
         }

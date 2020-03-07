@@ -231,7 +231,7 @@ class Report extends Element {
         }
     }
 
-    public function get_expression($text, $row, $writeHTML = null) {
+    public function get_expression($text, $row, $writeHTML = null, $element = null) {
         preg_match_all("/P{(\w+)}/", $text, $matchesP);
         if ($matchesP) {
             foreach ($matchesP[1] as $macthP) {
@@ -242,7 +242,7 @@ class Report extends Element {
         preg_match_all("/V{(\w+)}/", $text, $matchesV);
         if ($matchesV) {
             foreach ($matchesV[1] as $macthV) {
-                $text = $this->getValOfVariable($macthV, $text, $writeHTML);
+                $text = $this->getValOfVariable($macthV, $text, $writeHTML, $element);
             }
         }
         
@@ -258,7 +258,7 @@ class Report extends Element {
         return $text;
     }
 
-    public function getValOfVariable($variable, $text) {
+    public function getValOfVariable($variable, $text, $htmlentities = false, $element = null) {
         $val = array_key_exists($variable, $this->arrayVariable) ? $this->arrayVariable[$variable] : array();
         $ans = array_key_exists('ans', $val) ? $val['ans'] : '';
         if (preg_match_all("/V{" . $variable . "}\.toString/", $text, $matchesV) > 0) {
@@ -276,7 +276,11 @@ class Report extends Element {
             }
         } elseif ($variable == "MASTER_TOTAL_PAGES") {
             return str_ireplace(array('$V{MASTER_TOTAL_PAGES}'), array('{:ptp:}'), $text);
-        } elseif ($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE") {
+        } elseif ($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE" || $variable == "CURRENT_PAGE_NUMBER" ) {
+            if ( (JasperPHP\Instructions::$processingPageFooter && JasperPHP\Instructions::$lastPageFooter)
+               || (isset($element->evaluationTime) && $element->evaluationTime == "Report") ) {
+                return str_ireplace(array('$V{' . $variable . '}'), array('{:ptp:}'), $text);
+            }
             return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Instructions::getPageNo()), $text);
         } else {
             return str_ireplace(array('$V{' . $variable . '}'), array($ans), $text);
@@ -296,7 +300,13 @@ class Report extends Element {
                     $objCounter = $matArray[0][1];
                     $obj = $obj->$objArrayName;
                     $obj = $obj[$objCounter];
-                } else {
+                } else if (is_array($obj)) {
+                    if (array_key_exists($part, $obj)) {
+                        $obj = $obj[$part];
+                    } else {
+                        $obj = "";
+                    }
+                } else if (is_object($obj)) {
                     preg_match_all("/(\w+)\(\)/", $part, $matchMethod);
                     if ($matchMethod && array_key_exists(0, $matchMethod[1])) {
                         $method = $matchMethod[1][0];
@@ -304,7 +314,10 @@ class Report extends Element {
                     } else {
                         $obj = $obj->$part;
                     }
+                } else {
+                    $obj = "";
                 }
+                
             }
         }
 
