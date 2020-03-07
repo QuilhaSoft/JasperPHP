@@ -406,6 +406,9 @@ class PdfProcessor {
             case "INT2OF5":
                 $pdf->write1DBarcode($code, 'I25', $x, $y, $width, $height, $modulewidth, $style, 'N');
                 break;
+            case "POSTNET":
+                $pdf->write1DBarcode($code, 'POSTNET', $x, $y, $width, $height, $modulewidth, $style, 'N');
+                break;
         }
     }
 
