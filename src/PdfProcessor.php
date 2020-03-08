@@ -311,7 +311,7 @@ class PdfProcessor {
         $type = strtoupper($data['barcodetype']);
         $height = $data['height'];
         $width = $data['width'];
-        $x = $data['x'];
+        $x = $data['x'] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"];
         $y = $data['y'] + $y;
         $textposition = $data['textposition'];
         $code = $data['code'];
