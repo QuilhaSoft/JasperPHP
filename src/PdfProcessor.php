@@ -70,7 +70,8 @@ class PdfProcessor {
 
         if ($preventY_axis >= $discount) {
             if ($pageFooter) {
-                $pageFooter->generate(array($this->jasperObj, array('counter' => true)));
+                JasperPHP\Instructions::$lastPageFooter = false;
+                $pageFooter->generate($this->jasperObj);
             }
             JasperPHP\Instructions::addInstruction(array("type" => "resetY_axis"));
             JasperPHP\Instructions::$currrentPage++;
