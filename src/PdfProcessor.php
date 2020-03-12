@@ -46,7 +46,8 @@ class PdfProcessor {
         if (JasperPHP\Instructions::$fontdir == "")
             JasperPHP\Instructions::$fontdir = dirname(__FILE__) . "/tcpdf/fonts";
     }
-    public static function PageNo(){
+
+    public static function PageNo() {
         JasperPHP\Instructions::$objOutPut->PageNo();
     }
 
@@ -56,7 +57,6 @@ class PdfProcessor {
 
     public function PreventY_axis($arraydata) {
         //$pdf = \JasperPHP\Pdf;
-        $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
         $preventY_axis = JasperPHP\Instructions ::$y_axis + $arraydata['y_axis'];
         $pageheight = JasperPHP\Instructions::$arrayPageSetting["pageHeight"];
         $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
@@ -79,10 +79,8 @@ class PdfProcessor {
             JasperPHP\Instructions::addInstruction(array("type" => "setPage", "value" => JasperPHP\Instructions::$currrentPage, 'resetMargins' => false));
             JasperPHP\Instructions::runInstructions();
             $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
-            if (JasperPHP\Instructions::$print_expression_result == true) {
-                if ($pageHeader)
-                    $pageHeader->generate($this->jasperObj);
-            }
+            if ($pageHeader)
+                $pageHeader->generate($this->jasperObj);
             JasperPHP\Instructions::runInstructions();
         }
     }

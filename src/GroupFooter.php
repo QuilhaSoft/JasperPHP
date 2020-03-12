@@ -24,24 +24,19 @@ class GroupFooter extends Element {
             if (is_object($child)) {
 
                 $print_expression_result = false;
-                //echo     (string)$child->objElement['printWhenExpression']."oi";
                 $printWhenExpression = (string) $child->objElement->printWhenExpression;
                 if ($printWhenExpression != '') {
-
-
                     $printWhenExpression = $obj->get_expression($printWhenExpression,$row);
-                    //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
                     eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
                 } else {
                     $print_expression_result = true;
                 }
                 if ($print_expression_result == true) {
-                    if ($this->children['0']->objElement['splitType'] == 'Stretch' || $this->children['0']->objElement['splitType'] == 'Prevent') {
-                        JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
+                    if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
+                        JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $child->objElement['height']));
                     }
                     parent::generate(array($obj,$row));
-                    //var_dump($this->children['0']);
-                    JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $this->children['0']->objElement['height']));
+                    JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $child->objElement['height']));
                 }
             }
         }
