@@ -52,7 +52,7 @@ class PdfProcessor {
     }
 
     public static function get() {
-        JasperPHP\Instructions::$objOutPut;
+        return JasperPHP\Instructions::$objOutPut;
     }
 
     public function PreventY_axis($arraydata) {
