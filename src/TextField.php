@@ -38,7 +38,9 @@ class TextField extends Element {
         $writeHTML = '';
         $isPrintRepeatedValues = '';
         $valign = '';
-        $data->hyperlinkReferenceExpression = $data->hyperlinkReferenceExpression;
+        if (isset($data->hyperlinkReferenceExpression)) {
+            $data->hyperlinkReferenceExpression = $obj->get_expression($data->hyperlinkReferenceExpression,$rowData,false,$this);
+        }
         $multiCell = false;
         //SimpleXML object (1 item) [0] // ->codeExpression[0] ->attributes('xsi', true) ->schemaLocation ->attributes('', true) ->type ->drawText ->checksumRequired barbecue:
         //SimpleXMLElement Object ( [@attributes] => Array ( [hyperlinkType] => Reference [hyperlinkTarget] => Blank ) [reportElement] => SimpleX
