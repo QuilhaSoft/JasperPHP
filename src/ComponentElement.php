@@ -32,28 +32,8 @@ class ComponentElement extends Element
         //echo "<br/><br/>";
         //SimpleXML object (1 item) [0] // ->codeExpression[0] ->attributes('xsi', true) ->schemaLocation ->attributes('', true) ->type ->drawText ->checksumRequired barbecue: 
         foreach($data->children('jr',true) as $barcodetype =>$content){
-            $text = $content->codeExpression;
-
-            preg_match_all("/P{(\w+)}/",$text ,$matchesP);
-            if($matchesP){
-                foreach($matchesP[1] as $macthP){
-                    $text = str_ireplace(array('$P{'.$macthP.'}'),array(($obj->arrayParameter[$macthP])),$text); 
-                } 
-            }
-            preg_match_all("/V{(\w+)}/",$text ,$matchesV);
-            if($matchesV){
-                foreach($matchesV[1] as $macthV){
-                    $text = $obj->getValOfVariable($macthV,$text); 
-                }
-
-            }
-            preg_match_all("/F{(\w+)}/",$text ,$matchesF);
-            if($matchesF){
-                foreach($matchesF[1] as $macthF){
-                    $text = $obj->getValOfField($macthF,$rowData,$text);
-                }
-            }
-
+            $text = $obj->get_expression($content->codeExpression,$rowData,false,$this);
+            
             $barcodemethod="";
             $textposition="";
             if($barcodetype=="barbecue"){

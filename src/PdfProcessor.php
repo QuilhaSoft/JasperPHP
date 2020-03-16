@@ -383,6 +383,9 @@ class PdfProcessor {
                 } else
                     $pdf->write2DBarcode($code, 'DATAMATRIX', $x, $y, $width, $height, $style, 'N');
                 break;
+            case "QRCODE":
+                $pdf->write2DBarcode($code, 'QRCODE', $x, $y, $width, $height, $style, 'N');
+                break;
             case "CODE128":
 
                 $pdf->write1DBarcode($code, 'C128', $x, $y, $width, $height, $modulewidth, $style, 'N');
