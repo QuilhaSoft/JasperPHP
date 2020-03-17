@@ -58,42 +58,7 @@ class StaticText extends Element {
             $stretchoverflow = "false";
         }
         if (isset($data->box)) {
-            $borderset = "";
-            if ($data->box->topPen["lineWidth"] > 0)
-                $borderset .= "T";
-            if ($data->box->leftPen["lineWidth"] > 0)
-                $borderset .= "L";
-            if ($data->box->bottomPen["lineWidth"] > 0)
-                $borderset .= "B";
-            if ($data->box->rightPen["lineWidth"] > 0)
-                $borderset .= "R";
-            if (isset($data->box->pen["lineColor"])) {
-                $drawcolor = array("r" => hexdec(substr($data->box->pen["lineColor"], 1, 2)), "g" => hexdec(substr($data->box->pen["lineColor"], 3, 2)), "b" => hexdec(substr($data->box->pen["lineColor"], 5, 2)));
-            }
-            $dash = "";
-            if (isset($data->box->pen["lineStyle"])) {
-                if ($data->box->pen["lineStyle"] == "Dotted")
-                    $dash = "0,1";
-                elseif ($data->box->pen["lineStyle"] == "Dashed")
-                    $dash = "4,2";
-
-
-                //Dotted Dashed
-            }
-
-            $border = array($borderset => array('width' => $data->box->pen["lineWidth"],
-                    'cap' => 'butt',
-                    'join' => 'miter',
-                    'dash' => $dash,
-                    'phase' => 0,
-                    'color' => $drawcolor));
-            //array($borderset=>array('width'=>$data->box->pen["lineWidth"],
-            //'cap'=>'butt'(butt, round, square),'join'=>'miter' (miter, round,bevel),
-            //'dash'=>2 ("2,1","2"),
-            //  'colour'=>array(110,20,30)  ));
-            //&&$data->box->pen["lineWidth"]>0
-            //border can be array('LTRB' => array('width' => 2, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0))
-            //elseif()
+            $border = StaticText::formatBox($data->box);
         }
         if (isset($data->textElement["textAlignment"])) {
             $align = $this->get_first_value($data->textElement["textAlignment"]);
@@ -165,6 +130,62 @@ class StaticText extends Element {
         //$this->checkoverflow($pointer);
     }
 
+    /**
+     * Return format for a component of a box
+     * @param unknown $pen
+     * @return number[]|string[]|number[][]
+     */
+    public function formatPen($pen)
+    {
+        if (isset($pen["lineColor"])) {
+            $drawcolor = array(
+                "r" => hexdec(substr($pen["lineColor"], 1, 2)),
+                "g" => hexdec(substr($pen["lineColor"], 3, 2)),
+                "b" => hexdec(substr($pen["lineColor"], 5, 2))
+            );
+        }
+
+        $dash = "";
+        if (isset($pen["lineStyle"])) {
+            if ($pen["lineStyle"] == "Dotted")
+                $dash = "1,1";
+            elseif ($pen["lineStyle"] == "Dashed")
+                $dash = "4,2";
+
+            // Dotted Dashed
+        }
+
+        return array(
+            'width' => $pen["lineWidth"] + 0,
+            'cap' => 'butt',
+            'join' => 'miter',
+            'dash' => $dash,
+            'phase' => 0,
+            'color' => $drawcolor
+        );
+    }
+    
+    /**
+     * Returns patterns for all borders of a box
+     * @param unknown $box
+     * @return Array[]
+     */
+    public function formatBox($box)
+    {
+        $border = Array();
+        $borderset = "";
+        if ($box->topPen["lineWidth"] > 0)
+            $border["T"] = StaticText::formatPen($box->topPen);
+        if ($box->leftPen["lineWidth"] > 0)
+            $border["L"] = StaticText::formatPen($box->leftPen);
+        if ($box->bottomPen["lineWidth"] > 0)
+            $border["B"] = StaticText::formatPen($box->bottomPen);
+        if ($box->rightPen["lineWidth"] > 0)
+            $border["R"] = StaticText::formatPen($box->rightPen);
+
+        return $border;
+    }
+    
 }
 
 ?>
