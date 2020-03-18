@@ -70,55 +70,7 @@ class TextField extends Element {
             $printoverflow = "true";
         }
         if (isset($data->box)) {
-            $borderset = "";
-            if ($data->box->topPen["lineWidth"] > 0) {
-                $borderset .= "T";
-            }
-            if ($data->box->leftPen["lineWidth"] > 0) {
-                $borderset .= "L";
-            }
-            if ($data->box->bottomPen["lineWidth"] > 0) {
-                $borderset .= "B";
-            }
-            if ($data->box->rightPen["lineWidth"] > 0) {
-                $borderset .= "R";
-            }
-            if (isset($data->box->pen["lineColor"])) {
-                $drawcolor = array(
-                    "r" => hexdec(substr($data->box->pen["lineColor"], 1, 2)),
-                    "g" => hexdec(substr($data->box->pen["lineColor"], 3, 2)),
-                    "b" => hexdec(substr($data->box->pen["lineColor"], 5, 2))
-                );
-            }
-            $dash = "";
-            if (isset($data->box->pen["lineStyle"])) {
-                if ($data->box->pen["lineStyle"] == "Dotted") {
-                    $dash = "0,1";
-                } elseif ($data->box->pen["lineStyle"] == "Dashed") {
-                    $dash = "4,2";
-                }
-
-
-                //Dotted Dashed
-            }
-
-            $border = array(
-                $borderset => array(
-                    'width' => $data->box->pen["lineWidth"] + 0,
-                    'cap' => 'butt',
-                    'join' => 'miter',
-                    'dash' => $dash,
-                    'phase' => 0,
-                    'color' => $drawcolor
-                )
-            );
-            //array($borderset=>array('width'=>$data->box->pen["lineWidth"],
-            //'cap'=>'butt'(butt, round, square),'join'=>'miter' (miter, round,bevel),
-            //'dash'=>2 ("2,1","2"),
-            //  'colour'=>array(110,20,30)  ));
-            //&&$data->box->pen["lineWidth"]>0
-            //border can be array('LTRB' => array('width' => 2, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0))
-            //elseif()
+            $border = StaticText::formatBox($data->box);
         }
         if (isset($data->reportElement["key"])) {
             $height = $fontsize;
