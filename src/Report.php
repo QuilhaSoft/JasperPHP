@@ -467,7 +467,9 @@ class Report extends Element {
     public static function formatText($txt, $pattern) {
         if ($txt != '') {
             $nome_meses = array('Janeiro', 'Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
-            if ($pattern == "###0")
+            if (substr($pattern, 0, 1) === "%")
+                return sprintf($pattern,$txt);
+            elseif ($pattern == "###0")
                 return number_format($txt, 0, "", "");
             elseif ($pattern == "#.##0")
                 return number_format($txt, 0, ".", ",");
