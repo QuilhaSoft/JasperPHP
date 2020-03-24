@@ -52,7 +52,7 @@ class PdfProcessor {
     }
 
     public static function get() {
-        JasperPHP\Instructions::$objOutPut;
+        return JasperPHP\Instructions::$objOutPut;
     }
 
     public function PreventY_axis($arraydata) {
@@ -382,6 +382,9 @@ class PdfProcessor {
                     $pdf->write2DBarcode($code, 'QRCODE', $x, $y, $width, $height, $style, 'N');
                 } else
                     $pdf->write2DBarcode($code, 'DATAMATRIX', $x, $y, $width, $height, $style, 'N');
+                break;
+            case "QRCODE":
+                $pdf->write2DBarcode($code, 'QRCODE', $x, $y, $width, $height, $style, 'N');
                 break;
             case "CODE128":
 
