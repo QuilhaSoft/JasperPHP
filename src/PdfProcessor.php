@@ -403,6 +403,7 @@ class PdfProcessor {
                 break;
             case "I25":
             case "INT2OF5":
+            case "INTERLEAVED2OF5":
                 $pdf->write1DBarcode($code, 'I25', $x, $y, $width, $height, $modulewidth, $style, 'N');
                 break;
             case "POSTNET":
