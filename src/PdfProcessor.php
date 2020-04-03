@@ -150,6 +150,10 @@ class PdfProcessor {
           } */
     }
 
+    public function SetCellHeightRatio($arraydata) {
+        JasperPHP\Instructions::$objOutPut->SetCellHeightRatio($arraydata["ratio"]);
+    }
+    
     public function MultiCell($arraydata) {
 
         //if($fielddata==true) {
@@ -416,6 +420,7 @@ class PdfProcessor {
     }
 
     public function checkoverflow($obj) {
+        /* @var \TCPDF $pdf */
         $pdf = JasperPHP\Instructions::$objOutPut;
         $JasperObj = $this->jasperObj;
         // var_dump($obj->children);
@@ -426,11 +431,41 @@ class PdfProcessor {
         $arraydata = $obj;
 
         $pdf->SetXY($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis);
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $pdf->setCellPaddings(0, 0, 0, 0);
+        $w = $arraydata["width"];
+        $h = $arraydata["height"];
+        $pdf->StartTransform();
+
+        $clipx = $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"];
+        $clipy = $arraydata["y"] + JasperPHP\Instructions::$y_axis;
+        $clipw = $arraydata["width"];
+        $cliph = $arraydata["height"];
+
+        $rotated = false;
         if ($this->print_expression_result == true) {
             $angle = $this->rotate($arraydata);
             if ($angle != 0) {
-                $pdf->StartTransform();
+                $pdf->Rect($clipx, $clipy, $clipw, $cliph, 'CNZ');
                 $pdf->Rotate($angle);
+                $rotated = true;
+                switch ($angle) {
+                    case 90:
+                        $x = $x - $arraydata["height"];
+                        $h = $arraydata["width"];
+                        $w = $arraydata["height"];
+                        break;
+                    case 180:
+                        $x = $x - $arraydata["width"];
+                        $y = $y - $arraydata["height"];
+                        break;
+                    case 270:
+                        $y = $y - $arraydata["width"];
+                        $h = $arraydata["width"];
+                        $w = $arraydata["height"];
+                        break;
+                }
             }
             // echo $arraydata["link"];
             if ($arraydata["link"]) {
@@ -442,8 +477,6 @@ class PdfProcessor {
             }
             //print_r($arraydata);
 
-
-            /* @var \TCPDF $pdf */
             if ($arraydata["writeHTML"] == true) {
                 //echo  ($txt);
                 $pdf->writeHTML($txt, true, 0, true, true);
@@ -462,23 +495,17 @@ class PdfProcessor {
                 if ($arraydata["valign"] == "")
                     $arraydata["valign"] = "T";
 
-                // $text = $txt[0];
-                while ($pdf->GetStringWidth($txt) > $arraydata["width"]) { // aka a gambiarra da gambiarra funcionan assim nao mude a naão ser que de problema seu bosta
-                    if ($txt != $pdf->getAliasNbPages() && $txt != ' ' . $pdf->getAliasNbPages()) {
-                        $txt = mb_substr($txt, 0, -1, 'UTF-8');
-                    }
+                // clip width & height
+                if (!$rotated) {
+                    $pdf->Rect($clipx, $clipy, $clipw, $cliph, 'CNZ');
                 }
-
-                $x = $pdf->GetX();
-                $y = $pdf->GetY();
+                
                 $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
                 $text = $pattern != '' ? $JasperObj->formatText($txt, $pattern) : $txt;
-                if ($arraydata['multiCell'] === true) {
-
-                    $pdf->MultiCell(
-                            $arraydata["width"], $arraydata["height"], $text, $arraydata["border"], $arraydata["align"], 0, 0, $x, $y, true, 0);
-                } else {
-                    $pdf->Cell($arraydata["width"], $arraydata["height"], $text, $arraydata["border"], "", $arraydata["align"], $arraydata["fill"], $arraydata["link"], 0, true, "T", $arraydata["valign"]);
+                $pdf->MultiCell(
+                    $w, $h, $text, $arraydata["border"], $arraydata["align"], $arraydata["fill"], 0, $x, $y, true, 0, false, true, 0, $arraydata["valign"]);
+                if (isset($arraydata["link"]) && !empty($arraydata["link"])) {
+                    $pdf->Link($x, $y, $arraydata["width"], $arraydata["height"], $arraydata["link"]);
                 }
             } elseif ($arraydata["poverflow"] == "true" || $arraydata["soverflow"] == "true") {
                 if ($arraydata["valign"] == "C")
@@ -490,14 +517,16 @@ class PdfProcessor {
                 $yAfter = $pdf->GetY();
                 $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
-                $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
-                        , $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, false, true, $maxheight); //,$arraydata["valign"]);
+                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
+                        , $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, false, true, $maxheight); //,$arraydata["valign"]);
                 if (($yAfter + $arraydata["height"]) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
                     JasperPHP\Instructions::$y_axis = $pdf->GetY() - 20;
                 }
             } else {
-                $pdf->MultiCell($arraydata["width"], $arraydata["height"], $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, '', '', true, 0, true, true, $maxheight);
+                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, true, true, $maxheight);
             }
+            $pdf->StopTransform();
+            
         }
     }
 
