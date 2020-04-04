@@ -96,6 +96,25 @@ class StaticText extends Element {
         if (isset($data->reportElement["key"])) {
             $height = $fontsize * $this->adjust;
         }
+        $lineHeightRatio = 1;
+        if (isset($data->textElement->paragraph["lineSpacing"])) {
+            switch ($data->textElement->paragraph["lineSpacing"]) {
+                case "1_1_2":
+                    $lineHeightRatio = 1.5;
+                    break;
+                case "Double":
+                    $lineHeightRatio = 1.5;
+                    break;
+                case "Proportional":
+                    $lineHeightRatio = $data->textElement->paragraph["lineSpacingSize"];
+                    break;
+            }
+        }
+
+        JasperPHP\Instructions::addInstruction(array(
+            "type" => "setCellHeightRatio",
+            "ratio" => $lineHeightRatio
+        ));
         JasperPHP\Instructions::addInstruction(array("type" => "SetXY", "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0, "hidden_type" => "SetXY"));
         JasperPHP\Instructions::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
         JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));

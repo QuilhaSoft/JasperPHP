@@ -109,7 +109,24 @@ class TextField extends Element {
         if (isset($data->textElement->font["isUnderline"]) && $data->textElement->font["isUnderline"] == "true") {
             $fontstyle = $fontstyle . "U";
         }
-
+        $lineHeightRatio = 1;
+        if (isset($data->textElement->paragraph["lineSpacing"])) {
+            switch ($data->textElement->paragraph["lineSpacing"]) {
+                case "1_1_2":
+                    $lineHeightRatio = 1.5;
+                    break;
+                case "Double":
+                    $lineHeightRatio = 1.5;
+                    break;
+                case "Proportional":
+                    $lineHeightRatio = $data->textElement->paragraph["lineSpacingSize"];
+                    break;
+            }
+        }
+        JasperPHP\Instructions::addInstruction(array(
+            "type" => "setCellHeightRatio",
+            "ratio" => $lineHeightRatio
+        ));
 
         JasperPHP\Instructions::addInstruction(array(
             "type" => "SetXY",
