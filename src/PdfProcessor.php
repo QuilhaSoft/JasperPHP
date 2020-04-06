@@ -490,8 +490,8 @@ class PdfProcessor {
                   }
                   } */
             } elseif ($arraydata["poverflow"] == "false" && $arraydata["soverflow"] == "false") {
-                if ($arraydata["valign"] == "M")
-                    $arraydata["valign"] = "C";
+                if ($arraydata["valign"] == "C")
+                    $arraydata["valign"] = "M";
                 if ($arraydata["valign"] == "")
                     $arraydata["valign"] = "T";
 
@@ -503,7 +503,7 @@ class PdfProcessor {
                 $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
                 $text = $pattern != '' ? $JasperObj->formatText($txt, $pattern) : $txt;
                 $pdf->MultiCell(
-                    $w, $h, $text, $arraydata["border"], $arraydata["align"], $arraydata["fill"], 0, $x, $y, true, 0, false, true, 0, $arraydata["valign"]);
+                    $w, $h, $text, $arraydata["border"], $arraydata["align"], $arraydata["fill"], 0, $x, $y, true, 0, false, true, $h, $arraydata["valign"]);
                 if (isset($arraydata["link"]) && !empty($arraydata["link"])) {
                     $pdf->Link($x, $y, $arraydata["width"], $arraydata["height"], $arraydata["link"]);
                 }
