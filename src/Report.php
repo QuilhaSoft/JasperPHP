@@ -38,6 +38,8 @@ class Report extends Element {
             $xmlFile = file_get_contents(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
         } elseif (file_exists($xmlFile)) {
             $xmlFile = file_get_contents($xmlFile);
+        }else{
+            throw new Exception("File {$xmlFile} not found!!");
         }
         $keyword = "<queryString>
         <![CDATA[";
@@ -90,7 +92,7 @@ class Report extends Element {
             return $result;
         } else {
             // se não tiver transação, retorna uma exceção
-            throw new Exception('Não há transação ativa!!');
+            throw new Exception('No transaction!!');
         }
     }
 
