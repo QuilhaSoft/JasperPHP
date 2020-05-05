@@ -39,7 +39,7 @@ class Detail extends Element {
                     foreach ($obj->arrayGroup as $group) {
                         preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
                         $groupExpression = $matchesF[1][0];
-                        if ($rowIndex == 1 || $group->resetVariables == 'true') {
+                        if (($rowIndex == 1 || $group->resetVariables == 'true') && ($group->groupHeader)) {
                             $groupHeader = new GroupHeader($group->groupHeader);
                             $groupHeader->generate(array($obj, $row));
                             $group->resetVariables = 'false';
