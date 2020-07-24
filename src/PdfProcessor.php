@@ -205,8 +205,16 @@ class PdfProcessor {
         elseif ($imgtype == 'png' || $imgtype == 'PNG')
             $imgtype = "PNG";
         // echo $path;
-        if (file_exists($path) || mb_substr($path, 0, 4) == 'http') {
-            //echo $path;
+       // echo getcwd().$path;
+       // exit;
+        if (file_exists(getcwd().$path)) {
+            
+            //echo getcwd().$path;
+             ///exit;
+            JasperPHP\Instructions::$objOutPut->Image(getcwd().$path, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
+        }elseif( mb_substr($path, 0, 4) == 'http'){
+           // echo $path;
+        ///exit;
             JasperPHP\Instructions::$objOutPut->Image($path, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
         } elseif (mb_substr($path, 0, 21) == "data:image/jpg;base64") {
             $imgtype = "JPEG";
@@ -264,7 +272,10 @@ class PdfProcessor {
     public function Line($arraydata) {
         $this->print_expression($arraydata);
         if ($this->print_expression_result == true) {
-            JasperPHP\Instructions::$objOutPut->Line($arraydata["x1"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y1"] + JasperPHP\Instructions::$y_axis, $arraydata["x2"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y2"] + JasperPHP\Instructions::$y_axis, $arraydata["style"]);
+           //var_dump($arraydata["style"]);
+            //echo ($arraydata["x1"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"])."||". ($arraydata["y1"] + JasperPHP\Instructions::$y_axis)."||". ($arraydata["x2"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"])."||". $arraydata["y2"] + JasperPHP\Instructions::$y_axis."||". $arraydata["style"]; 
+            
+            JasperPHP\Instructions::$objOutPut->Line((int)$arraydata["x1"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], (int)$arraydata["y1"] + JasperPHP\Instructions::$y_axis, (int)$arraydata["x2"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], (int)$arraydata["y2"] + JasperPHP\Instructions::$y_axis, $arraydata["style"]);
         }
     }
 
