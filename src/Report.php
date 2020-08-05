@@ -32,6 +32,7 @@ class Report extends Element {
     public $returnedValues = array();
     public $objElement;
     public $rowData;
+    public $lastRowData;
 
     public function __construct($xmlFile = null, $param) {
         if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {

@@ -21,7 +21,7 @@ class PageFooter extends Element {
         $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
         $recordObject = array_key_exists('recordObj', $arrayVariable) ? $arrayVariable['recordObj']['initialValue'] : "stdClass";
         $rowIndex = 0;
-        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : array() : $obj->rowData;
+        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : array() : $obj->lastRowData;
         if (!$row) {
             $row = array();
         }

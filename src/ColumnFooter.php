@@ -17,7 +17,11 @@ use \JasperPHP;
 class ColumnFooter extends Element {
 
     public function generate($obj = null) {
-        $row = is_array($obj) ? $obj[1] : array();
+        $rowIndex = 0;
+        $row = $obj->lastRowData;
+        //if (!$row) {
+        //    $row = array();
+        //}
         $obj = is_array($obj) ? $obj[0] : $obj;
         foreach ($this->children as $child) {
             // se for objeto
@@ -39,7 +43,7 @@ class ColumnFooter extends Element {
                     if ($this->children['0']->objElement['splitType'] == 'Stretch' || $this->children['0']->objElement['splitType'] == 'Prevent') {
                         JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $this->children['0']->objElement['height']));
                     }
-                    parent::generate($obj);
+                    parent::generate(array($obj,$row));
                     //var_dump($this->children['0']);
                     JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $this->children['0']->objElement['height']));
                 }
