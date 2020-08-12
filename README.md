@@ -7,8 +7,6 @@ Pure PHP library, without a java server or Jasper Server
 Please, consider donating funds to support us
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
-Training, and remote jobs are e acepted, PLEASE, HELP US ON CORONAVIRUS PHASE!!!
-
 See more blog, documentation, and more on https://jasperphp.com 
 
 # Export formats
