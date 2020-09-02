@@ -205,13 +205,12 @@ class PdfProcessor {
         elseif ($imgtype == 'png' || $imgtype == 'PNG')
             $imgtype = "PNG";
         // echo $path;
-       // echo getcwd().$path;
-       // exit;
-        if (file_exists(getcwd().$path)) {
+        $imagePath = getcwd().DIRECTORY_SEPARATOR. str_replace(array('"','\\','/'),array('',DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR) ,$path);
+        if (file_exists($imagePath)) {
             
-            //echo getcwd().$path;
-             ///exit;
-            JasperPHP\Instructions::$objOutPut->Image(getcwd().$path, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
+            //echo $imagePath;
+             //exit;
+            JasperPHP\Instructions::$objOutPut->Image($imagePath, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
         }elseif( mb_substr($path, 0, 4) == 'http'){
            // echo $path;
         ///exit;

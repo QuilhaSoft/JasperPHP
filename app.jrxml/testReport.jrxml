@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2018-11-20T12:25:25 -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -20,11 +19,44 @@
 	<parameter name="locacoes_dia_repasse" class="java.lang.String"/>
 	<parameter name="eventos_mes_ref" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT now()]]>
+		<![CDATA[SELECT * FROM despesas_subgrupo order by despesas_grupo_codigo]]>
 	</queryString>
-	<variable name="Variable_1" class="java.lang.String"/>
+	<variable name="Variable_1" class="java.lang.String" resetType="Group" resetGroup="grupoDespesas" calculation="Sum">
+		<variableExpression><![CDATA[$F{despesas_grupo_codigo}]]></variableExpression>
+	</variable>
+	<group name="grupoDespesas">
+		<groupExpression><![CDATA[$F{despesas_grupo_codigo}]]></groupExpression>
+		<groupHeader>
+			<band height="17" splitType="Stretch">
+				<staticText>
+					<reportElement x="139" y="0" width="100" height="17" uuid="27f07ba4-7fcb-4d29-a5d3-66ec5f6bfdca"/>
+					<text><![CDATA[gupo de despesa]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="290" y="-1" width="186" height="18" uuid="5d919c82-9250-4f7f-b5c1-3b9420254532"/>
+					<textFieldExpression><![CDATA[$F{despesas_grupo->despesas_grupo_nome}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="75" splitType="Stretch">
+				<staticText>
+					<reportElement x="120" y="0" width="100" height="14" uuid="7cb48ed1-f540-4d80-bb1b-2969d2919a8c"/>
+					<text><![CDATA[group footer static text]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="239" y="0" width="100" height="14" uuid="68029460-ff18-418d-9d18-af62f75f2184"/>
+					<textFieldExpression><![CDATA[$F{despesas_grupo_codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="370" y="0" width="100" height="14" uuid="80518fd0-01fd-41a0-aef6-a54c5e14eebc"/>
+					<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<title>
-		<band height="38">
+		<band height="61">
 			<textField pattern="dd/MM/yyyy h.mm a">
 				<reportElement x="250" y="0" width="90" height="13" uuid="b800fb54-f9e9-45d3-aa58-83be22f288da">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -46,10 +78,12 @@
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="1" y="0" width="39" height="13" uuid="27d6dbae-0922-42e5-bdaf-d5789a9b4ece">
+				<reportElement positionType="FixRelativeToBottom" x="91" y="8" width="39" height="13" uuid="27d6dbae-0922-42e5-bdaf-d5789a9b4ece">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-					<printWhenExpression><![CDATA[1==1]]></printWhenExpression>
 				</reportElement>
+				<textElement>
+					<font fontName="times"/>
+				</textElement>
 				<text><![CDATA[Rel/1]]></text>
 			</staticText>
 			<staticText>
@@ -65,28 +99,87 @@
 				<text><![CDATA[Generated on:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="-5" y="37" width="575" height="1" uuid="d787490e-3b50-41bf-b6bb-c430f56c7416"/>
+				<reportElement x="-5" y="54" width="575" height="1" uuid="d787490e-3b50-41bf-b6bb-c430f56c7416"/>
 			</line>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="90" height="10" uuid="7e0e6e63-02e4-41d6-8f68-7707f3ba4d9c">
+				<reportElement positionType="FixRelativeToBottom" x="90" y="27" width="90" height="10" uuid="7e0e6e63-02e4-41d6-8f68-7707f3ba4d9c">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<printWhenExpression><![CDATA[1==1]]></printWhenExpression>
 				</reportElement>
 				<text><![CDATA[Title Band]]></text>
 			</staticText>
+			<image>
+				<reportElement x="10" y="4" width="50" height="50" uuid="1060d24f-4821-491f-9886-2c72d3dd0c81"/>
+				<imageExpression><![CDATA[images/jasperLogo.png]]></imageExpression>
+			</image>
 		</band>
 	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="520" y="0" width="50" height="13" uuid="68587732-2951-48a9-be30-8672a4c0c533">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="60" height="13" uuid="fda54c69-99ac-45f7-b381-5329c668e9e8">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="13" width="100" height="30" uuid="78c3043b-1bcf-4c3a-a0f8-0d552b8c5762"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina "+ $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="281" y="13" width="100" height="30" uuid="9d087dcf-7ab3-4a80-86e4-d8d1fc19088a"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
 	<columnHeader>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="99" splitType="Prevent"/>
+		<band height="30" splitType="Prevent">
+			<textField>
+				<reportElement x="50" y="2" width="100" height="8" uuid="9946cbd9-32b9-4552-a346-ac88b4b7db6e"/>
+				<textFieldExpression><![CDATA[$F{despesas_subgrupo_codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="163" y="0" width="100" height="10" uuid="530e771a-1869-4e18-b042-a3ea07f60885"/>
+				<textFieldExpression><![CDATA[$F{despesas_subgrupo_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="100" height="10" uuid="27b741e1-c1d7-486f-833a-4178aef6926a"/>
+				<textFieldExpression><![CDATA[$F{plano_contas_codigo}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
-		<band splitType="Stretch"/>
+		<band height="52" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="120" y="20" width="100" height="14" uuid="508d8b5b-ac15-4d25-ba7a-11a4b0bbc464"/>
+				<textFieldExpression><![CDATA[$F{despesas_grupo_codigo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="13" width="100" height="21" uuid="778557b2-ad72-43c9-b9f6-245f5869c072"/>
+				<text><![CDATA[teste]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="270" y="21" width="186" height="18" uuid="a93b761d-8f6c-4569-9b64-6513d4cd67b8"/>
+				<textFieldExpression><![CDATA[$F{despesas_grupo->despesas_grupo_nome}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="12" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="0" width="429" height="10" uuid="30bee12b-6c21-4697-bf1c-6c260a837581"/>
 				<textElement>
@@ -97,6 +190,14 @@
 			<line>
 				<reportElement x="-5" y="0" width="575" height="1" uuid="a8a8e584-b747-4d20-a622-546110c84392"/>
 			</line>
+			<textField evaluationTime="Page">
+				<reportElement x="476" y="4" width="100" height="18" uuid="69cfdc51-ede7-4061-8233-5cb3948f1bbd"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="163" y="0" width="100" height="10" uuid="862fa8dd-0fa7-4401-a697-4cf72f794610"/>
+				<textFieldExpression><![CDATA[$F{despesas_subgrupo_nome}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 </jasperReport>
