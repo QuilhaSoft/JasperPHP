@@ -1,4 +1,4 @@
-![alt text](https://jasperphp.com/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png) 
+![alt text](https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png) 
 
 # JasperPHP
 Library to generate reports created with the JasperSoft Studio application<br>
@@ -7,7 +7,7 @@ Pure PHP library, without a java server or Jasper Server
 Please, consider donating funds to support us
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
-See more blog, documentation, and more on https://jasperphp.com 
+See more blog, documentation, and more on https://jasperphp.net 
 
 # Export formats
  PDF <br>
