@@ -27,7 +27,11 @@ final class TConnection
      */
     public static function open($name)
     {
-        if (file_exists("config/{$name}.ini"))
+        if (file_exists($name))
+        {
+            $db = parse_ini_file($name);
+        }
+        elseif (file_exists("config/{$name}.ini"))
         {
             $db = parse_ini_file("config/{$name}.ini");
         }
