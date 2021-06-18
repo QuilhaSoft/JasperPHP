@@ -93,6 +93,13 @@ See more blog, documentation, and more on https://jasperphp.net
     <tr>
         <td>Background</td>
         <td>OK</td>
+        <td>Style</td>
+        <td>OK</td>
+    </tr>
+    <tr>
+        <td>Frame</td>
+        <td>OK</td>
+        
     </tr>
 </table>
 * Subreports are supported recursively and unlimited
