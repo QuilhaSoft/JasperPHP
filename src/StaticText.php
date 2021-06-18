@@ -93,7 +93,7 @@ class StaticText extends Element {
         if (isset($data->textElement->font["isUnderline"]) && $data->textElement->font["isUnderline"] == "true") {
             $fontstyle = $fontstyle . "U";
         }
-        if (isset($data->reportElement["key"])) {
+        if (isset($data->reportElement["key"]) && !empty($data->reportElement["key"])) {
             $height = $fontsize * $this->adjust;
         }
         $lineHeightRatio = 1;
