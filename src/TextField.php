@@ -45,6 +45,12 @@ class TextField extends Element {
         //SimpleXML object (1 item) [0] // ->codeExpression[0] ->attributes('xsi', true) ->schemaLocation ->attributes('', true) ->type ->drawText ->checksumRequired barbecue:
         //SimpleXMLElement Object ( [@attributes] => Array ( [hyperlinkType] => Reference [hyperlinkTarget] => Blank ) [reportElement] => SimpleX
         //print_r( $data["@attributes"]);
+                
+        //apply style formatting
+        if(isset($data->reportElement['style'])){
+        $name = $data->reportElement['style'];
+        $obj->applyStyle($name, $data->reportElement, $rowData);
+        }
 
         if (isset($data->reportElement["forecolor"])) {
             $textcolor = array(
