@@ -111,6 +111,7 @@ See more blog, documentation, and more on https://jasperphp.net
     <li>array of objects as input data</li>
     <li>textfield with html render with data replacement</li>
     <li>active record</li>
+    <li>Conditional styles ready too</li>
 </lu>
 <br>
 
