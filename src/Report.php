@@ -33,6 +33,7 @@ class Report extends Element {
     public $objElement;
     public $rowData;
     public $lastRowData;
+    public $arrayStyles;
 
     public function __construct($xmlFile = null, $param) {
         if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {
@@ -45,7 +46,7 @@ class Report extends Element {
         $keyword = "<queryString>
         <![CDATA[";
         $xmlFile = str_replace($keyword, "<queryString><![CDATA[", $xmlFile);
-        $xml = simplexml_load_string($xmlFile);
+        $xml = simplexml_load_string($xmlFile,null,LIBXML_NOCDATA);
         $this->charge($xml, $param);
         //$this->objElement = $xml;
     }
@@ -65,6 +66,9 @@ class Report extends Element {
             $obj = ($obj == 'break') ? 'Breaker' : $obj;
             $className = "JasperPHP\\" . ucfirst($obj);
             // echo $className."|";
+            if(ucfirst($obj)=='Style'){
+            $this->addStyle($value); 
+            }
             if (class_exists($className)) {
                 // echo $className."%".CHR(10);
                 $this->add(new $className($value));
@@ -637,6 +641,53 @@ class Report extends Element {
         $instructions = JasperPHP\Instructions::setJasperObj($this);
         JasperPHP\Instructions::runInstructions();
         //$this->runInstructions($instructions);
+    }
+    public function addStyle($style){
+        //print_r($style);return;
+        $attributes = $style->attributes();
+        $key = $attributes['name'];            
+        $this->arrayStyles["{$key}"] = $style; // here you can trate all parameter of style
+    }
+    
+    public function getStyle($key){
+        if(isset($this->arrayStyles["{$key}"])){
+        return $this->arrayStyles["{$key}"];
+        }
+    }
+    public function applyStyle($key, &$reportElement, $rowData){
+        $style = $this->getStyle($key);
+        if($style){
+            //default
+            $attributes = $style->attributes();
+            if(isset($style->conditionalStyle)){ 
+                //percore os styles
+                foreach($style->conditionalStyle as $styleNew){                
+                    $expression = $styleNew->conditionExpression;             
+                    //echo $expression;
+                    $resultExpression = false;
+                    $expression = $this->get_expression($expression, $rowData);
+                    //echo 'if(' . $expression . '){$resultExpression=true;}<br/>';
+                    eval('if(' . $expression . '){$resultExpression=true;}'); 
+                    //echo $resultExpression."<br/>";
+                    if($resultExpression){
+                        //get definition style condicional
+                        $attributCondicional= $styleNew->style->attributes();
+                        $attributes = $attributCondicional;
+                        break;
+                        //var_dump($attributCondicional);  
+                    }      
+                }
+            }           
+           //change properties  
+            foreach($attributes as $key => $value){
+                //ignore
+                if(!in_array($key,array('name'))){
+                    //echo "{$key} - {$value}<br/>";    
+                    $reportElement[$key]=$value;                             
+                }   
+            }
+           
+        }        
     }
 
 }
