@@ -195,6 +195,7 @@ class Report extends Element {
                           $x= "'$a'";
                           } */
                         $this->sql = str_replace('$P{' . $v . '}', $a, $this->sql);
+                        $this->sql = str_replace('$P!{' . $v . '}', $a, $this->sql);
                     }
                 }
             }
