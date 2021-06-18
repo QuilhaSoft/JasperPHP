@@ -78,7 +78,7 @@ class TextField extends Element {
         if (isset($data->box)) {
             $border = StaticText::formatBox($data->box);
         }
-        if (isset($data->reportElement["key"])) {
+        if (isset($data->reportElement["key"]) && !empty($data->reportElement["key"])) {
             $height = $fontsize;
         }
         if (isset($data->textElement["textAlignment"])) {
