@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="80"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Row" isDefault="true" mode="Opaque" backcolor="#FCFAFA" fill="Solid">
+		<box>
+			<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F2BEBD" fill="Solid" scaleImage="RetainShape" pattern=""/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Uf" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT Id, Codigo, Nome, Uf FROM Municipio WHERE  Uf = '$P{Uf}' LIMIT 10]]>
+	</queryString>
+	<field name="Id" class="java.lang.String"/>
+	<field name="Codigo" class="java.lang.String"/>
+	<field name="Nome" class="java.lang.String"/>
+	<field name="Uf" class="java.lang.String"/>
+	<variable name="Variable_1" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="90" y="0" width="70" height="20" backcolor="#E65C5A" uuid="03de2072-fec6-42d1-9849-31e895a14a2f"/>
+				<text><![CDATA[Id City]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="270" height="20" uuid="9daa66ca-31ab-4cf8-aeb0-26ac4940318d"/>
+				<text><![CDATA[City Name]]></text>
+			</staticText>
+			<line>
+				<reportElement x="90" y="0" width="480" height="1" uuid="d3ca1b9d-8e28-4691-92cf-94bb84fa2645"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement style="Row" x="90" y="2" width="80" height="20" uuid="d100e7a2-dd98-4b89-96a4-0bc52f4dc392"/>
+				<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Row" x="170" y="2" width="400" height="20" uuid="6380ff6e-6953-419c-a92d-48fe3273cab5"/>
+				<textFieldExpression><![CDATA[$F{Nome}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="90" y="1" width="480" height="1" uuid="e5a3b88f-adf0-4337-b62c-971281f85506"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>
