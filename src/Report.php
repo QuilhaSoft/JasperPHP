@@ -504,7 +504,7 @@ class Report extends Element {
             elseif ($pattern == "#,##0.0000")
                 return number_format($txt, 4, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "###0.0000")
-                return number_format($txt, 4, self::$dec_point, self::$thousands_sep);
+                return number_format($txt, 4, self::$dec_point, "");
 
             // latin formats
             elseif ($pattern == "#,##0")
