@@ -21,6 +21,8 @@ class Report extends Element {
 
     public static $defaultFolder = 'app.jrxml';
     public static $locale = 'en_us';
+    public static $dec_point=".";
+    public static $thousands_sep=",";
     public $dbData;
     public $arrayVariable;
     public $arrayfield;
@@ -480,29 +482,29 @@ class Report extends Element {
             elseif ($pattern == "###0")
                 return number_format($txt, 0, "", "");
             elseif ($pattern == "#.##0")
-                return number_format($txt, 0, ".", ",");
+                return number_format($txt, 0, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "###0.0")
-                return number_format($txt, 1, ".", "");
+                return number_format($txt, 1, self::$dec_point, "");
             elseif ($pattern == "#,##0.0" || $pattern == "#,##0.0;-#,##0.0")
-                return number_format($txt, 1, ".", ",");
+                return number_format($txt, 1, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "###0.00" || $pattern == "###0.00;-###0.00")
-                return number_format($txt, 2, ".", "");
+                return number_format($txt, 2, self::$dec_point, "");
             elseif ($pattern == "#,##0.00" || $pattern == "#,##0.00;-#,##0.00")
-                return number_format($txt, 2, ".", ",");
+                return number_format($txt, 2, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "###0.00;(###0.00)")
-                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ".", "") . ")" : number_format($txt, 2, ".", ""));
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, self::$dec_point, "") . ")" : number_format($txt, 2, self::$dec_point, ""));
             elseif ($pattern == "#,##0.00;(#,##0.00)")
-                return ($txt < 0 ? "(" . number_format(abs($txt), 2, ".", ",") . ")" : number_format($txt, 2, ".", ","));
+                return ($txt < 0 ? "(" . number_format(abs($txt), 2, self::$dec_point, self::$thousands_sep) . ")" : number_format($txt, 2, self::$dec_point, self::$thousands_sep));
             elseif ($pattern == "#,##0.00;(-#,##0.00)")
-                return ($txt < 0 ? "(" . number_format($txt, 2, ".", ",") . ")" : number_format($txt, 2, ".", ","));
+                return ($txt < 0 ? "(" . number_format($txt, 2, self::$dec_point, ",") . ")" : number_format($txt, 2, ".", ","));
             elseif ($pattern == "###0.000")
-                return number_format($txt, 3, ".", "");
+                return number_format($txt, 3, self::$dec_point, "");
             elseif ($pattern == "#,##0.000")
-                return number_format($txt, 3, ".", ",");
+                return number_format($txt, 3, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "#,##0.0000")
-                return number_format($txt, 4, ".", ",");
+                return number_format($txt, 4, self::$dec_point, self::$thousands_sep);
             elseif ($pattern == "###0.0000")
-                return number_format($txt, 4, ".", "");
+                return number_format($txt, 4, self::$dec_point, self::$thousands_sep);
 
             // latin formats
             elseif ($pattern == "#,##0")
