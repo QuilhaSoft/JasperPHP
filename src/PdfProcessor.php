@@ -443,7 +443,27 @@ class PdfProcessor {
         $pdf->SetXY($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
-        $pdf->setCellPaddings(0, 0, 0, 0);
+        //default
+        $pLeft=1;
+        $pTop=0;
+        $pRight=1;
+        $pBottom=0;         
+        //suport padding cells
+        if(isset($obj['box']) && !empty($obj['box'])){   
+            if(isset($obj['box']['leftPadding'])){
+            $pLeft=$obj['box']['leftPadding'];            
+            }
+            if(isset($obj['box']['topPadding'])){
+            $pTop=$obj['box']['topPadding'];
+            }
+            if(isset($obj['box']['rightPadding'])){
+            $pRight=$obj['box']['rightPadding'];            
+            }
+            if(isset($obj['box']['bottomPadding'])){
+            $pBottom = $obj['box']['bottomPadding'];            
+            }
+        }
+        $pdf->setCellPaddings($pLeft, $pTop, $pRight, $pBottom);
         $w = $arraydata["width"];
         $h = $arraydata["height"];
         $pdf->StartTransform();
