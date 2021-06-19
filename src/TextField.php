@@ -214,7 +214,7 @@ class TextField extends Element {
         } elseif ($data->textElement['markup'] == 'rtf') {
             $multiCell = true;
         } else {
-            $text = str_ireplace(array('"+','" +', '+"', '+ "', '"'), array('', '', ''), $text);
+            $text = str_ireplace(array('"+','" +', '+"', '+ "', '"','\n'), array('', '', ''), $text);
         }
         if (isset($data->reportElement["isPrintRepeatedValues"]))
             $isPrintRepeatedValues = $data->reportElement["isPrintRepeatedValues"];
