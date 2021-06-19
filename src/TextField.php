@@ -75,8 +75,10 @@ class TextField extends Element {
         if (isset($data->reportElement["isPrintWhenDetailOverflows"]) && $data->reportElement["isPrintWhenDetailOverflows"] == "true") {
             $printoverflow = "true";
         }
+        $box = array();
         if (isset($data->box)) {
             $border = StaticText::formatBox($data->box);
+            $box = $data->box;
         }
         if (isset($data->reportElement["key"]) && !empty($data->reportElement["key"])) {
             $height = $fontsize;
@@ -233,6 +235,7 @@ class TextField extends Element {
             "isPrintRepeatedValues" => $isPrintRepeatedValues,
             "rotation" => $rotation,
             "valign" => $valign,
+            "box"=>$box,
             "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0));
 
         //$this->checkoverflow($pointer);
