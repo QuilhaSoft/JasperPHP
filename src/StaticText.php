@@ -57,8 +57,10 @@ class StaticText extends Element {
             $printoverflow = "true";
             $stretchoverflow = "false";
         }
+        $box = array();
         if (isset($data->box)) {
             $border = StaticText::formatBox($data->box);
+            $box = $data->box;
         }
         if (isset($data->textElement["textAlignment"])) {
             $align = $this->get_first_value($data->textElement["textAlignment"]);
@@ -142,6 +144,7 @@ class StaticText extends Element {
                 "multiCell" => false,
                 "soverflow" => $stretchoverflow, "poverflow" => $printoverflow, "rotation" => $rotation, "valign" => $valign, "link" => null,
                 "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0,
+                "box"=>$box,
                 'writeHTML' => $writeHTML));
         }
         //### End of modification, below is the original line        
