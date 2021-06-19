@@ -26,6 +26,7 @@ class Image extends Element
         //echo $imagepath;
         //$text= substr($data->imageExpression, 1, -1);
         $text = $obj->get_expression($text, $row);
+        $text = str_ireplace(array('"+','" +', '+"', '+ "', '"'), array('', '', ''), $text);
 
         $imagetype= substr($text,-3);
         //$data->hyperlinkReferenceExpression=$this->analyse_expression($data->hyperlinkReferenceExpression);
