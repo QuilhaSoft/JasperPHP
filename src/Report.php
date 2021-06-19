@@ -496,7 +496,7 @@ class Report extends Element {
             elseif ($pattern == "#,##0.00;(#,##0.00)")
                 return ($txt < 0 ? "(" . number_format(abs($txt), 2, self::$dec_point, self::$thousands_sep) . ")" : number_format($txt, 2, self::$dec_point, self::$thousands_sep));
             elseif ($pattern == "#,##0.00;(-#,##0.00)")
-                return ($txt < 0 ? "(" . number_format($txt, 2, self::$dec_point, ",") . ")" : number_format($txt, 2, ".", ","));
+                return ($txt < 0 ? "(" . number_format($txt, 2, self::$dec_point, self::$thousands_sep) . ")" : number_format($txt, 2, self::$dec_point, self::$thousands_sep));
             elseif ($pattern == "###0.000")
                 return number_format($txt, 3, self::$dec_point, "");
             elseif ($pattern == "#,##0.000")
