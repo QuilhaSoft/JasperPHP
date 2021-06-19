@@ -189,7 +189,7 @@ class StaticText extends Element {
      * @param unknown $box
      * @return Array[]
      */
-    public function formatBox($box)
+    public static function formatBox($box)
     {
         $border = Array();
         $borderset = "";
