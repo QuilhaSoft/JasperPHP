@@ -205,7 +205,11 @@ class PdfProcessor {
         elseif ($imgtype == 'png' || $imgtype == 'PNG')
             $imgtype = "PNG";
         // echo $path;
-        $imagePath = getcwd().DIRECTORY_SEPARATOR. str_replace(array('"','\\','/'),array('',DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR) ,$path);
+        $imagePath = str_replace(array('"','\\','/'),array('',DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR) ,$path);
+        //not full patch?
+        if (!file_exists($imagePath)) {
+        $imagePath = getcwd().DIRECTORY_SEPARATOR.$imagePath;
+        }
         if (file_exists($imagePath)) {
             
             //echo $imagePath;
