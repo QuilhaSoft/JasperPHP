@@ -81,6 +81,12 @@ class PdfProcessor {
             $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
             if ($pageHeader)
                 $pageHeader->generate($this->jasperObj);
+            //repeat column header?
+            if ($this->jasperObj::$columnHeaderRepeat){
+				 $columnHeader = $this->jasperObj->getChildByClassName('ColumnHeader');
+				 if($columnHeader)
+					$columnHeader->generate($this->jasperObj);
+                }
             JasperPHP\Instructions::runInstructions();
         }
     }
