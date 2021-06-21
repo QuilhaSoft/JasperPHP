@@ -23,6 +23,7 @@ class Report extends Element {
     public static $locale = 'en_us';
     public static $dec_point=".";
     public static $thousands_sep=",";
+    public static $columnHeaderRepeat=false;
     public $dbData;
     public $arrayVariable;
     public $arrayfield;
