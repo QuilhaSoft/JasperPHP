@@ -19,6 +19,7 @@ class ColumnFooter extends Element {
     public function generate($obj = null) {
         $rowIndex = 0;
         $row = $obj->lastRowData;
+        if (!$row) {return;}
         //if (!$row) {
         //    $row = array();
         //}
