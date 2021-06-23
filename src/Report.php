@@ -555,8 +555,12 @@ class Report extends Element {
                 return date("d/m/Y h:i a", strtotime($txt));
             elseif ($pattern == "dd/MM/yyyy HH.mm.ss" && $txt != "")
                 return date("d-m-Y H:i:s", strtotime($txt));
+            elseif (($pattern == "dd/MM/yyyy HH:mm" || $pattern == "dd/MM/yyyy HH.mm" || $pattern == "dd/MM/yyyy H:m") && $txt != "")
+                return date("d/m/Y H:i", strtotime($txt));
             elseif ($pattern == "H:m:s" && $txt != "")
                 return date("H:i:s", strtotime($txt));
+            elseif (($pattern == "H:m" || $pattern == "HH:mm" || $pattern == "H.m" || $pattern == "HH.mm") && $txt != "")
+                return date("H:i", strtotime($txt));
             elseif (($pattern == "dFyyyy") && $txt != "")
                 return date("d ", strtotime($txt)) . " de " . $nome_meses[date("n", strtotime($txt))] . " de " . date("Y", strtotime($txt));
             elseif (($pattern == "dFbyyyy") && $txt != "")
