@@ -194,6 +194,10 @@ class PdfProcessor {
         //
         //        JasperPHP\Pdf::$pdfOutPut->SetLineStyle($arraydata['border']);
         JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111', $style, $arraydata['border'], $arraydata['fillcolor']);
+    	//draw only border
+	JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
+	JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);		
+	JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
     }
 
     public function Ellipse($arraydata) {
