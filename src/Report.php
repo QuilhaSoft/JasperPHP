@@ -103,6 +103,22 @@ class Report extends Element {
             throw new Exception('No transaction!!');
         }
     }
+	
+	public function getDbDataQuery($sql) {
+
+        if ($conn = JasperPHP\ado\TTransaction::get()) {
+            // registra mensagem de log
+            JasperPHP\ado\TTransaction::log($sql);
+
+            // executa instrução de SELECT
+            $result = $conn->Query($sql);
+            $rowData = $result->fetchAll(\PDO::FETCH_CLASS);
+            return $rowData;
+        } else {
+            // se não tiver transação, retorna uma exceção
+            throw new Exception('No transaction!!');
+        }
+    }
 
     public function page_setting($xml_path) {
         $this->arrayPageSetting["orientation"] = "P";
@@ -167,13 +183,9 @@ class Report extends Element {
         }
     }
 
-    public function queryString_handler($xml_path) {
-        //var_dump($xml_path);
-        $this->sql = (string) $xml_path->queryString;
-        if (strlen(trim($xml_path->queryString)) > 0) {
-
-            if (isset($this->arrayParameter)) {
-                foreach ($this->arrayParameter as $v => $a) {
+	public function prepareSql($sql, $arrayParameter=array()){
+		if (isset($arrayParameter) && !empty($arrayParameter)) {
+                foreach ($arrayParameter as $v => $a) {
                     if (is_array($a)) {
                         foreach ($a as $x) {
                             // se for um inteiro
@@ -186,7 +198,7 @@ class Report extends Element {
                         }
                         // converte o array em string separada por ","
                         $result = '(' . implode(',', $foo) . ')';
-                        $this->sql = str_replace('$P{' . $v . '}', $result, $this->sql);
+                        $sql = str_replace('$P{' . $v . '}', $result, $sql);
                     } else {
                         /* if (is_integer($a))
                           {
@@ -197,10 +209,21 @@ class Report extends Element {
                           // se for string, adiciona aspas
                           $x= "'$a'";
                           } */
-                        $this->sql = str_replace('$P{' . $v . '}', $a, $this->sql);
-                        $this->sql = str_replace('$P!{' . $v . '}', $a, $this->sql);
+                        $sql = str_replace('$P{' . $v . '}', $a, $sql);
+                        $sql = str_replace('$P!{' . $v . '}', $a, $sql);
                     }
                 }
+            }
+		return $sql;
+	}
+	
+    public function queryString_handler($xml_path) {
+        //var_dump($xml_path);
+        $this->sql = (string) $xml_path->queryString;
+        if (strlen(trim($xml_path->queryString)) > 0) {
+
+            if (isset($this->arrayParameter)) {
+				$this->sql=$this->prepareSql($this->sql,$this->arrayParameter);
             }
         }
     }
