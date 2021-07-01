@@ -25,6 +25,12 @@ class ComponentElement extends Element
         $width=$data->reportElement["width"];
         $height=$data->reportElement["height"];
 
+        //table =========================================
+		$jrs = $data->children('jr',true);	
+		if(isset($jrs->table)){
+		$table = new JasperPHP\Table($jrs->table);
+		$table->generate(array($obj,$rowData));
+		}//end table
         
         //simplexml_tree( $data);        
         // echo "<br/><br/>";
