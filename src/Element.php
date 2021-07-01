@@ -13,7 +13,7 @@ namespace JasperPHP;
 	class Element
 	{
 		private $properties;    // propriedades da TAG 
-		protected $objElement;
+		public $objElement;
 		public $children;
 
 
