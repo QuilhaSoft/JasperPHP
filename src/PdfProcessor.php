@@ -332,7 +332,11 @@ class PdfProcessor {
 
         //$this->generateCrossTab($arraydata, JasperPHP\Pdf::$y_axis);
     }
-
+ 
+    public function Table($arraydata){
+	JasperPHP\Table::process($arraydata);		
+    }
+	
     public function showBarcode($data, $y) {
 
         $pdf = JasperPHP\Instructions::get();
