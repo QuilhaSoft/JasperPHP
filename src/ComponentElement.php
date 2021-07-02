@@ -29,7 +29,7 @@ class ComponentElement extends Element
 		$jrs = $data->children('jr',true);	
 		if(isset($jrs->table)){
 		$table = new JasperPHP\Table($jrs->table);
-		$table->generate(array($obj,$rowData));
+		$table->generate(array($obj,$rowData,$data->reportElement));
 		}//end table
         
         //simplexml_tree( $data);        
