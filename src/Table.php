@@ -213,10 +213,8 @@ class Table extends Element
 		$topMargin = JasperPHP\Instructions::$arrayPageSetting["topMargin"];		
         $dbData = $arraydata['data']; 
 		$columns = $arraydata['column'];
-		JasperPHP\Instructions::addInstruction(array("type" => "resetY_axis"));
-		JasperPHP\Instructions::runInstructions();
 		$pdf->Ln(0);
-		$pdf->SetY($pdf->GetY()-$topMargin+$arraydata['y']);
+		self::SetY_axis($arraydata['y']);
 		
 		$showColumnHeader = true;
 		//after font definition
@@ -323,17 +321,18 @@ class Table extends Element
 			}//end get height row header and detail
 			
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$pdf->GetY()+$height_detail-$topMargin));
+			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_detail));
 			JasperPHP\Instructions::runInstructions();
 			//new page?
 			if(self::$page != JasperPHP\Instructions::$currrentPage){
-				$pdf->SetY($pdf->GetY()-$topMargin);
 				$showColumnHeader=true;//repeat columnHeader
+				$pdf->Ln(0);
+				$y = JasperPHP\Instructions::$y_axis;
 			}			
 			
 			//posições iniciais
 			$startX = $pdf->GetX();
-			$startY = $pdf->GetY(); 		
+			$startY = JasperPHP\Instructions::$y_axis; 		
 			$y = $startY;
 			$x = $startX;	
 
@@ -348,7 +347,7 @@ class Table extends Element
 						$field->objElement->reportElement["x"]=$x-$marginLeft;					
 						//$y = $startY+$field->objElement->reportElement["y"];					
 						$field->objElement->reportElement["height"]=$cell['h'];					
-						$field->objElement->reportElement["y"]=$y;	
+						//$field->objElement->reportElement["y"]=$y;	
 						$field->generate(array($jasperObj,$row));
 						JasperPHP\Instructions::runInstructions();
 					}
@@ -357,7 +356,7 @@ class Table extends Element
 					if(isset($cell['fillcolor'])){
 					$pdf->SetFillColor($cell['fillcolor']["r"], $cell['fillcolor']["g"], $cell['fillcolor']["b"]);
 					}
-					$pdf->MultiCell($width_column,$cell['h'],"",$borders,'L',isset($cell['fill']),0,$x,$y+$topMargin);	
+					$pdf->MultiCell($width_column,$cell['h'],"",$borders,'L',isset($cell['fill']),0,$x,$y);	
 					$x = $x+$width_column;
 					$pdf->SetX($x);				
 				}//end column
@@ -366,8 +365,8 @@ class Table extends Element
 			$pdf->Ln(0);	
 			$x = $startX;
 			$y = $y+$cell['h'];	
-			$pdf->SetY($y);
 			$pdf->SetX($x);
+			self::SetY_axis($cell['h']);
 			}//end tableHeader
 			
 			//design columnHeader table ===================
@@ -381,7 +380,7 @@ class Table extends Element
 						$field->objElement->reportElement["x"]=$x-$marginLeft;					
 						//$y = $startY+$field->objElement->reportElement["y"];					
 						$field->objElement->reportElement["height"]=$height_header;					
-						$field->objElement->reportElement["y"]=$y;	
+						//$field->objElement->reportElement["y"]=$y;	
 						$field->generate(array($jasperObj,$row));
 						JasperPHP\Instructions::runInstructions();
 					}
@@ -390,7 +389,7 @@ class Table extends Element
 					if(isset($cell['fillcolor'])){
 					$pdf->SetFillColor($cell['fillcolor']["r"], $cell['fillcolor']["g"], $cell['fillcolor']["b"]);
 					}
-					$pdf->MultiCell($width_column,$height_header,"",$borders,'L',isset($cell['fill']),0,$x,$y+$topMargin);	
+					$pdf->MultiCell($width_column,$height_header,"",$borders,'L',isset($cell['fill']),0,$x,$y);	
 					$x = $x+$width_column;
 					$pdf->SetX($x);				
 				}//end column each design header
@@ -399,8 +398,9 @@ class Table extends Element
 			$pdf->Ln(0);	
 			$x = $startX;
 			$y = $y+$height_header;	
-			$pdf->SetY($y);
 			$pdf->SetX($x);
+			self::SetY_axis($height_header);
+			
 			$showColumnHeader=false;
 			}//final header table
 		
@@ -414,7 +414,7 @@ class Table extends Element
 					$field=$cell['field'];
 					$field->objElement->reportElement["x"]=$x-$marginLeft;
 					$field->objElement->reportElement["height"]=$height_detail;					
-					$field->objElement->reportElement["y"]=$y;
+					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,$row));
 					JasperPHP\Instructions::runInstructions();
 				}
@@ -423,7 +423,7 @@ class Table extends Element
 				if(isset($cell['fillcolor'])){
 					$pdf->SetFillColor($cell['fillcolor']["r"], $cell['fillcolor']["g"], $cell['fillcolor']["b"]);
 				}
-				$pdf->MultiCell($width_column,$height_detail,"",$borders,'L',isset($cell['fill']),0,$x,$y+$topMargin);	
+				$pdf->MultiCell($width_column,$height_detail,"",$borders,'L',isset($cell['fill']),0,$x,$y);	
 				$x = $x+$width_column;
 				$pdf->SetX($x);					
 			}//end column each design detail
@@ -432,21 +432,21 @@ class Table extends Element
 			$x = $startX;
 			$y=$y+$height_detail;
 			$pdf->SetX($x);
-			$pdf->SetY($y);
-
+			self::SetY_axis($height_detail);
+			$pdf->Ln(0);
         }//end data each
 		
 		
 		//check new page
 		if($height_columnFooter>0){
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$pdf->GetY()+$height_columnFooter-$topMargin));
+			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_columnFooter));
 			JasperPHP\Instructions::runInstructions();
 			//new page?
 			if(self::$page != JasperPHP\Instructions::$currrentPage){
 				self::$page = JasperPHP\Instructions::$currrentPage;
-				$y = $pdf->GetY()-$topMargin;	
-				$pdf->SetY($y);
+				$pdf->Ln(0);
+				$y = JasperPHP\Instructions::$y_axis;	
 			}
 		}
 		
@@ -462,7 +462,7 @@ class Table extends Element
 					$field=$cell['field'];
 					$field->objElement->reportElement["x"]=$x-$marginLeft;
 					$field->objElement->reportElement["height"]=$height_columnFooter;					
-					$field->objElement->reportElement["y"]=$y;
+					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,null));
 					JasperPHP\Instructions::runInstructions();
 				}
@@ -472,7 +472,7 @@ class Table extends Element
 				if(isset($cell['fillcolor'])){
 					$pdf->SetFillColor($cell['fillcolor']["r"], $cell['fillcolor']["g"], $cell['fillcolor']["b"]);
 				}
-				$pdf->MultiCell($width_column,$height_columnFooter,"",$borders,'L',isset($cell['fill']),0,$x,$y+$topMargin);	
+				$pdf->MultiCell($width_column,$height_columnFooter,"",$borders,'L',isset($cell['fill']),0,$x,$y);	
 				$x = $x+$width_column;
 				$pdf->SetX($x);
 			}else{
@@ -483,18 +483,18 @@ class Table extends Element
 		$y=$y+$height_columnFooter;
 		$x = $startX;
 		$pdf->SetX($x);
-		$pdf->SetY($y);	
-		
+		self::SetY_axis($height_columnFooter);
+			
 		//check new page
 		if($height_tableFooter>0){
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$pdf->GetY()+$height_tableFooter-$topMargin));
+			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_tableFooter));
 			JasperPHP\Instructions::runInstructions();
 			//new page?
 			if(self::$page != JasperPHP\Instructions::$currrentPage){
 				self::$page = JasperPHP\Instructions::$currrentPage;
-				$y = $pdf->GetY()-$topMargin;	
-				$pdf->SetY($y);
+				$pdf->Ln(0);
+				$y = JasperPHP\Instructions::$y_axis;				
 			}
 		}	
 		
@@ -510,7 +510,7 @@ class Table extends Element
 					$field=$cell['field'];
 					$field->objElement->reportElement["x"]=$x-$marginLeft;
 					$field->objElement->reportElement["height"]=$height_tableFooter;					
-					$field->objElement->reportElement["y"]=$y;
+					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,null));
 					JasperPHP\Instructions::runInstructions();
 				}
@@ -520,7 +520,7 @@ class Table extends Element
 				if(isset($cell['fillcolor'])){
 					$pdf->SetFillColor($cell['fillcolor']["r"], $cell['fillcolor']["g"], $cell['fillcolor']["b"]);
 				}
-				$pdf->MultiCell($width_column,$height_tableFooter,"",$borders,'L',isset($cell['fill']),0,$x,$y+$topMargin);	
+				$pdf->MultiCell($width_column,$height_tableFooter,"",$borders,'L',isset($cell['fill']),0,$x,$y);	
 				$x = $x+$width_column;
 				$pdf->SetX($x);			
 			}else{
@@ -530,9 +530,12 @@ class Table extends Element
 		$y=$y+$height_tableFooter;
 		$x = $startX;
 		$pdf->SetX($x);
-		$pdf->SetY($y);
-		
-		
+		self::SetY_axis($height_tableFooter+10);
+	}
+	
+	static function SetY_axis($addY_axis){
+		JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $addY_axis));
+		JasperPHP\Instructions::runInstructions();		
 	}
 	
 }
