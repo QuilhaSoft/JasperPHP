@@ -444,8 +444,9 @@ class Table extends Element
 			JasperPHP\Instructions::runInstructions();
 			//new page?
 			if(self::$page != JasperPHP\Instructions::$currrentPage){
-			$y = $pdf->GetY()-$topMargin;	
-			$pdf->SetY($y);
+				self::$page = JasperPHP\Instructions::$currrentPage;
+				$y = $pdf->GetY()-$topMargin;	
+				$pdf->SetY($y);
 			}
 		}
 		
@@ -491,8 +492,9 @@ class Table extends Element
 			JasperPHP\Instructions::runInstructions();
 			//new page?
 			if(self::$page != JasperPHP\Instructions::$currrentPage){
-			$y = $pdf->GetY()-$topMargin;	
-			$pdf->SetY($y);
+				self::$page = JasperPHP\Instructions::$currrentPage;
+				$y = $pdf->GetY()-$topMargin;	
+				$pdf->SetY($y);
 			}
 		}	
 		
