@@ -99,6 +99,8 @@ See more blog, documentation, and more on https://jasperphp.net
     <tr>
         <td>Frame</td>
         <td>OK</td>
+        <td>dynamic table</td>
+        <td>OK</td>
         
     </tr>
 </table>
