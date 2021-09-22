@@ -23,6 +23,7 @@ class Detail extends Element {
             $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
 
             $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
+            $obj->firstRowData = $row;
 
             while ($row) {
 

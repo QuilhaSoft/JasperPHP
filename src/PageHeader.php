@@ -17,7 +17,7 @@ use \JasperPHP;
 class PageHeader extends Element {
 
     public function generate($obj = null) {
-        $row = (array) $obj->rowData;
+        $row = is_array($obj) ? $obj[1] : (array) $obj->rowData;
         $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
         $band = $this->children['0'];
