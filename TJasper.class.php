@@ -85,7 +85,7 @@ require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf clas
 // on production using composer instalation is not necessaty 
 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
-TTransaction::open('dev');
+TTransaction::open('jsp');
 TTransaction::setLogger(new TLoggerHTML('log.html'));
 $jasper = new TJasper($report_name, $_GET);
 $jasper->outpage();
