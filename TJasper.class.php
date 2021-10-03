@@ -86,6 +86,8 @@ require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf clas
 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
 TTransaction::open('jsp');
+//JasperPHP\Report::$proccessintructionsTime = 'inline'; // if uncomented this line intructions are proccessed afte each database row
 TTransaction::setLogger(new TLoggerHTML('log.html'));
 $jasper = new TJasper($report_name, $_GET);
+
 $jasper->outpage();
