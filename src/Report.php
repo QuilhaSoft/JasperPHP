@@ -36,7 +36,6 @@ class Report extends Element {
     public $objElement;
     public $rowData;
     public $lastRowData;
-    public $firstRowData;
     public $arrayStyles;
 
     public function __construct($xmlFile = null, $param) {
@@ -602,9 +601,9 @@ class Report extends Element {
 
     function numberToText($valor = 0, $maiusculas = false, $money = true) {
 
-        $singular = array(" centavo", "", " mil", " milhão", " bilhão", " trilhão", " quatrilhão");
-        $plural = array(" centavos", "", " mil", " milhões", " bilhões", " trilhões",
-            " quatrilhões");
+        $singular = array(" centavo", "", " mil", "milhão", "bilhão", "trilhão", "quatrilhão");
+        $plural = array(" centavos", "", " mil", "milhões", "bilhões", "trilhões",
+            "quatrilhões");
 
         $c = array("", "cem", "duzentos", "trezentos", "quatrocentos",
             "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos");
