@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-10-20T17:21:24 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="578900e3-0c5e-4102-8e31-dc6c573ab805">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -18,12 +19,12 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="report" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT Id as IdRegiao,Nome FROM Regiao WHERE Id in ('1','2')]]>
+		<![CDATA[SELECT Id as IdRegiao,Nome FROM Regiao WHERE Id in ('1')]]>
 	</queryString>
 	<field name="IdRegiao" class="java.lang.String"/>
 	<field name="Nome" class="java.lang.String"/>
 	<variable name="Variable_1" class="java.lang.String"/>
-	<title>
+	<pageHeader>
 		<band height="38">
 			<textField pattern="dd/MM/yyyy h.mm a">
 				<reportElement x="300" y="0" width="100" height="10" uuid="b800fb54-f9e9-45d3-aa58-83be22f288da">
@@ -36,7 +37,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement x="520" y="0" width="50" height="10" uuid="bf87de04-8d4e-4aba-8769-908d465660d2">
@@ -65,22 +66,6 @@
 			<line>
 				<reportElement x="0" y="37" width="575" height="1" uuid="d787490e-3b50-41bf-b6bb-c430f56c7416"/>
 			</line>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="55">
-			<textField>
-				<reportElement x="40" y="15" width="150" height="15" uuid="05b44fa3-cac4-4df3-a149-5bb974f8439f"/>
-				<textFieldExpression><![CDATA["This is a Page Hearder"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="225" y="12" width="100" height="30" uuid="e2c20f71-3751-4806-87a4-a063c6344ca9"/>
-				<textFieldExpression><![CDATA[$F{IdRegiao}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="410" y="12" width="100" height="30" uuid="17ad1b97-e38f-412e-b216-94f5dec80da2"/>
-				<textFieldExpression><![CDATA[$F{Nome}]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<detail>
