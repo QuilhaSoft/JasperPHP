@@ -24,6 +24,7 @@ class Report extends Element {
     public static $dec_point=".";
     public static $thousands_sep=",";
     public static $columnHeaderRepeat=false;
+    public static $proccessintructionsTime = "after"; // after : process intructions after generate all intrucions / inline : process intrucions after gerenate each detail
     public $dbData;
     public $arrayVariable;
     public $arrayfield;
@@ -663,13 +664,13 @@ class Report extends Element {
             $this->dbData = $this->getDbData();
         }
         // exibe a tag
+        $instructions = JasperPHP\Instructions::setJasperObj($this);
         parent::generate($this);
         return $this->arrayVariable;
     }
 
     public function out() {
 
-        $instructions = JasperPHP\Instructions::setJasperObj($this);
         JasperPHP\Instructions::runInstructions();
         //$this->runInstructions($instructions);
     }

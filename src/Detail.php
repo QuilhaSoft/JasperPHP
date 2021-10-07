@@ -25,7 +25,9 @@ class Detail extends Element {
             $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
 
             while ($row) {
-
+                if($obj->proccessintructionsTime == 'inline'){
+                    JasperPHP\Instructions::runInstructions();
+                }
                 $row->rowIndex = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
