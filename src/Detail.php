@@ -26,9 +26,7 @@ class Detail extends Element {
             $obj->firstRowData = $row;
 
             while ($row) {
-                if($obj->proccessintructionsTime == 'inline'){
-                    JasperPHP\Instructions::runInstructions();
-                }
+
                 $row->rowIndex = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
