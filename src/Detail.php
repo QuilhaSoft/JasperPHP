@@ -25,7 +25,7 @@ class Detail extends Element {
             $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
 
             while ($row) {
-                if($obj->proccessintructionsTime == 'inline'){
+                if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
                     JasperPHP\Instructions::runInstructions();
                 }
                 $row->rowIndex = $rowIndex;
