@@ -94,7 +94,7 @@ class Report extends Element {
 
             // executa instrução de SELECT
             $result = $conn->Query($this->sql);
-            $arrayVariable = ($this->arrayVariable) ? $this->arrayVariable : array();
+            $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
             $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
 
             $this->rowData = $result->fetchObject($recordObject);
