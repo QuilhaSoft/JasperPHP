@@ -16,6 +16,7 @@ final class TTransaction
 {
     private static $conn;   // conexão ativa
     private static $logger; // objeto de LOG
+    private static $fake; //conexão somente leitura?
     
     /*
      * método __construct()
@@ -27,19 +28,25 @@ final class TTransaction
      * método open()
      * Abre uma transação e uma conexão ao BD
      * @param $database = nome do banco de dados
+     * @param $fake = se deseja abrir uma conexão somente leitura evita deadlock
      */
-    public static function open($database)
+    public static function open($database, $fake=false)
     {
         // abre uma conexão e armazena na propriedade estática $conn
         if (empty(self::$conn))
         {
             self::$conn = TConnection::open($database);
+            //informa se a conexão é fake
+            self::$fake = $fake;
             // inicia a transação
-            self::$conn->beginTransaction();
+            if(!self::$fake){
+                self::$conn->beginTransaction();
+            }
             // desliga o log de SQL
             self::$logger = NULL;
         }
-    }
+    }    
+
     
     /*
      * método get()
@@ -75,7 +82,9 @@ final class TTransaction
         {
             // aplica as operações realizadas
             // durante a transação
+            if(!self::$fake){
             self::$conn->commit();
+            }
             self::$conn = NULL;
         }
     }
