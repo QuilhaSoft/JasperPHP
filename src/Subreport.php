@@ -44,7 +44,7 @@ class Subreport extends Element
             $report->dbData = $obj->get_expression($this->objElement->dataSourceExpression,$row,null);
         }
 
-        $report->generate(array());
+        $report->generate($obj?$obj:array());
         foreach ($this->objElement->returnValue as $r) {
             $this->returnValues[] = $r;
         }
