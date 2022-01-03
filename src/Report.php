@@ -664,7 +664,7 @@ class Report extends Element {
             $this->dbData = $this->getDbData();
         }
         // exibe a tag
-        $instructions = JasperPHP\Instructions::setJasperObj($this);
+        $instructions = JasperPHP\Instructions::setJasperObj($obj?$obj:$this);
         parent::generate($this);
         return $this->arrayVariable;
     }
