@@ -382,6 +382,8 @@ class Report extends Element {
             }
         } elseif (is_array($val)) {
             return $val;
+        } elseif ($val === false) {
+            return str_ireplace('$F{' . $field . '}', '0', $text);
         } else {
             return str_ireplace(array('$F{' . $field . '}'), array(($val)), $text);
         }

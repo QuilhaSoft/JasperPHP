@@ -23,6 +23,20 @@ class Subreport extends Element
         $this->returnValues = array();
         $row = is_object($obj) ? $_POST : $obj[1];
         $obj = is_array($obj) ? $obj[0] : $obj;
+        
+        
+        $print_expression_result = false;
+        $printWhenExpression = (string)$this->objElement->reportElement->printWhenExpression;
+        if ($printWhenExpression != '') {
+            $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
+            eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
+        } else {
+            $print_expression_result = true;
+        }
+        if ($print_expression_result !== true) {
+            return;
+        }
+        
         $xmlFile = (string) $this->objElement->subreportExpression;
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         //$rowArray =is_array($row)?$row:get_object_vars($row);
