@@ -14,7 +14,7 @@ use TTransaction;
  * 
  * 2015.03.11 -- create
  * */
-class Processor {
+class OthProcessor {
 
     private $jasperObj;
     private $print_expression_result;
