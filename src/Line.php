@@ -25,6 +25,7 @@ class Line extends Element {
         $hidden_type = "line";
         $linewidth = '';
         $dash = '';
+        if($data->graphicElement->pen)
         if ($data->graphicElement->pen["lineWidth"] > 0)
             $linewidth = $data->graphicElement->pen["lineWidth"];
 

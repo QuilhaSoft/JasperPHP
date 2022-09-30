@@ -26,6 +26,7 @@ class Report extends Element {
     public static $columnHeaderRepeat=false;
     public static $proccessintructionsTime = "after"; // after : process intructions after generate all intrucions / inline : process intrucions after gerenate each detail
     public $dbData;
+    public $pageChanged;
     public $arrayVariable;
     public $arrayfield;
     public $arrayParameter;
@@ -235,6 +236,9 @@ class Report extends Element {
                 $this->variable_calculation($k, $out, $row);
             }
         }
+        if($this->pageChanged == true){
+            $this->pageChanged = false;
+        }
     }
 
     public function setReturnVariables($subReportTag, $arrayVariablesSubReport) {
@@ -412,14 +416,21 @@ class Report extends Element {
         }
         $htmlData = array_key_exists('htmlData', $this->arrayVariable) ? $this->arrayVariable['htmlData']['class'] : '';
         if (preg_match('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)/', $out['target'], $matchesMath) > 0 && $htmlData != 'HTMLDATA') {
-
+            
             error_reporting(0);
             $mathValue = eval('return (' . $out['target'] . ');');
             error_reporting(5);
         }
-
+        
         $value = (array_key_exists('ans', $this->arrayVariable[$k])) ? $this->arrayVariable[$k]["ans"] : null;
         $newValue = (isset($mathValue)) ? $mathValue : $out['target'];
+        $resetType = (array_key_exists('resetType', $out)) ? $out['resetType'] : '';
+        if ($resetType == 'Page') {
+            if ($this->pageChanged == 'true') {
+                $value = $this->arrayVariable[$k]["lastValue"];
+            }
+        }
+        $this->arrayVariable[$k]["lastValue"] = $newValue;
         switch ($out["calculation"]) {
             case "Sum":
                 if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
@@ -468,12 +479,12 @@ class Report extends Element {
                 $value = $newValue;
                 break;
         }
-        $resetType = (array_key_exists('resetType', $out)) ? $out['resetType'] : '';
         if ($resetType == 'Group') {
             if ($this->arrayGroup[$out['resetGroup']]->resetVariables == 'true') {
                 $value = $newValue;
             }
         }
+        
         $this->arrayVariable[$k]["ans"] = $value;
     }
 
@@ -668,6 +679,8 @@ class Report extends Element {
         // exibe a tag
         $instructions = JasperPHP\Instructions::setJasperObj($obj?$obj:$this);
         parent::generate($this);
+        //JasperPHP\Instructions::runInstructions();
+        //JasperPHP\Instructions::clearInstructrions();
         return $this->arrayVariable;
     }
 

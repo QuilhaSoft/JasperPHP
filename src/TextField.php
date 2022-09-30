@@ -169,7 +169,7 @@ class TextField extends Element {
         JasperPHP\Instructions::addInstruction(array(
             "type" => "SetFont",
             "font" => $font . "",
-            "pdfFontName" => $data->textElement->font["pdfFontName"] . "",
+            "pdfFontName" => $data->textElement->font? $data->textElement->font["pdfFontName"] . "":"",
             "fontstyle" => $fontstyle . "",
             "fontsize" => $fontsize + 0,
             "hidden_type" => "font"

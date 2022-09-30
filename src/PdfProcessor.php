@@ -114,6 +114,8 @@ class PdfProcessor {
     }
 
     public function AddPage($arraydata) {
+        $this->jasperObj->pageChanged = true;
+
         // $pdf = JasperPHP\Pdf;
         JasperPHP\Instructions::$objOutPut->AddPage();
     }

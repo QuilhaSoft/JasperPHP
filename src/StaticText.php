@@ -121,7 +121,7 @@ class StaticText extends Element {
         JasperPHP\Instructions::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
         JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));
         JasperPHP\Instructions::addInstruction(array("type" => "SetFillColor", 'backcolor' => $data->reportElement["backcolor"] . '', "r" => $fillcolor["r"], "g" => $fillcolor["g"], "b" => $fillcolor["b"], "hidden_type" => "fillcolor"));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" => $data->textElement->font["pdfFontName"], "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
+        JasperPHP\Instructions::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" =>  $data->textElement->font? $data->textElement->font["pdfFontName"]:"", "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
         //"height"=>$data->reportElement["height"]
         //### UTF-8 characters, a must for me.    
         $txtEnc = $data->text;

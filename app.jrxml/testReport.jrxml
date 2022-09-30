@@ -21,8 +21,8 @@
 	<queryString>
 		<![CDATA[SELECT * FROM despesas_subgrupo order by despesas_grupo_codigo]]>
 	</queryString>
-	<variable name="Variable_1" class="java.lang.String" resetType="Group" resetGroup="grupoDespesas" calculation="Sum">
-		<variableExpression><![CDATA[$F{despesas_grupo_codigo}]]></variableExpression>
+	<variable name="Variable_1" class="java.lang.String" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{despesas_subgrupo_codigo}]]></variableExpression>
 	</variable>
 	<group name="grupoDespesas">
 		<groupExpression><![CDATA[$F{despesas_grupo_codigo}]]></groupExpression>
@@ -47,10 +47,6 @@
 				<textField>
 					<reportElement x="239" y="0" width="100" height="14" uuid="68029460-ff18-418d-9d18-af62f75f2184"/>
 					<textFieldExpression><![CDATA[$F{despesas_grupo_codigo}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="370" y="0" width="100" height="14" uuid="80518fd0-01fd-41a0-aef6-a54c5e14eebc"/>
-					<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -159,6 +155,10 @@
 				<reportElement x="270" y="0" width="100" height="10" uuid="27b741e1-c1d7-486f-833a-4178aef6926a"/>
 				<textFieldExpression><![CDATA[$F{plano_contas_codigo}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="380" y="7" width="100" height="14" uuid="80518fd0-01fd-41a0-aef6-a54c5e14eebc"/>
+				<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
@@ -173,13 +173,13 @@
 				<text><![CDATA[teste]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="270" y="21" width="186" height="18" uuid="a93b761d-8f6c-4569-9b64-6513d4cd67b8"/>
+				<reportElement x="210" y="18" width="186" height="18" uuid="a93b761d-8f6c-4569-9b64-6513d4cd67b8"/>
 				<textFieldExpression><![CDATA[$F{despesas_grupo->despesas_grupo_nome}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="23" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="0" width="429" height="10" uuid="30bee12b-6c21-4697-bf1c-6c260a837581"/>
 				<textElement>
