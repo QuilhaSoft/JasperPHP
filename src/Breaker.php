@@ -21,12 +21,10 @@ class Breaker extends Element {
         $obj = is_array($obj) ? $obj[0] : $obj;
         $data = $this->objElement;
         $print_expression_result = false;
-        $printWhenExpression = (string) $data->objElement->printWhenExpression;
+        $printWhenExpression = (string) $data->reportElement->printWhenExpression;
         if ($printWhenExpression != '') {
 
             $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
-
-            //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
         } else {
             $print_expression_result = true;

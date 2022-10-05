@@ -24,6 +24,9 @@
 	<variable name="Variable_1" class="java.lang.String" resetType="Page" calculation="Sum">
 		<variableExpression><![CDATA[$F{despesas_subgrupo_codigo}]]></variableExpression>
 	</variable>
+	<variable name="Variable_2" class="java.lang.String">
+		<variableExpression><![CDATA[$V{REPORT_COUNT} / 10]]></variableExpression>
+	</variable>
 	<group name="grupoDespesas">
 		<groupExpression><![CDATA[$F{despesas_grupo_codigo}]]></groupExpression>
 		<groupHeader>
@@ -142,7 +145,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Prevent">
+		<band height="47" splitType="Prevent">
 			<textField>
 				<reportElement x="50" y="2" width="100" height="8" uuid="9946cbd9-32b9-4552-a346-ac88b4b7db6e"/>
 				<textFieldExpression><![CDATA[$F{despesas_subgrupo_codigo}]]></textFieldExpression>
@@ -156,9 +159,22 @@
 				<textFieldExpression><![CDATA[$F{plano_contas_codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="380" y="7" width="100" height="14" uuid="80518fd0-01fd-41a0-aef6-a54c5e14eebc"/>
+				<reportElement x="360" y="0" width="70" height="14" uuid="80518fd0-01fd-41a0-aef6-a54c5e14eebc"/>
 				<textFieldExpression><![CDATA[$V{Variable_1}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="430" y="-2" width="70" height="19" uuid="767c2903-9033-4765-97a7-7ac23327c042"/>
+				<textFieldExpression><![CDATA[$V{Variable_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="1" width="76" height="16" uuid="6947b61e-5337-4748-a157-738c8ab6a2e5"/>
+				<textFieldExpression><![CDATA[$F{despesas_subgrupo_codigo}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="16" width="100" height="1" uuid="c38b2692-dd45-4ec0-beea-8cc8743a7901">
+					<printWhenExpression><![CDATA[is_int( $V{REPORT_COUNT} / 10)]]></printWhenExpression>
+				</reportElement>
+			</break>
 		</band>
 	</detail>
 	<columnFooter>
