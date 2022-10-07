@@ -23,7 +23,7 @@ class Detail extends Element {
             $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
 
             $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
-
+            $obj->variables_calculation($obj, $row);
             while ($row) {
                 if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
                     JasperPHP\Instructions::runInstructions();
@@ -36,7 +36,6 @@ class Detail extends Element {
                 $obj->arrayVariable['totalRows']["target"] = $totalRows;
                 $obj->arrayVariable['totalRows']["calculation"] = null;
                 $row->totalRows = $totalRows;
-                $obj->variables_calculation($obj, $row);
                 if (count($obj->arrayGroup) > 0) {
                     foreach ($obj->arrayGroup as $group) {
                         preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
@@ -48,7 +47,6 @@ class Detail extends Element {
                         }
                     }
                 }
-
                 $background = $obj->getChildByClassName('Background');
 
                 if ($background)
@@ -61,9 +59,9 @@ class Detail extends Element {
                         $print_expression_result = false;
                         $printWhenExpression = (string) $child->objElement->printWhenExpression;
                         if ($printWhenExpression != '') {
-
+                            
                             $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
-
+                            
                             //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
                             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
                         } else {
@@ -74,9 +72,15 @@ class Detail extends Element {
                             if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
                                 JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $height));
                             }
+                            if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
+                                JasperPHP\Instructions::runInstructions();
+                            }
                             $child->generate(array($obj, $row));
                             if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
                                 JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $height));
+                            }
+                            if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
+                                JasperPHP\Instructions::runInstructions();
                             }
                             if ($obj->arrayPageSetting['columnCount'] > 1) {
                                 JasperPHP\Instructions::addInstruction(array("type" => "ChangeCollumn"));
@@ -87,25 +91,15 @@ class Detail extends Element {
                         }
                     }
                 }
+                
                 $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
                 $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
                 $obj->lastRowData = $obj->rowData;
                 $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
                 //echo $rowIndex;
-                if (count($obj->arrayGroup) > 0) {
-                    foreach ($obj->arrayGroup as $group) {
-                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
-                        $groupExpression = $matchesF[1][0];
-                        if (($obj->rowData->$groupExpression != $row->$groupExpression)  || ($obj->rowData->$groupExpression==NULL)) {
-                            $groupFooter = new GroupFooter($group->groupFooter);
-                            $groupFooter->generate(array($obj, $obj->rowData));
-                            $group->resetVariables = 'true';
-                        }
-                    }
-                }
-
-
+                
                 $obj->rowData = $row;
+                $obj->variables_calculation($obj, $row);
                 $rowIndex++;
             }
 

@@ -425,12 +425,7 @@ class Report extends Element {
         $value = (array_key_exists('ans', $this->arrayVariable[$k])) ? $this->arrayVariable[$k]["ans"] : null;
         $newValue = (isset($mathValue)) ? $mathValue : $out['target'];
         $resetType = (array_key_exists('resetType', $out)) ? $out['resetType'] : '';
-        if ($resetType == 'Page') {
-            if ($this->pageChanged == 'true') {
-                $value = $this->arrayVariable[$k]["lastValue"];
-            }
-        }
-        $this->arrayVariable[$k]["lastValue"] = $newValue;
+        
         switch ($out["calculation"]) {
             case "Sum":
                 if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
@@ -479,6 +474,12 @@ class Report extends Element {
                 $value = $newValue;
                 break;
         }
+        if ($resetType == 'Page') {
+            if ($this->pageChanged == 'true') {
+                $value = $newValue;
+            }
+        }
+        $this->arrayVariable[$k]["lastValue"] = $newValue;
         if ($resetType == 'Group') {
             if ($this->arrayGroup[$out['resetGroup']]->resetVariables == 'true') {
                 $value = $newValue;
