@@ -320,7 +320,7 @@ class Report extends Element {
                || (isset($element->evaluationTime) && $element->evaluationTime == "Report") ) {
                 return str_ireplace(array('$V{' . $variable . '}'), array('{:ptp:}'), $text);
             }
-            return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Instructions::getPageNo()), $text);
+            return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Instructions::$currrentPage), $text);
         } else {
             return str_ireplace(array('$V{' . $variable . '}'), array($ans), $text);
         }
