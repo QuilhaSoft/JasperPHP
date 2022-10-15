@@ -157,7 +157,7 @@ class StaticText extends Element {
      * @param unknown $pen
      * @return number[]|string[]|number[][]
      */
-    public function formatPen($pen)
+    public static function formatPen($pen)
     {
         if (isset($pen["lineColor"])) {
             $drawcolor = array(
