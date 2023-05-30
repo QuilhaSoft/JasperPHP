@@ -18,11 +18,14 @@ class Title extends Element {
         $dbData = $obj->dbData;
         $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
         $recordObject = array_key_exists('recordObj', $arrayVariable) ? $arrayVariable['recordObj']['initialValue'] : "stdClass";
-        $rowIndex = 0;
-        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : array() : $obj->rowData;
+        $row = (is_array($dbData) || $dbData instanceOf \ArrayAccess) ? ( isset($dbData[0]) ? $dbData[0] : array() ) : $obj->rowData;
+        
         if (!$row) {
             $row = array();
         }
+        
+        
+        
         foreach ($this->children as $child) {
             // se for objeto
             if (is_object($child)) {

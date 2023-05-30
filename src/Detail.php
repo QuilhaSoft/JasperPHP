@@ -20,15 +20,23 @@ class Detail extends Element {
         $dbData = $obj->dbData;
         if ($this->children) {
             $rowIndex = 1;
-            $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
+            $totalRows = is_countable($dbData) ? count($dbData) : $dbData->rowCount();
 
-            $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
+            $row = (is_array($dbData) || $dbData instanceOf \ArrayAccess) ? $dbData[0] : $obj->rowData;
+
             $obj->variables_calculation($obj, $row);
             while ($row) {
                 if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
                     JasperPHP\Instructions::runInstructions();
                 }
+
+                // convert array to object
+                if (!is_object($row) && is_array($row)) {
+                    $row = (object)$row;
+                }
+                
                 $row->rowIndex = $rowIndex;
+
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['calculation'] = null;
@@ -95,7 +103,7 @@ class Detail extends Element {
                 $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
                 $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
                 $obj->lastRowData = $obj->rowData;
-                $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
+                $row = ( is_array($dbData) || $dbData instanceOf \ArrayAccess ) ? (isset($dbData[$rowIndex])) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
                 //echo $rowIndex;
                 
                 $obj->rowData = $row;
