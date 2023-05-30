@@ -3,6 +3,7 @@
 namespace JasperPHP;
 
 use \JasperPHP;
+use PDO;
 
 /**
  * classe TLabel
@@ -17,18 +18,51 @@ use \JasperPHP;
 class Detail extends Element {
 
     public function generate($obj = null) {
-        $dbData = $obj->dbData;
         if ($this->children) {
-            $rowIndex = 1;
-            $totalRows = is_array($dbData) ? count($dbData) : $dbData->rowCount();
+            $dbData = $obj->dbData;
+            if (is_array($dbData) || $dbData instanceOf \ArrayAccess) {
+                $totalRows = count($dbData);
+            } else if ($dbData instanceOf \PDOStatement) {
+                $dbData->setFetchMode(PDO::FETCH_OBJ);
+                $totalRows = $dbData->rowCount();
+            } else {
+                $totalRows = 0;
+            }
+            
+            if (count($obj->arrayGroup) > 0) {
+                foreach ($obj->arrayGroup as $group) {
+                    $groupName = strval($group->attributes()['name']);
+                    $obj->arrayVariable[$groupName.'_COUNT']["ans"] = 1;
+                    $obj->arrayVariable[$groupName.'_COUNT']['target'] = 1;
+                    $obj->arrayVariable[$groupName.'_COUNT']['calculation'] = 'Count';
+                    $obj->arrayVariable[$groupName.'_COUNT']['resetType'] = 'Group';
+                    $obj->arrayVariable[$groupName.'_COUNT']['resetGroup'] = $groupName;
+                    $obj->arrayVariable[$groupName.'_COUNT']['initialValue'] = 1;
+                    $group->resetVariables = 'true';
+                    $group->started = 'false';
+                }
+            }
 
-            $row = is_array($dbData) ? $dbData[0] : $obj->rowData; // $dbData->fetchObject($recordObject);
-            $obj->variables_calculation($obj, $row);
-            while ($row) {
+            $previousRow = [];
+            $rowIndex = 0;
+            
+            foreach ($dbData as $row) {
+                // convert array to object
+                if (!is_object($row) && is_array($row)) {
+                    $row = (object)$row;
+                }
+                
+                $obj->variables_calculation($obj, $row);
+                $obj->rowData = $row;
+                $obj->generateDeferred();
+
+                $rowIndex++;
                 if(JasperPHP\Report::$proccessintructionsTime == 'inline'){
                     JasperPHP\Instructions::runInstructions();
                 }
+
                 $row->rowIndex = $rowIndex;
+
                 $obj->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
                 $obj->arrayVariable['REPORT_COUNT']['calculation'] = null;
@@ -36,15 +70,25 @@ class Detail extends Element {
                 $obj->arrayVariable['totalRows']["target"] = $totalRows;
                 $obj->arrayVariable['totalRows']["calculation"] = null;
                 $row->totalRows = $totalRows;
-                if (count($obj->arrayGroup) > 0) {
-                    foreach ($obj->arrayGroup as $group) {
-                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
-                        $groupExpression = $matchesF[1][0];
-                        if (($rowIndex == 1 || $group->resetVariables == 'true') && ($group->groupHeader)) {
-                            $groupHeader = new GroupHeader($group->groupHeader);
-                            $groupHeader->generate(array($obj, $row));
-                            $group->resetVariables = 'false';
+                // test if need group footer (reverse order)
+                foreach (array_reverse($obj->arrayGroup) as $group) {
+                    $groupExpressionResult = $obj->get_expression($group->groupExpression, $row);
+                    if ( (!isset($group->lastResult) || $groupExpressionResult != $group->lastResult || $group->resetVariables == 'true') && ($group->groupHeader)) {
+                        if ( $group->groupFooter && $group->started == 'true') {
+                            $groupFooter = new GroupFooter($group->groupFooter);
+                            $groupFooter->generate(array($obj, $previousRow));
                         }
+                    }
+                }
+                // then make the new headers
+                foreach ($obj->arrayGroup as $group) {
+                    $groupExpressionResult = $obj->get_expression($group->groupExpression, $row);
+                    if ( (!isset($group->lastResult) || $groupExpressionResult != $group->lastResult || $group->resetVariables == 'true') && ($group->groupHeader)) {
+                        $group->resetVariables = 'true';
+                        $groupHeader = new GroupHeader($group->groupHeader);
+                        $groupHeader->generate(array($obj, $row));
+                        $group->lastResult = $groupExpressionResult;
+                        $group->started = 'true';
                     }
                 }
                 $background = $obj->getChildByClassName('Background');
@@ -92,18 +136,17 @@ class Detail extends Element {
                     }
                 }
                 
-                $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
-                $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
                 $obj->lastRowData = $obj->rowData;
-                $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
-                //echo $rowIndex;
-                
-                $obj->rowData = $row;
-                $obj->variables_calculation($obj, $row);
-                $rowIndex++;
-            }
+                $previousRow = $row;
 
-            //$this->close();
+            }
+            foreach (array_reverse($obj->arrayGroup) as $group) {
+                if ( $group->groupFooter && $group->started == 'true' ) {
+                    $groupFooter = new GroupFooter($group->groupFooter);
+                    $groupFooter->generate(array($obj, $previousRow));
+                }
+            }
+            
         }
     }
 

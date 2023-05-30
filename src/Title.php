@@ -2,6 +2,7 @@
 
 namespace JasperPHP;
 use \JasperPHP;
+use PDO;
 /**
  * classe TLabel
  * classe para construção de rótulos de texto
@@ -15,14 +16,12 @@ use \JasperPHP;
 class Title extends Element {
 
     public function generate($obj = null) {
-        $dbData = $obj->dbData;
-        $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
-        $recordObject = array_key_exists('recordObj', $arrayVariable) ? $arrayVariable['recordObj']['initialValue'] : "stdClass";
-        $rowIndex = 0;
-        $row = ( is_array($dbData) ) ? (array_key_exists($rowIndex, $dbData)) ? $dbData[$rowIndex] : array() : $obj->rowData;
+        $row = $obj->rowData;
+        
         if (!$row) {
             $row = array();
         }
+        
         foreach ($this->children as $child) {
             // se for objeto
             if (is_object($child)) {

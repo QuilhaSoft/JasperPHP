@@ -18,7 +18,6 @@ class PageHeader extends Element {
 
     public function generate($obj = null) {
         $row = (array) $obj->rowData;
-        $data = $this->objElement;
         $obj = is_array($obj) ? $obj[0] : $obj;
         $band = $this->children['0'];
         $height = (string) $band->objElement['height'];

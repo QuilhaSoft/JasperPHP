@@ -39,6 +39,8 @@ class Report extends Element {
     public $rowData;
     public $lastRowData;
     public $arrayStyles;
+    public $deferredGenerate = array();
+    public $deferGenerate = true;
 
     public function __construct($xmlFile = null, $param) {
         if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {
@@ -98,7 +100,8 @@ class Report extends Element {
             $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
             $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
 
-            $this->rowData = $result->fetchObject($recordObject);
+            // rowData will be read only on Detail Band
+            $this->rowData = false;
             return $result;
         } else {
             // se não tiver transação, retorna uma exceção
@@ -238,6 +241,11 @@ class Report extends Element {
         }
         if($this->pageChanged == true){
             $this->pageChanged = false;
+        }
+        if (count($obj->arrayGroup) > 0) {
+            foreach ($obj->arrayGroup as $group) {
+                $group->resetVariables = 'false';
+            }
         }
     }
 
@@ -423,7 +431,7 @@ class Report extends Element {
         }
         
         $value = (array_key_exists('ans', $this->arrayVariable[$k])) ? $this->arrayVariable[$k]["ans"] : null;
-        $newValue = (isset($mathValue)) ? $mathValue : $out['target'];
+        $newValue = (isset($mathValue)) ? $mathValue : strval($out['target']);
         $resetType = (array_key_exists('resetType', $out)) ? $out['resetType'] : '';
         
         switch ($out["calculation"]) {
@@ -482,7 +490,7 @@ class Report extends Element {
         $this->arrayVariable[$k]["lastValue"] = $newValue;
         if ($resetType == 'Group') {
             if ($this->arrayGroup[$out['resetGroup']]->resetVariables == 'true') {
-                $value = $newValue;
+                $value = $this->arrayVariable[$k]["initialValue"];
             }
         }
         
@@ -679,10 +687,38 @@ class Report extends Element {
         }
         // exibe a tag
         $instructions = JasperPHP\Instructions::setJasperObj($obj?$obj:$this);
-        parent::generate($this);
+        if ($this->children)
+        {
+            foreach ($this->children as $child)
+            {
+                // se for objeto
+                if (is_object($child))
+                {
+                    // defer the generation of pre-Detail bands
+                    // first detail band will complete the generation
+                    if (!$this->deferGenerate || $child instanceOf Detail)
+                    {
+                        $child->generate($this);
+                    } else {
+                        $this->deferredGenerate[] = $child;
+                    }
+                }
+            }
+        }
         //JasperPHP\Instructions::runInstructions();
         //JasperPHP\Instructions::clearInstructrions();
         return $this->arrayVariable;
+    }
+    
+    public function generateDeferred() {
+        if (!$this->deferGenerate) {
+            return;
+        }
+        foreach ($this->deferredGenerate as $child)
+        {
+            $child->generate($this);
+        }
+        $this->deferGenerate = false;
     }
 
     public function out() {
