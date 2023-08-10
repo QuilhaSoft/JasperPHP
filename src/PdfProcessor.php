@@ -197,11 +197,11 @@ class PdfProcessor {
         //        JasperPHP\Pdf::$pdfOutPut->SetLineStyle($arraydata['border']);
         JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111', $style, $arraydata['border'], $arraydata['fillcolor']);
     	//draw only border
-	if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0){		
+ 	if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0){		
 		JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
-		JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);		
-		JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
-	}
+ 		JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111', $style, $arraydata['border']);		
+ 		JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
+ 	}
     }
 
     public function Ellipse($arraydata) {
@@ -567,7 +567,7 @@ class PdfProcessor {
 
                 $x = $pdf->GetX();
                 $yAfter = $pdf->GetY();
-                $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
+                $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : 0;
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
                 $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
                         , $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, false, true, $maxheight); //,$arraydata["valign"]);
