@@ -23,7 +23,7 @@ class Line extends Element {
         $obj = is_array($obj) ? $obj[0] : $obj;
         $drawcolor = array("r" => 0, "g" => 0, "b" => 0);
         $hidden_type = "line";
-        $linewidth = '';
+        $linewidth = false;
         $dash = '';
         if($data->graphicElement->pen)
         if ($data->graphicElement->pen["lineWidth"] > 0)
@@ -60,7 +60,10 @@ class Line extends Element {
             $hidden_type = "relativebottomline";
         }
 
-        $style = array('color' => $drawcolor, 'width' => $linewidth, 'dash' => $dash);
+        $style = array('color' => $drawcolor, 'dash' => $dash);
+        if ($linewidth) {
+            $style['width'] = $linewidth;
+        }
         $print_expression_result = false;
         $printWhenExpression = (string)$data->reportElement->printWhenExpression;;
         if ($printWhenExpression != '') {
