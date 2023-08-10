@@ -1,5 +1,5 @@
 {
-    "name": "quilhasoft/jasperphp",
+    "name": "allgood/jasperphp",
     "type": "library",
     "description": "Pure PHP library to read JRXML files made with 'JasperSoft Studio' and generate reports in PDF",
     "keywords": ["report", "jrxml", "jaspersoft", "pdf"],
@@ -8,6 +8,10 @@
         {
             "name": "Rogerio Muniz de Castro",
             "email": "rogerio@quilhasoft.net"
+        },
+        {
+            "name": "Claudemir Todo Bom",
+            "email": "claudemir@todobom.com"
         }
     ],
     "autoload": {

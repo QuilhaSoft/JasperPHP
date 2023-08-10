@@ -1,6 +1,13 @@
 <p>
-   <b>2020-01-08 13:49:11</b> : 
+   <b>2023-08-10 12:21:01</b> : 
    <i>
-		SELECT now()
+		SELECT c.id,c.nome,c.latitude,c.longitude,m.nome mesoregiao,m.id mesoregiao_id,e.nome estado ,e.sigla   FROM cidades c  JOIN  mesoregioes m  ON m.id=c.mesoregiao_id  JOIN estados e ON  m.estado_id=e.id ORDER BY e.sigla,m.nome,c.nome
 	</i> <br>
+</p>
+<p>
+   <b>2023-08-10 12:21:03</b> : 
+   <i>SELECT nome,
+	id
+FROM cidades
+  ORDER BY nome LIMIT 5</i> <br>
 </p>
