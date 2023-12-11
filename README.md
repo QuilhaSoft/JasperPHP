@@ -101,7 +101,6 @@ See more blog, documentation, and more on https://jasperphp.net
         <td>OK</td>
         <td>dynamic table</td>
         <td>OK</td>
-        
     </tr>
 </table>
 * Subreports are supported recursively and unlimited
