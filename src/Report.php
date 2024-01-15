@@ -30,6 +30,7 @@ class Report extends Element {
     public $arrayVariable;
     public $arrayfield;
     public $arrayParameter;
+    public $arrayProperty;
     public $arrayPageSetting;
     public $arrayGroup;
     public $sql;
@@ -80,6 +81,7 @@ class Report extends Element {
             }
         }
         $this->parameter_handler($ObjElement, $param);
+        $this->property_handler($ObjElement, $param);
         $this->field_handler($ObjElement);
         $this->variable_handler($ObjElement);
         $this->page_setting($ObjElement);
@@ -89,7 +91,17 @@ class Report extends Element {
 
     public function getDbData() {
 
-        if ($conn = TTransaction::get()) {
+        if($this->arrayProperty['net.sf.jasperreports.data.adapter']=='laravel.sqlsrv'){
+            $connectionName = explode('.',$this->arrayProperty['net.sf.jasperreports.data.adapter'])[1];
+            $con = \Illuminate\Support\Facades\DB;
+            $result = $con::connection($connectionName)->select($this->sql);
+            $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
+            $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
+            if($recordObject != 'stdClass'){
+                $result  = new $recordObject::hydrate($result->toArray());
+            }
+
+        }elseif ($conn = TTransaction::get()) {
             // registra mensagem de log
             TTransaction::log($this->sql);
 
@@ -157,6 +169,18 @@ class Report extends Element {
             }
         } else {
             $this->arrayParameter = array();
+        }
+    }    
+    
+    public function property_handler($xml_path, $param) {
+        $this->arrayProperty = array();
+        if ($xml_path->property) {
+            foreach ($xml_path->property as $property) {
+                $paraName = (string) $property["name"];
+                $this->arrayProperty[$paraName] = array_key_exists($paraName, $param) ? $param[$paraName] : '';
+            }
+        } else {
+            $this->arrayProperty = array();
         }
     }
 
