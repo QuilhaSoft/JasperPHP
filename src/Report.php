@@ -30,6 +30,7 @@ class Report extends Element {
     public $arrayVariable;
     public $arrayfield;
     public $arrayParameter;
+    public $arrayProperty;
     public $arrayPageSetting;
     public $arrayGroup;
     public $sql;
@@ -80,6 +81,7 @@ class Report extends Element {
             }
         }
         $this->parameter_handler($ObjElement, $param);
+        $this->property_handler($ObjElement, $param);
         $this->field_handler($ObjElement);
         $this->variable_handler($ObjElement);
         $this->page_setting($ObjElement);
@@ -89,7 +91,18 @@ class Report extends Element {
 
     public function getDbData() {
 
-        if ($conn = TTransaction::get()) {
+        if($this->arrayProperty['net.sf.jasperreports.data.adapter']=='laravel.sqlsrv'){
+            $connectionName = explode('.',$this->arrayProperty['net.sf.jasperreports.data.adapter'])[1];
+            $result = \Illuminate\Support\Facades\DB::connection($connectionName)->select($this->sql);
+            $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
+            $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
+            if($recordObject != 'stdClass'){
+                $result  = $recordObject::hydrate($result);
+            }
+            $this->rowData = $result[0];
+            return $result;
+
+        }elseif ($conn = TTransaction::get()) {
             // registra mensagem de log
             TTransaction::log($this->sql);
 
@@ -157,6 +170,18 @@ class Report extends Element {
             }
         } else {
             $this->arrayParameter = array();
+        }
+    }    
+    
+    public function property_handler($xml_path, $param) {
+        $this->arrayProperty = array();
+        if ($xml_path->property) {
+            foreach ($xml_path->property as $property) {
+                $paraName = (string) $property["name"];
+                $this->arrayProperty[$paraName] = (string)$property['value'];
+            }
+        } else {
+            $this->arrayProperty = array();
         }
     }
 
@@ -403,7 +428,11 @@ class Report extends Element {
         preg_match_all("/V{(\w+)}/", $out['target'], $matchesV);
         if ($matchesV) {
             foreach ($matchesV[1] as $macthV) {
-                $ans = array_key_exists('ans', $this->arrayVariable[$macthV]) ? $this->arrayVariable[$macthV]['ans'] : '';
+                if(is_array($this->arrayVariable[$macthV])){
+                    $ans = array_key_exists('ans', $this->arrayVariable[$macthV]) ? $this->arrayVariable[$macthV]['ans'] : '';
+                }else{
+                    $ans = '';
+                }
                 $defVal = $ans != '' ? $ans : $this->arrayVariable[$macthV]['initialValue'];
                 $out['target'] = str_ireplace(array('$V{' . $macthV . '}'), array($ans), $out['target']);
             }

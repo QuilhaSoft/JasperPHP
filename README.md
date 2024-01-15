@@ -113,6 +113,7 @@ See more blog, documentation, and more on https://jasperphp.net
     <li>textfield with html render with data replacement</li>
     <li>active record</li>
     <li>Conditional styles ready too</li>
+    <li>support for Laravel DB Facade adding tag `property name="net.sf.jasperreports.data.adapter" value="laravel.sqlsrv"` on jrxml files or edit Default data source on report properties on JasperSoft Studio</li>
 </lu>
 <br>
 
