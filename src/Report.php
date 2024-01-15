@@ -93,13 +93,14 @@ class Report extends Element {
 
         if($this->arrayProperty['net.sf.jasperreports.data.adapter']=='laravel.sqlsrv'){
             $connectionName = explode('.',$this->arrayProperty['net.sf.jasperreports.data.adapter'])[1];
-            $con = \Illuminate\Support\Facades\DB;
-            $result = $con::connection($connectionName)->select($this->sql);
+            $result = \Illuminate\Support\Facades\DB::connection($connectionName)->select($this->sql);
             $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
             $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
             if($recordObject != 'stdClass'){
-                $result  = new $recordObject::hydrate($result->toArray());
+                $result  = $recordObject::hydrate($result);
             }
+            $this->rowData = $result[0];
+            return $result;
 
         }elseif ($conn = TTransaction::get()) {
             // registra mensagem de log
@@ -177,7 +178,7 @@ class Report extends Element {
         if ($xml_path->property) {
             foreach ($xml_path->property as $property) {
                 $paraName = (string) $property["name"];
-                $this->arrayProperty[$paraName] = array_key_exists($paraName, $param) ? $param[$paraName] : '';
+                $this->arrayProperty[$paraName] = (string)$property['value'];
             }
         } else {
             $this->arrayProperty = array();
@@ -427,7 +428,11 @@ class Report extends Element {
         preg_match_all("/V{(\w+)}/", $out['target'], $matchesV);
         if ($matchesV) {
             foreach ($matchesV[1] as $macthV) {
-                $ans = array_key_exists('ans', $this->arrayVariable[$macthV]) ? $this->arrayVariable[$macthV]['ans'] : '';
+                if(is_array($this->arrayVariable[$macthV])){
+                    $ans = array_key_exists('ans', $this->arrayVariable[$macthV]) ? $this->arrayVariable[$macthV]['ans'] : '';
+                }else{
+                    $ans = '';
+                }
                 $defVal = $ans != '' ? $ans : $this->arrayVariable[$macthV]['initialValue'];
                 $out['target'] = str_ireplace(array('$V{' . $macthV . '}'), array($ans), $out['target']);
             }
