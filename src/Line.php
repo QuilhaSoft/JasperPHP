@@ -60,7 +60,7 @@ class Line extends Element {
             $hidden_type = "relativebottomline";
         }
 
-        $style = array('color' => $drawcolor, 'width' => $linewidth, 'dash' => $dash);
+        $style = array('color' => $drawcolor, 'width' => (int)$linewidth, 'dash' => $dash);
         $print_expression_result = false;
         $printWhenExpression = (string)$data->reportElement->printWhenExpression;;
         if ($printWhenExpression != '') {
