@@ -91,7 +91,7 @@ class Report extends Element {
 
     public function getDbData() {
 
-        if($this->arrayProperty['net.sf.jasperreports.data.adapter']=='laravel.sqlsrv'){
+        if(array_key_exists('net.sf.jasperreports.data.adapter',$this->arrayProperty)){
             $connectionName = explode('.',$this->arrayProperty['net.sf.jasperreports.data.adapter'])[1];
             $result = \Illuminate\Support\Facades\DB::connection($connectionName)->select($this->sql);
             $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
