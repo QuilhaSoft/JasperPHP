@@ -40,8 +40,15 @@ class Report extends Element {
     public $rowData;
     public $lastRowData;
     public $arrayStyles;
+	
+    private $name;
+    private $height;
+    private $splitType;
+    private $radius;
+    private $scaleImage;
+    private $y_axis;
 
-    public function __construct($xmlFile = null, $param) {
+    public function __construct($xmlFile, $param) {
         if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {
             $xmlFile = file_get_contents(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile);
         } elseif (file_exists($xmlFile)) {
