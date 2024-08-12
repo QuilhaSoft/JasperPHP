@@ -570,7 +570,7 @@ class PdfProcessor {
 
                 $x = $pdf->GetX();
                 $yAfter = $pdf->GetY();
-                $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : '';
+                $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : 0;
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
                 $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
                         , $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, false, true, $maxheight); //,$arraydata["valign"]);

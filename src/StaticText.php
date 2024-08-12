@@ -196,13 +196,13 @@ class StaticText extends Element {
     {
         $border = Array();
         $borderset = "";
-        if ($box->topPen["lineWidth"] > 0)
+        if ($box->topPen["lineWidth"] > 0.0)
             $border["T"] = StaticText::formatPen($box->topPen);
-        if ($box->leftPen["lineWidth"] > 0)
+        if ($box->leftPen["lineWidth"] > 0.0)
             $border["L"] = StaticText::formatPen($box->leftPen);
-        if ($box->bottomPen["lineWidth"] > 0)
+        if ($box->bottomPen["lineWidth"] > 0.0)
             $border["B"] = StaticText::formatPen($box->bottomPen);
-        if ($box->rightPen["lineWidth"] > 0)
+        if ($box->rightPen["lineWidth"] > 0.0)
             $border["R"] = StaticText::formatPen($box->rightPen);
 
         return $border;
