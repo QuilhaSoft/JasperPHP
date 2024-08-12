@@ -34,6 +34,7 @@ class Rectangle extends Element {
             $drawcolor = array("r" => hexdec(substr($data->graphicElement->pen["lineColor"], 1, 2)), "g" => hexdec(substr($data->graphicElement->pen["lineColor"], 3, 2)), "b" => hexdec(substr($data->graphicElement->pen["lineColor"], 5, 2)));
 
         $dash = "";
+        // dd($data);;
         if ($data->graphicElement->pen["lineStyle"] == "Dotted")
             $dash = "0,1";
         elseif ($data->graphicElement->pen["lineStyle"] == "Dashed")

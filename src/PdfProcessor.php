@@ -193,15 +193,18 @@ class PdfProcessor {
             $style = '';
         else
             $style = 'FD';
+       
         //
         //        JasperPHP\Pdf::$pdfOutPut->SetLineStyle($arraydata['border']);
         JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111', $style, $arraydata['border'], $arraydata['fillcolor']);
     	//draw only border
-	if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0){		
-		JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
-		JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);		
-		JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
-	}
+        if(isset($arraydata['border']['width']) && $arraydata['border']['width']>0){		
+            JasperPHP\Instructions::$objOutPut->SetLineStyle($arraydata['border']);
+            $arraydata['border']['color'] = '000';
+        //    dd($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$arraydata['border']);
+            JasperPHP\Instructions::$objOutPut->RoundedRect($arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $arraydata["radius"], '1111',$style,$arraydata['border'], $arraydata['fillcolor']);		
+            JasperPHP\Instructions::$objOutPut->SetLineStyle(array());
+        }
     }
 
     public function Ellipse($arraydata) {
@@ -267,24 +270,24 @@ class PdfProcessor {
         JasperPHP\Instructions::$objOutPut->SetLineWidth($arraydata["width"]);
     }
 
-    public function breaker($arraydata) {
-        $this->print_expression($arraydata);
-        $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
-        if ($this->print_expression_result == true) {
-            if ($pageFooter)
-                $pageFooter->generate($this->jasperObj);
-            JasperPHP\Instructions::addInstruction(array("type" => "resetY_axis"));
-            JasperPHP\Instructions::$currrentPage++;
-            JasperPHP\Instructions::addInstruction(array("type" => "AddPage"));
-            JasperPHP\Instructions::addInstruction(array("type" => "setPage", "value" => JasperPHP\Instructions::$currrentPage, 'resetMargins' => false));
-            $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
-            //if (JasperPHP\Pdf::$print_expression_result == true) {
-            if ($pageHeader)
-                $pageHeader->generate($this->jasperObj);
-            //}
-            JasperPHP\Instructions::runInstructions();
-        }
-    }
+    // public function breaker($arraydata) {
+        // $this->print_expression($arraydata);
+        // $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
+        // if ($this->print_expression_result == true) {
+        //     if ($pageFooter)
+        //         $pageFooter->generate($this->jasperObj);
+        //     JasperPHP\Instructions::addInstruction(array("type" => "resetY_axis"));
+        //     JasperPHP\Instructions::$currrentPage++;
+        //     JasperPHP\Instructions::addInstruction(array("type" => "AddPage"));
+        //     JasperPHP\Instructions::addInstruction(array("type" => "setPage", "value" => JasperPHP\Instructions::$currrentPage, 'resetMargins' => false));
+        //     $pageHeader = $this->jasperObj->getChildByClassName('PageHeader');
+        //     //if (JasperPHP\Pdf::$print_expression_result == true) {
+        //     if ($pageHeader)
+        //         $pageHeader->generate($this->jasperObj);
+        //     //}
+        //     JasperPHP\Instructions::runInstructions();
+        // }
+    // }
 
     public function Line($arraydata) {
         $this->print_expression($arraydata);

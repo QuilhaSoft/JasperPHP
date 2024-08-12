@@ -1,6 +1,7 @@
 <?php
 namespace JasperPHP;
-use JasperPHP\Element;
+
+use \JasperPHP;
 /**
  * classe TLabel
  * classe para construção de rótulos de texto
@@ -13,5 +14,6 @@ use JasperPHP\Element;
 **/
 class Background extends Element
 {
+    
 }
 ?>
