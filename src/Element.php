@@ -13,12 +13,12 @@ namespace JasperPHP;
 	use JasperPHP;
 	class Element
 	{
-		private $properties;    // propriedades da TAG 
-		private $name;
-		private $height;
-		private $splitType;
-		private $radius;
-		private $scaleImage;
+		public $properties;    // propriedades da TAG 
+		public $name;
+		public $height;
+		public $splitType;
+		public $radius;
+		public $scaleImage;
 		
 		public $objElement;
 		public $children;
