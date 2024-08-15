@@ -34,7 +34,7 @@ class Breaker extends Element
         } else {
             $print_expression_result = true;
         }
-        if ($print_expression_result == true) {
+        if ($print_expression_result == true && Report::$proccessintructionsTime == 'inline') {
             
             if ($pageFooter)
                 $pageFooter->generate($obj,$row);
@@ -51,6 +51,9 @@ class Breaker extends Element
             //}
 
             JasperPHP\Instructions::runInstructions();
+        }else{
+            JasperPHP\Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
+            parent::generate($obj,$row);
         }
 
     }

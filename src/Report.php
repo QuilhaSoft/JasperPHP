@@ -18,13 +18,7 @@ use JasperPHP\ado\TTransaction;
  * 2015.03.11 -- criação
  * */
 class Report extends Element {
-    private $name;
-    private $height;
-    private $splitType;
-    private $radius;
-    private $scaleImage;
-    private $y_axis;
-	
+   
     public static $defaultFolder = 'app.jrxml';
     public static $locale = 'en_us';
     public static $dec_point=".";
