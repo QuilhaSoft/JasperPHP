@@ -27,18 +27,12 @@ final class TConnection
      */
     public static function open($name)
     {
-        if (file_exists($name))
-        {
-            $db = parse_ini_file($name);
-        }
-        elseif (file_exists("config/{$name}.ini"))
-        {
-            $db = parse_ini_file("config/{$name}.ini");
-        }
-        else
-        {
-            throw new Exception("Arquivo '$name' não encontrado");
-        }
+        $db = self::getDatabaseInfo($name);
+        return self::openArray($db);
+    }
+   
+    public static function openArray($db)
+    {
         $user = isset($db['user']) ? $db['user'] : NULL;
         $pass = isset($db['pass']) ? $db['pass'] : NULL;
         $name = isset($db['name']) ? $db['name'] : NULL;
@@ -72,5 +66,22 @@ final class TConnection
         }
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
-    }
+    } 
+    
+  public static function getDatabaseInfo($name)
+    {
+       if (file_exists($name))
+        {
+            $db = parse_ini_file($name);
+        }
+        elseif (file_exists("config/{$name}.ini"))
+        {
+            $db = parse_ini_file("config/{$name}.ini");
+        }
+        else
+        {
+            throw new Exception("Arquivo '$name' não encontrado");
+        }
+        return $db;
+    }   
 }
