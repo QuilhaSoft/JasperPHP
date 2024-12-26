@@ -28,20 +28,27 @@ final class TTransaction
      * método open()
      * Abre uma transação e uma conexão ao BD
      * @param $database = nome do banco de dados
-     * @param $fake = se deseja abrir uma conexão somente leitura evita deadlock
+     * @param $dbinfo = conexão via array
      */
-    public static function open($database, $fake=false)
+    public static function open($database, $dbinfo = NULL)
     {
         // abre uma conexão e armazena na propriedade estática $conn
         if (empty(self::$conn))
         {
-            self::$conn = TConnection::open($database);
-            //informa se a conexão é fake
-            self::$fake = $fake;
-            // inicia a transação
+            if ($dbinfo)
+            {
+                self::$conn = TConnection::openArray($dbinfo);                
+            }else{
+                $dbinfo = TConnection::getDatabaseInfo($database);
+                self::$conn = TConnection::open($database);                
+            }
+            
+            //verifica se a conexão é fake [evita locks tables]
+            self::$fake = isset($dbinfo['fake']) ? $dbinfo['fake'] : FALSE;
             if(!self::$fake){
                 self::$conn->beginTransaction();
             }
+            
             // desliga o log de SQL
             self::$logger = NULL;
         }
@@ -112,4 +119,3 @@ final class TTransaction
         }
     }
 }
-?>
