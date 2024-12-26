@@ -54,6 +54,18 @@ final class TTransaction
         }
     }    
 
+    /**
+     * Open fake transaction
+     * @param $database Name of the database (an INI file).
+     */
+    public static function openFake($database)
+    {
+        $info = TConnection::getDatabaseInfo($database);
+        $info['fake'] = 1;
+        
+        self::open(null, $info);
+    }
+	
     
     /*
      * método get()
@@ -119,4 +131,3 @@ final class TTransaction
         }
     }
 }
-?>
