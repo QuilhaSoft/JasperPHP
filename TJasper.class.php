@@ -44,6 +44,11 @@ class TJasper {
                 JasperPHP\Instructions::setProcessor('\JasperPHP\XlsProcessor');
                 JasperPHP\Instructions::prepare($this->report);
                 break;
+            case 'xlsx':
+                //Process use 'PHPOffice/PhpSpreadsheet' 
+                JasperPHP\Instructions::setProcessor('\JasperPHP\XlsxProcessor');
+                JasperPHP\Instructions::prepare($this->report);
+                break;
         }
     }
 
@@ -69,6 +74,20 @@ class TJasper {
                 $objWriter = PHPExcel_IOFactory::createWriter(JasperPHP\Instructions::$objOutPut, 'Excel5');
                 $objWriter->save('php://output');
                 break;
+            case 'xlsx':
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="01simple.xls"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+                header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx(JasperPHP\Instructions::$objOutPut);
+                $objWriter->save('php://output');
+                break;
         }
     }
 
@@ -81,6 +100,7 @@ class TJasper {
 require('autoloader.php');
 require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
 require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
+
 //require('../TCPDF/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in stand alone instalations)
 // on production using composer instalation is not necessaty 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
