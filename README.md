@@ -239,7 +239,7 @@ $jasper->outpage();
 * PHP 5.2+
 * "tecnickcom/tcpdf":"6.2.*"
 * "PHPOffice/PHPExcel" only of XLS export
-* "phpoffice/phpspreadsheet" only of XLSX export
+* "PHPOffice/PhpSpreadsheet" only of XLSX export
 
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
