@@ -203,7 +203,9 @@ require('autoloader.php');
 require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
 require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
 //require('../TCPDF/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in stand alone instalations)
-// on production using composer instalation is not necessaty 
+// on production using composer instalation is not necessaty
+
+//Assuming the 'xlsx' format use the 'phpoffice/phpspreadsheet' lib installation via 'composer require phpoffice/phpspreadsheet'
 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
 TTransaction::open('dev');
@@ -218,6 +220,7 @@ $jasper->outpage();
 * PHP 5.2+
 * "tecnickcom/tcpdf":"6.2.*"
 * "PHPOffice/PHPExcel" only of XLS export
+* "phpoffice/phpspreadsheet" only of XLSX export
 
 # How to use this sample
 Define database conections params into file config\dev.ini<br>
