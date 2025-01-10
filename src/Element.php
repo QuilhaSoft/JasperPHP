@@ -19,6 +19,10 @@ namespace JasperPHP;
 		public $splitType;
 		public $radius;
 		public $scaleImage;
+		public $hAlign;
+		public $onErrorType;
+		public $pattern;
+		public $y_axis;
 		
 		public $objElement;
 		public $children;
