@@ -66,7 +66,7 @@ class TextField extends Element {
                 "b" => hexdec(substr($data->reportElement["backcolor"], 5, 2))
             );
         }
-        if ($data->reportElement["mode"] == "Opaque") {
+        if ($data->reportElement["mode"] == "Opaque" || isset($data->reportElement["backcolor"])) {
             $fill = 1;
         }
         if ((isset($this->textAdjust) && $this->textAdjust == "StretchHeight") || (isset($this->isStretchWithOverflow) && $this->isStretchWithOverflow == "true")) {
