@@ -57,7 +57,7 @@ class PdfProcessor {
 
     public function PreventY_axis($arraydata) {
         //$pdf = \JasperPHP\Pdf;
-        $preventY_axis = JasperPHP\Instructions ::$y_axis + $arraydata['y_axis'];
+        $preventY_axis = JasperPHP\Instructions ::$y_axis + (int)$arraydata['y_axis'];
         $pageheight = JasperPHP\Instructions::$arrayPageSetting["pageHeight"];
         $pageFooter = $this->jasperObj->getChildByClassName('PageFooter');
         $pageFooterHeigth = ($pageFooter) ? $pageFooter->children[0]->height : 0;
@@ -97,8 +97,8 @@ class PdfProcessor {
     }
 
     public function SetY_axis($arraydata) {
-        if ((JasperPHP\Instructions::$y_axis + $arraydata['y_axis']) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
-            JasperPHP\Instructions::$y_axis = JasperPHP\Instructions::$y_axis + $arraydata['y_axis'];
+        if ((JasperPHP\Instructions::$y_axis + (int) $arraydata['y_axis']) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
+            JasperPHP\Instructions::$y_axis = JasperPHP\Instructions::$y_axis + (int)$arraydata['y_axis'];
         }
     }
 
