@@ -306,10 +306,12 @@ class Table extends Element
 					
 					$text = $jasperObj->get_expression($field->objElement->textFieldExpression,$row);
 					//change font for height row
-					$font = $field->objElement->textElement->font->attributes();
-					//$this->SetFont(array("font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));	
-					JasperPHP\Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
-					JasperPHP\Instructions::runInstructions();
+                    if($field->objElement->textElement->font) {
+                        $font = $field->objElement->textElement->font->attributes();
+                        //$this->SetFont(array("font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
+                        JasperPHP\Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
+                        JasperPHP\Instructions::runInstructions();
+                    }
 					$height_new = $pdf->getStringHeight($width_column,$text)*$lineHeightRatio;
 					//return default font
 					//$this->SetFont($fontDefault);				
