@@ -97,7 +97,7 @@ class PdfProcessor {
     }
 
     public function SetY_axis($arraydata) {
-        if ((JasperPHP\Instructions::$y_axis + (int) $arraydata['y_axis']) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
+        if ((JasperPHP\Instructions::$y_axis + (int)$arraydata['y_axis']) <= JasperPHP\Instructions::$arrayPageSetting["pageHeight"]) {
             JasperPHP\Instructions::$y_axis = JasperPHP\Instructions::$y_axis + (int)$arraydata['y_axis'];
         }
     }
@@ -214,43 +214,47 @@ class PdfProcessor {
 
     public function Image($arraydata) {
         //echo $arraydata["path"];
-        $path = $arraydata["path"];
-        $imgtype = mb_substr($path, -3);
-        $arraydata["link"] = $arraydata["link"] . "";
-        if ($imgtype == 'jpg')
-            $imgtype = "JPEG";
-        elseif ($imgtype == 'png' || $imgtype == 'PNG')
-            $imgtype = "PNG";
-        // echo $path;
-        $imagePath = str_replace(array('"','\\','/'),array('',DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR) ,$path);
-        //not full patch?
-        if (!file_exists($imagePath)) {
-        $imagePath = getcwd().DIRECTORY_SEPARATOR.$imagePath;
-        }
-        if (file_exists($imagePath)) {
-            
-            //echo $imagePath;
-             //exit;
-            JasperPHP\Instructions::$objOutPut->Image($imagePath, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
-        }elseif( mb_substr($path, 0, 4) == 'http'){
-           // echo $path;
-        ///exit;
-            JasperPHP\Instructions::$objOutPut->Image($path, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"] , $arraydata["fitbox"]);
-        } elseif (mb_substr($path, 0, 21) == "data:image/jpg;base64") {
-            $imgtype = "JPEG";
-            //echo $path;
-            $img = str_replace('data:image/jpg;base64,', '', $path);
-            $imgdata = base64_decode($img);
-            JasperPHP\Instructions::$objOutPut->Image('@' . $imgdata, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], '', '' , '', false, 300, '', false, false, $arraydata["border"] ,$arraydata["fitbox"]);
-        } elseif (mb_substr($path, 0, 22) == "data:image/png;base64,") {
-            $imgtype = "PNG";
-            // JasperPHP\Pdf::$pdfOutPut->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $this->print_expression($arraydata);
+        if ($this->print_expression_result == true) {
 
-            $img = str_replace('data:image/png;base64,', '', $path);
-            $imgdata = base64_decode($img);
+            $path = $arraydata["path"];
+            $imgtype = mb_substr($path, -3);
+            $arraydata["link"] = $arraydata["link"] . "";
+            if ($imgtype == 'jpg')
+                $imgtype = "JPEG";
+            elseif ($imgtype == 'png' || $imgtype == 'PNG')
+                $imgtype = "PNG";
+            // echo $path;
+            $imagePath = str_replace(array('"', '\\', '/'), array('', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $path);
+            //not full patch?
+            if (!file_exists($imagePath)) {
+                $imagePath = getcwd() . DIRECTORY_SEPARATOR . $imagePath;
+            }
+            if (file_exists($imagePath)) {
+
+                //echo $imagePath;
+                //exit;
+                JasperPHP\Instructions::$objOutPut->Image($imagePath, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"], $arraydata["fitbox"]);
+            } elseif (mb_substr($path, 0, 4) == 'http') {
+                // echo $path;
+                ///exit;
+                JasperPHP\Instructions::$objOutPut->Image($path, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], $imgtype, $arraydata["link"], '', false, 300, '', false, false, $arraydata["border"], $arraydata["fitbox"]);
+            } elseif (mb_substr($path, 0, 21) == "data:image/jpg;base64") {
+                $imgtype = "JPEG";
+                //echo $path;
+                $img = str_replace('data:image/jpg;base64,', '', $path);
+                $imgdata = base64_decode($img);
+                JasperPHP\Instructions::$objOutPut->Image('@' . $imgdata, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], '', '', '', false, 300, '', false, false, $arraydata["border"], $arraydata["fitbox"]);
+            } elseif (mb_substr($path, 0, 22) == "data:image/png;base64,") {
+                $imgtype = "PNG";
+                // JasperPHP\Pdf::$pdfOutPut->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+                $img = str_replace('data:image/png;base64,', '', $path);
+                $imgdata = base64_decode($img);
 
 
-            JasperPHP\Instructions::$objOutPut->Image('@' . $imgdata, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], '', $arraydata["link"], '', false, 300, '', false, false, 0 ,$arraydata["fitbox"]);
+                JasperPHP\Instructions::$objOutPut->Image('@' . $imgdata, $arraydata["x"] + JasperPHP\Instructions::$arrayPageSetting["leftMargin"], $arraydata["y"] + JasperPHP\Instructions::$y_axis, $arraydata["width"], $arraydata["height"], '', $arraydata["link"], '', false, 300, '', false, false, 0, $arraydata["fitbox"]);
+            }
         }
     }
 
