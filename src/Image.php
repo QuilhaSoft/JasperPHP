@@ -32,6 +32,7 @@ class Image extends Element
         //$data->hyperlinkReferenceExpression=$this->analyse_expression($data->hyperlinkReferenceExpression);
         $data->hyperlinkReferenceExpression=trim(str_replace(array('"',''),"",$data->hyperlinkReferenceExpression));
             // echo $text;
+        $printWhenExpression = $obj->get_expression($data->reportElement->printWhenExpression, $row);
 
         $arraydata = [
             "type" => "Image",
@@ -45,7 +46,8 @@ class Image extends Element
             "hidden_type" => "image",
             "linktarget" => $data["hyperlinkTarget"] . "",
             "border" => 0,
-            "fitbox" => false
+            "fitbox" => false,
+            "printWhenExpression" => $printWhenExpression . "",
         ];
         if (isset($data->box)) {
             $arraydata["border"] = StaticText::formatBox($data->box);
