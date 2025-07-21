@@ -35,11 +35,12 @@ class Rectangle extends Element {
 
         $dash = "";
         // dd($data);;
-        if ($data->graphicElement->pen["lineStyle"] == "Dotted")
+        $lineStyle = isset($data->graphicElement->pen["lineStyle"]) ? $data->graphicElement->pen["lineStyle"] : "Solid";
+        if ($lineStyle == "Dotted")
             $dash = "0,1";
-        elseif ($data->graphicElement->pen["lineStyle"] == "Dashed")
+        elseif ($lineStyle == "Dashed")
             $dash = "4,2";
-        elseif ($data->graphicElement->pen["lineStyle"] == "Solid")
+        elseif ($lineStyle == "Solid")
             $dash = "";
 //echo "$borderwidth,";
 
