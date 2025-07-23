@@ -1,18 +1,12 @@
 <?php
 namespace JasperPHP;
-	/**
-	* classe TElement
-	* classe para abstração de tags HTML
-	*
-	* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
-	* @version  2015.03.11
-	* @access   restrict
-	* 
-	* 2015.03.11 -- criação
-	**/
-	use JasperPHP;
-	class Element
-	{
+
+/**
+ * Element class
+ * This class serves as the base class for all report elements.
+ */
+class Element
+{
 		public $properties;    // propriedades da TAG 
 		public $name;
 		public $height;
@@ -23,7 +17,6 @@ namespace JasperPHP;
 		public $onErrorType;
 		public $pattern;
 		public $y_axis;
-		
 		public $objElement;
 		public $children;
 
@@ -41,7 +34,7 @@ namespace JasperPHP;
                                 
                     $obj = ($obj=='break')?'Breaker':$obj;
 
-					$className = "JasperPHP\\".ucfirst($obj);
+					$className = "JasperPHP\\" . ucfirst($obj);
 					if(class_exists($className)){
 						$this->add(new $className($value));
 					}
@@ -51,35 +44,7 @@ namespace JasperPHP;
 			}
 		}
 
-		/**
-		* método __set()
-		* intercepta as atribuições à propriedades do objeto
-		* @param $name      = nome da propriedade
-		* @param $value     = valor
-		*//* 
-		public function __set($name, $value)
-		{
-		// armazena os valores atribuídos
-		// ao array properties
-		$this->properties[$name] = $value;
-		}
-		/**
-		* método __get()
-		* intercepta as atribuições à propriedades do objeto
-		* @param $name      = nome da propriedade
-		* @param $value     = valor
-		*//* 
-		public function __get($name)
-		{
-		// armazena os valores atribuídos
-		// ao array properties
-		if(array_key_exists($name,$this->properties)){
-		return $this->properties[$name];
-		}else{
-		return NULL;   
-		}
-
-		}*/
+		
 
 
 		/**
@@ -98,56 +63,12 @@ namespace JasperPHP;
 
 		public function getChildByClassName($childClassName){
 			foreach($this->children as $Child){
-				if(get_class($Child)=='JasperPHP\\'.$childClassName)return $Child;
+				if(get_class($Child)=="JasperPHP" . $childClassName)return $Child;
 			}
 		}
 		public function recommendFont($utfstring,$defaultfont,$pdffont=""){
 
-			/*\p{Common}
-			\p{Arabic}
-			\p{Armenian}
-			\p{Bengali}
-			\p{Bopomofo}
-			\p{Braille}
-			\p{Buhid}
-			\p{CanadianAboriginal}
-			\p{Cherokee}
-			\p{Cyrillic}
-			\p{Devanagari}
-			\p{Ethiopic}
-			\p{Georgian}
-			\p{Greek}
-			\p{Gujarati}
-			\p{Gurmukhi}
-			\p{Han}
-			\p{Hangul}
-			\p{Hanunoo}
-			\p{Hebrew}
-			\p{Hiragana}
-			\p{Inherited}
-			\p{Kannada}
-			\p{Katakana}
-			\p{Khmer}
-			\p{Lao}
-			\p{Latin}
-			\p{Limbu}
-			\p{Malayalam}
-			\p{Mongolian}
-			\p{Myanmar}
-			\p{Ogham}
-			\p{Oriya}
-			\p{Runic}
-			\p{Sinhala}
-			\p{Syriac}
-			\p{Tagalog}
-			\p{Tagbanwa}
-			\p{TaiLe}
-			\p{Tamil}
-			\p{Telugu}
-			\p{Thaana}
-			\p{Thai}
-			\p{Tibetan}
-			\p{Yi}*/
+			
 
 			if($pdffont!="")
 				return $pdffont;

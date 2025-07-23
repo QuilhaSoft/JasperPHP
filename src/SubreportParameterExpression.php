@@ -1,15 +1,9 @@
 <?php
 namespace JasperPHP;
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
-**/
+ * SubreportParameterExpression class
+ * This class represents a subreport parameter expression element in a Jasper report.
+ */
 class SubreportParameterExpression extends Element
 {
 	public function generate($obj = null)

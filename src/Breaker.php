@@ -2,20 +2,13 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * Breaker class
+ * This class handles page breaks and column breaks in a Jasper report.
+ */
 class Breaker extends Element
 {
+    public $printWhenExpression;
 
     public function generate($obj = null)
     {
@@ -38,22 +31,22 @@ class Breaker extends Element
             
             if ($pageFooter)
                 $pageFooter->generate($obj,$row);
-            //JasperPHP\Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
-            parent::generate($obj,$row);
-            JasperPHP\Instructions::addInstruction(array("type" => "resetY_axis"));
-            JasperPHP\Instructions::$currrentPage++;
-            JasperPHP\Instructions::addInstruction(array("type" => "AddPage"));
-            JasperPHP\Instructions::addInstruction(array("type" => "setPage", "value" => JasperPHP\Instructions::$currrentPage, 'resetMargins' => false));
+            //Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
+            parent::generate($obj);
+            Instructions::addInstruction(array("type" => "resetY_axis"));
+            Instructions::$currrentPage++;
+            Instructions::addInstruction(array("type" => "AddPage"));
+            Instructions::addInstruction(array("type" => "setPage", "value" => Instructions::$currrentPage, 'resetMargins' => false));
             $pageHeader = $obj->getChildByClassName('PageHeader');
             //if (JasperPHP\Pdf::$print_expression_result == true) {
             if ($pageHeader)
                 $pageHeader->generate($obj,$row);
             //}
 
-            JasperPHP\Instructions::runInstructions();
+            Instructions::runInstructions();
         }else{
-            JasperPHP\Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
-            parent::generate($obj,$row);
+            Instructions::addInstruction(array("type" => "break", "printWhenExpression" => $printWhenExpression . ""));
+            parent::generate($obj);
         }
 
     }

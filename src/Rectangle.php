@@ -2,19 +2,15 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * Rectangle class
+ * This class represents a rectangle element in a Jasper report.
+ */
 class Rectangle extends Element {
+
+    public $radius;
+    public $graphicElement;
+    public $reportElement;
 
     public function generate($obj = null) {
 
@@ -75,7 +71,7 @@ class Rectangle extends Element {
 //                "height"=>$data->reportElement["height"]+0,"hidden_type"=>"rect",
 //                "fillcolor"=>$fillcolor."","mode"=>$data->reportElement["mode"]."",'border'=>0);
 //        else
-        JasperPHP\Instructions::addInstruction(array("type" => "RoundedRect", "x" => $data->reportElement["x"] + 0,
+        Instructions::addInstruction(array("type" => "RoundedRect", "x" => $data->reportElement["x"] + 0,
             "y" => $data->reportElement["y"] + 0, "width" => $data->reportElement["width"] + 0,
             "height" => $data->reportElement["height"] + 0, "hidden_type" => "roundedrect", "radius" => $radius,
             "fillcolor" => $fillcolor,

@@ -2,19 +2,17 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * StaticText class
+ * This class represents a static text element in a Jasper report.
+ */
 class StaticText extends Element {
+
+    public $isStretchWithOverflow;
+    public $hyperlinkReferenceExpression;
+    public $text;
+    public $reportElement;
+    public $adjust = 1;
 
     public function generate($obj = null) {
         $row = is_array($obj) ? $obj[1] : null;
@@ -81,7 +79,7 @@ class StaticText extends Element {
 
             //else
             //$data->text=$data->textElement->font["pdfFontName"];//$this->recommendFont($data->text);
-            $font = $this->recommendFont($data->text, $data->textElement->font["fontName"], $data->textElement->font["pdfFontName"]);
+            $font = $this->recommendFont(isset($data->text) ? $data->text : '', $data->textElement->font["fontName"], $data->textElement->font["pdfFontName"]);
         }
         if (isset($data->textElement->font["size"])) {
             $fontsize = $data->textElement->font["size"];
@@ -113,15 +111,15 @@ class StaticText extends Element {
             }
         }
 
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "setCellHeightRatio",
             "ratio" => $lineHeightRatio
         ));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetXY", "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0, "hidden_type" => "SetXY"));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetFillColor", 'backcolor' => $data->reportElement["backcolor"] . '', "r" => $fillcolor["r"], "g" => $fillcolor["g"], "b" => $fillcolor["b"], "hidden_type" => "fillcolor"));
-        JasperPHP\Instructions::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" =>  $data->textElement->font? $data->textElement->font["pdfFontName"]:"", "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
+        Instructions::addInstruction(array("type" => "SetXY", "x" => $data->reportElement["x"] + 0, "y" => $data->reportElement["y"] + 0, "hidden_type" => "SetXY"));
+        Instructions::addInstruction(array("type" => "SetTextColor", 'forecolor' => $data->reportElement["forecolor"] . '', "r" => $textcolor["r"], "g" => $textcolor["g"], "b" => $textcolor["b"], "hidden_type" => "textcolor"));
+        Instructions::addInstruction(array("type" => "SetDrawColor", "r" => $drawcolor["r"], "g" => $drawcolor["g"], "b" => $drawcolor["b"], "hidden_type" => "drawcolor"));
+        Instructions::addInstruction(array("type" => "SetFillColor", 'backcolor' => $data->reportElement["backcolor"] . '', "r" => $fillcolor["r"], "g" => $fillcolor["g"], "b" => $fillcolor["b"], "hidden_type" => "fillcolor"));
+        Instructions::addInstruction(array("type" => "SetFont", "font" => $font, "pdfFontName" =>  $data->textElement->font? $data->textElement->font["pdfFontName"]:"", "fontstyle" => $fontstyle, "fontsize" => $fontsize, "hidden_type" => "font"));
         //"height"=>$data->reportElement["height"]
         //### UTF-8 characters, a must for me.    
         $txtEnc = $data->text;
@@ -133,12 +131,14 @@ class StaticText extends Element {
             $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
 
             //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
+            // WARNING: Using eval() can be a security risk and makes debugging difficult.
+            // A more robust solution would involve parsing and evaluating expressions without eval.
             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
         } else {
             $print_expression_result = true;
         }
-        if ($print_expression_result == true) {
-            JasperPHP\Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"], "height" => $height,
+        if ($print_expression_result) {
+            Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"], "height" => $height,
                 "txt" => $txtEnc, "border" => $border, "align" => $align, "fill" => $fill, "hidden_type" => "statictext",
                 "printWhenExpression" => $printWhenExpression . "",
                 "multiCell" => false,
@@ -154,11 +154,12 @@ class StaticText extends Element {
 
     /**
      * Return format for a component of a box
-     * @param unknown $pen
-     * @return number[]|string[]|number[][]
+     * @param object $pen
+     * @return array<string, mixed>
      */
     public static function formatPen($pen)
     {
+        $drawcolor = array();
         if (isset($pen["lineColor"])) {
             $drawcolor = array(
                 "r" => hexdec(substr($pen["lineColor"], 1, 2)),
@@ -189,8 +190,8 @@ class StaticText extends Element {
     
     /**
      * Returns patterns for all borders of a box
-     * @param unknown $box
-     * @return Array[]
+     * @param object $box
+     * @return array<string, mixed>
      */
     public static function formatBox($box)
     {

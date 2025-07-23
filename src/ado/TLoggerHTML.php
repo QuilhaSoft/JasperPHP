@@ -1,15 +1,11 @@
 <?php
-/*
- * classe TLoggerHTML
- * implement algorithm to HTML log
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.10
- * @access   restrict
- * 
- * 2015.03.10 -- create
-**/
 namespace JasperPHP\ado;
+
+/**
+ * TLoggerHTML class.
+ *
+ * Implements an HTML logging algorithm.
+ */
 class TLoggerHTML extends TLogger
 {
     /*

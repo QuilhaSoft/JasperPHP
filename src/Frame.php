@@ -2,18 +2,10 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Leandro Gama <gamadoleo@hotmail.com>
- * @version  2021.06.18
- * @access   restrict
- * 
- * 2021.06.18 -- criação
- * */
+ * Frame class
+ * This class represents a frame element in a Jasper report.
+ */
 class Frame extends Element {
 
     public function generate($obj = null) {

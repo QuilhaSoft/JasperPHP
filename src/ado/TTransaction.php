@@ -1,17 +1,12 @@
 <?php
-/*
- * classe TTransaction
- * esta classe provê os métodos necessários manipular transações
- *
- * @author   Rogerio Muniz de Castro <rogerio@singularsistemas.net>
- * @version  2015.03.10
- * @access   restrict
- * 
- * 2015.03.10 -- criação
-**/
 
 namespace JasperPHP\ado;
 
+/**
+ * TTransaction class.
+ *
+ * This class provides methods for managing database transactions.
+ */
 final class TTransaction
 {
     private static $conn;   // conexão ativa

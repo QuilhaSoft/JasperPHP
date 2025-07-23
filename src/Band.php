@@ -2,18 +2,10 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * Band class
+ * This class represents a band in a Jasper report, such as title, page header, detail, etc.
+ */
 class Band extends Element {
 
     public function generate($obj = null) {

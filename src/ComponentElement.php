@@ -1,19 +1,14 @@
 <?php
 namespace JasperPHP;
-use JasperPHP;
+
 /**
-* classe TLabel
-* classe para construção de rótulos de texto
-*
-* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
-* @version  2015.03.11
-* @access   restrict
-* 
-* 2015.03.11 -- criação
-**/
+ * ComponentElement class
+ * This class represents a component element in a Jasper report, such as tables or barcodes.
+ */
 class ComponentElement extends Element
 {
-
+    public $reportElement;
+    public $codeExpression;
 
     public function generate($obj = null)
     {
@@ -28,7 +23,7 @@ class ComponentElement extends Element
         //table =========================================
 		$jrs = $data->children('jr',true);	
 		if(isset($jrs->table)){
-		$table = new JasperPHP\Table($jrs->table);
+		$table = new Table($jrs->table);
 		$table->generate(array($obj,$rowData,$data->reportElement));
 		}//end table
         
@@ -68,7 +63,7 @@ class ComponentElement extends Element
             if($modulewidth=="")
                 $modulewidth=1;
             //                            echo "Barcode: $code,position: $textposition <br/><br/>";
-            JasperPHP\Instructions::addInstruction(array("type"=>"Barcode","barcodetype"=>$barcodemethod,"x"=>$x,"y"=>$y,"width"=>$width,"height"=>$height,'textposition'=>$textposition,'code'=>$code,'modulewidth'=>$modulewidth));
+            Instructions::addInstruction(array("type"=>"Barcode","barcodetype"=>$barcodemethod,"x"=>$x,"y"=>$y,"width"=>$width,"height"=>$height,'textposition'=>$textposition,'code'=>$code,'modulewidth'=>$modulewidth));
 
 
 

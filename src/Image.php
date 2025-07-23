@@ -1,19 +1,16 @@
 <?php
 namespace JasperPHP;
-use JasperPHP;
+
 /**
-* classe TLabel
-* classe para construção de rótulos de texto
-*
-* @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
-* @version  2015.03.11
-* @access   restrict
-* 
-* 2015.03.11 -- criação
-**/
+ * Image class
+ * This class represents an image element in a Jasper report.
+ */
 class Image extends Element
 {
-
+    public $scaleImage;
+    public $vAlign;
+    public $hyperlinkReferenceExpression;
+    public $hyperlinkTarget;
 
     public function generate($obj = null)
     {
@@ -79,7 +76,7 @@ class Image extends Element
                         break;
                 }
         }
-        JasperPHP\Instructions::addInstruction($arraydata);
+        Instructions::addInstruction($arraydata);
         
 
     }

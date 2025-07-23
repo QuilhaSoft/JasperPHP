@@ -2,19 +2,13 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * GroupHeader class
+ * This class represents the group header band in a Jasper report.
+ */
 class GroupHeader extends Element {
+
+    public $printWhenExpression;
 
     public function generate($obj = null) {
         $row = is_array($obj) ? $obj[1] : array();
@@ -29,16 +23,19 @@ class GroupHeader extends Element {
 
                     $printWhenExpression = $obj->get_expression($printWhenExpression,$row);
                     //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
+                    // WARNING: Using eval() can be a security risk and makes debugging difficult.
+                    // A more robust solution would involve parsing and evaluating expressions without eval.
                     eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
                 } else {
                     $print_expression_result = true;
                 }
-                if ($print_expression_result == true) {
-                    if ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent') {
-                        JasperPHP\Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $child->objElement['height']));
+                if ($print_expression_result) {
+                    $isSplitTypeStretchOrPrevent = ($child->objElement['splitType'] == 'Stretch' || $child->objElement['splitType'] == 'Prevent');
+                    if ($isSplitTypeStretchOrPrevent) {
+                        Instructions::addInstruction(array("type" => "PreventY_axis", "y_axis" => $child->objElement['height']));
                     }
                     parent::generate(array($obj, $row));
-                    JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $child->objElement['height']));
+                    Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $child->objElement['height']));
                 }
             }
         }

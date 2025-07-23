@@ -2,19 +2,13 @@
 
 namespace JasperPHP;
 
-use JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- *
- * 2015.03.11 -- criação
- * */
+ * TextField class
+ * This class represents a text field element in a Jasper report.
+ */
 class TextField extends Element {
+
+    public $evaluationTime;
 
     public function generate($obj = null) {
         $rowData = is_array($obj) ? $obj[1] : null;
@@ -131,18 +125,18 @@ class TextField extends Element {
                     break;
             }
         }
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "setCellHeightRatio",
             "ratio" => $lineHeightRatio
         ));
 
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "SetXY",
             "x" => $data->reportElement["x"] + 0,
             "y" => $data->reportElement["y"] + 0,
             "hidden_type" => "SetXY"
         ));
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "SetTextColor",
             "forecolor" => $data->reportElement["forecolor"],
             "r" => $textcolor["r"],
@@ -150,14 +144,14 @@ class TextField extends Element {
             "b" => $textcolor["b"],
             "hidden_type" => "textcolor"
         ));
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "SetDrawColor",
             "r" => $drawcolor["r"],
             "g" => $drawcolor["g"],
             "b" => $drawcolor["b"],
             "hidden_type" => "drawcolor"
         ));
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "SetFillColor",
             "backcolor" => $data->reportElement["backcolor"] . "",
             "r" => $fillcolor["r"],
@@ -166,7 +160,7 @@ class TextField extends Element {
             "hidden_type" => "fillcolor",
             "fill" => $fill
         ));
-        JasperPHP\Instructions::addInstruction(array(
+        Instructions::addInstruction(array(
             "type" => "SetFont",
             "font" => $font . "",
             "pdfFontName" => $data->textElement->font? $data->textElement->font["pdfFontName"] . "":"",
@@ -225,7 +219,7 @@ class TextField extends Element {
             $text = str_ireplace(array('+', '+', '"'), array('', '', ''), $text);
         }
         $printWhenExpression = $obj->get_expression($data->reportElement->printWhenExpression, $rowData);
-        JasperPHP\Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"] + 0, "height" => $height + 0, "txt" => $text . "",
+        Instructions::addInstruction(array("type" => "MultiCell", "width" => $data->reportElement["width"] + 0, "height" => $height + 0, "txt" => $text . "",
             "border" => $border, "align" => $align, "fill" => $fill,
             "hidden_type" => "field", "soverflow" => $stretchoverflow, "poverflow" => $printoverflow,
             "printWhenExpression" => $printWhenExpression . "",

@@ -1,16 +1,10 @@
 <?php
 namespace JasperPHP;
-use JasperPHP\Element;
+
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
-**/
+ * BottomPen class
+ * This class represents the bottom pen properties in a Jasper report element.
+ */
 class BottomPen extends Element
 {
 	

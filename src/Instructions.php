@@ -2,19 +2,10 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
-/*
- * classe Instructions
- * 
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.10
- * @access   restrict
- * 
- * 2015.03.10 -- criação
- * */
-
+/**
+ * Instructions class
+ * This class manages and executes instructions for generating Jasper reports.
+ */
 final class Instructions {
 
     static public $objOutPut;
@@ -51,7 +42,7 @@ final class Instructions {
         self::$intructions[] = $instruction;
     }
 
-    public static function setJasperObj(JasperPHP\Element $JasperObj) {
+    public static function setJasperObj(Element $JasperObj) {
         self::$JasperObj = $JasperObj;
     }
 

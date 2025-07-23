@@ -1,17 +1,11 @@
 <?php
-/*
- * classe TConnection
- * Manage conection with databases, based on configuration files
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.10
- * @access   restrict
- * 
- * 2015.03.10 -- create
-**/
 namespace JasperPHP\ado;
 use PDO;
  
+/**
+ * TConnection class
+ * Manages database connections based on configuration files.
+ */
 final class TConnection
 {
     /*
@@ -39,6 +33,7 @@ final class TConnection
         $host = isset($db['host']) ? $db['host'] : NULL;
         $type = isset($db['type']) ? $db['type'] : NULL;
         $port = isset($db['port']) ? $db['port'] : NULL;
+        $conn = null;
         
         switch ($type)
         {

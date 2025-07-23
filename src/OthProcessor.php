@@ -2,31 +2,21 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-use TTransaction;
-
 /**
- * classe Processor
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- create
- * */
+ * OthProcessor class
+ * This class handles various processing tasks for Jasper reports.
+ */
 class OthProcessor {
 
-    private $jasperObj;
-    private $print_expression_result;
+
 
     /*
      * method __construct()
      * @ \JasperPHP\Report $jasperObj
      */
 
-    public function __construct(\JasperPHP\Report $jasperObj) {
+    public function __construct() {
 
-        $this->jasperObj = $jasperObj;
     }
 
     /*
@@ -45,7 +35,7 @@ class OthProcessor {
      */
 
     public static function get() {
-        JasperPHP\Instructions::$objOutPut;
+        return Instructions::$objOutPut;
     }
 
     /*
@@ -115,7 +105,7 @@ class OthProcessor {
 
     public function AddPage($arraydata) {
         // $pdf = JasperPHP\Pdf;
-        JasperPHP\Instructions::$objOutPut->AddPage();
+        Instructions::$objOutPut->AddPage();
     }
 
     /*
@@ -126,7 +116,7 @@ class OthProcessor {
 
     public function setPage($arraydata) {
         //$pdf = JasperPHP\Pdf;
-        JasperPHP\Instructions::$objOutPut->setPage($arraydata["value"], $arraydata["resetMargins"]);
+        Instructions::$objOutPut->setPage($arraydata["value"], $arraydata["resetMargins"]);
     }
 
     /*
@@ -297,7 +287,7 @@ class OthProcessor {
 
     public function Barcode($arraydata) {
 
-        $this->showBarcode($arraydata, JasperPHP\Instructions::$y_axis);
+        $this->showBarcode($arraydata, Instructions::$y_axis);
     }
 
     /*

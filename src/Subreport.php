@@ -1,25 +1,20 @@
 <?php
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construÃ§Ã£o de rÃ³tulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criaÃ§Ã£o
- * */
+ * Subreport class
+ * This class handles subreports within a Jasper report.
+ */
 class Subreport extends Element
 {
 
     public $returnValues;
+    public $subreportExpression;
+    public $dataSourceExpression;
 
     public function generate($obj = null)
     {
+        $rowArray = [];
         $this->returnValues = array();
         $row = is_object($obj) ? $_POST : $obj[1];
         $obj = is_array($obj) ? $obj[0] : $obj;
@@ -29,6 +24,8 @@ class Subreport extends Element
         $printWhenExpression = (string)$this->objElement->reportElement->printWhenExpression;
         if ($printWhenExpression != '') {
             $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
+            // WARNING: Using eval() can be a security risk and makes debugging difficult.
+            // A more robust solution would involve parsing and evaluating expressions without eval.
             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
         } else {
             $print_expression_result = true;
@@ -51,14 +48,14 @@ class Subreport extends Element
         }
         $newParameters = ($rowArray) ? array_merge($obj->arrayParameter, $rowArray) : $obj->arrayParameter;
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
-        $report = new JasperPHP\Report($xmlFile, $newParameters); //$GLOBALS['reports'][$xmlFile];
+        $report = new Report($xmlFile, $newParameters); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
         
-        if ( preg_match("#^\\\$F{#", $this->objElement->dataSourceExpression) === 1 ) {
-            $report->dbData = $obj->get_expression($this->objElement->dataSourceExpression,$row,null);
+        if ( preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1 ) {
+            $report->dbData = $obj->get_expression((string)$this->objElement->dataSourceExpression,$row,null);
         }
 
-        $report->generate($obj?$obj:array());
+        $report->generate($obj ?? []);
         foreach ($this->objElement->returnValue as $r) {
             $this->returnValues[] = $r;
         }

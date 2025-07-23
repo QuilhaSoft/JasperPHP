@@ -1,16 +1,10 @@
 <?php
 namespace JasperPHP;
-use JasperPHP\Element;
+
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
-**/
+ * SubreportExpression class
+ * This class represents a subreport expression element in a Jasper report.
+ */
 class SubreportExpression extends Element
 {
 	

@@ -14,6 +14,8 @@ use JasperPHP;
 class Table extends Element
 {
 	private $arrayVariable;
+	public $objElement;
+
 	static private $page=0;
 	
 	public function getColorFill($data){
@@ -24,6 +26,7 @@ class Table extends Element
 	
 	public function formatPen($box,$pen)
     {
+		$drawcolor = array();
 		if(!isset($pen["lineColor"]))
 			$pen["lineColor"]= $box->pen["lineColor"];//get default box
 				
@@ -137,6 +140,7 @@ class Table extends Element
 		
     public function generate($obj = null)
     {
+		$rowArray = array();
         $data = $this->objElement;
 		//ComponentElement
 		$reportElement=$obj[2];
@@ -202,15 +206,24 @@ class Table extends Element
 			$columns[$i] = $objColumn;
 			$i++;	
 		}//end each column	
-		JasperPHP\Instructions::addInstruction(array("type"=>"Table", 'obj'=> $obj, 'x'=>$x,'y'=> $y,"column"=>$columns, "data"=>$dataRowTable));
+		Instructions::addInstruction(array("type"=>"Table", 'obj'=> $obj, 'x'=>$x,'y'=> $y,"column"=>$columns, "data"=>$dataRowTable));
 		
     }
 	
 	public static function process($arraydata){
+		$drawcolor = ['r' => 0, 'g' => 0, 'b' => 0];
+        $rowArray = [];
+        $cell = null;
+        $height_columnFooter = 0;
+        $marginLeft = 0;
+        $x = 0;
+        $y = 0;
+        $startX = 0;
+        $height_tableFooter = 0;
 		$jasperObj = $arraydata['obj'];
-		$pdf = JasperPHP\Instructions::get();
+		$pdf = Instructions::get();
         $dimensions = $pdf->getPageDimensions();
-		$topMargin = JasperPHP\Instructions::$arrayPageSetting["topMargin"];		
+		$topMargin = Instructions::$arrayPageSetting["topMargin"];		
         $dbData = $arraydata['data']; 
 		$columns = $arraydata['column'];
 		$pdf->Ln(0);
@@ -230,7 +243,7 @@ class Table extends Element
 		//each row data	
 		$rowIndex = 0;	
         foreach($dbData as $row) {
-			self::$page = JasperPHP\Instructions::$currrentPage;
+			self::$page = Instructions::$currrentPage;
 			$borders = 'LRBT';//default
 			$rowIndex++;
 			//variables dataset================================
@@ -244,7 +257,7 @@ class Table extends Element
             $jasperObj->variables_calculation($jasperObj, $row);
 			//endVariables
 				
-			$marginLeft = JasperPHP\Instructions::$arrayPageSetting["leftMargin"];			
+			$marginLeft = Instructions::$arrayPageSetting["leftMargin"];			
 			//get height header and detail
 			$height_header = 0;
 			$height_detail = 0;	
@@ -270,8 +283,8 @@ class Table extends Element
 					$text = $jasperObj->get_expression($field->objElement->text,$row);
 					//change font for height row
 					$font = $field->objElement->textElement->font->attributes();
-					JasperPHP\Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
-					JasperPHP\Instructions::runInstructions();					
+					Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
+					Instructions::runInstructions();					
 					$height_new = $pdf->getStringHeight($width_column,$text)*1.5;
 					//return default font
 					//$this->SetFont($fontDefault);
@@ -309,8 +322,8 @@ class Table extends Element
                     if($field->objElement->textElement->font) {
                         $font = $field->objElement->textElement->font->attributes();
                         //$this->SetFont(array("font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
-                        JasperPHP\Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
-                        JasperPHP\Instructions::runInstructions();
+                        Instructions::addInstruction(array("type"=>"SetFont","font"=> $font->fontName, "fontstyle"=> (isset($font->isBold)?"B":""), "fontsize"=>$font->size));
+                        Instructions::runInstructions();
                     }
 					$height_new = $pdf->getStringHeight($width_column,$text)*$lineHeightRatio;
 					//return default font
@@ -323,18 +336,18 @@ class Table extends Element
 			}//end get height row header and detail
 			
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_detail));
-			JasperPHP\Instructions::runInstructions();
+			Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_detail));
+			Instructions::runInstructions();
 			//new page?
-			if(self::$page != JasperPHP\Instructions::$currrentPage){
+			if(self::$page != Instructions::$currrentPage){
 				$showColumnHeader=true;//repeat columnHeader
 				$pdf->Ln(0);
-				$y = JasperPHP\Instructions::$y_axis;
+				$y = Instructions::$y_axis;
 			}			
 			
 			//posições iniciais
 			$startX = $pdf->GetX();
-			$startY = JasperPHP\Instructions::$y_axis; 		
+			$startY = Instructions::$y_axis; 		
 			$y = $startY;
 			$x = $startX;	
 
@@ -351,7 +364,7 @@ class Table extends Element
 						$field->objElement->reportElement["height"]=$cell['h'];					
 						//$field->objElement->reportElement["y"]=$y;	
 						$field->generate(array($jasperObj,$row));
-						JasperPHP\Instructions::runInstructions();
+						Instructions::runInstructions();
 					}
 					$pdf->SetX($x);									
 					//border column
@@ -384,7 +397,7 @@ class Table extends Element
 						$field->objElement->reportElement["height"]=$height_header;					
 						//$field->objElement->reportElement["y"]=$y;	
 						$field->generate(array($jasperObj,$row));
-						JasperPHP\Instructions::runInstructions();
+						Instructions::runInstructions();
 					}
 					$pdf->SetX($x);									
 					//border column 
@@ -418,7 +431,7 @@ class Table extends Element
 					$field->objElement->reportElement["height"]=$height_detail;					
 					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,$row));
-					JasperPHP\Instructions::runInstructions();
+					Instructions::runInstructions();
 				}
 				$pdf->SetX($x);					
 				//border column
@@ -442,13 +455,13 @@ class Table extends Element
 		//check new page
 		if($height_columnFooter>0){
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_columnFooter));
-			JasperPHP\Instructions::runInstructions();
+			Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_columnFooter));
+			Instructions::runInstructions();
 			//new page?
-			if(self::$page != JasperPHP\Instructions::$currrentPage){
-				self::$page = JasperPHP\Instructions::$currrentPage;
+			if(self::$page != Instructions::$currrentPage){
+				self::$page = Instructions::$currrentPage;
 				$pdf->Ln(0);
-				$y = JasperPHP\Instructions::$y_axis;	
+				$y = Instructions::$y_axis;	
 			}
 		}
 		
@@ -466,7 +479,7 @@ class Table extends Element
 					$field->objElement->reportElement["height"]=$height_columnFooter;					
 					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,null));
-					JasperPHP\Instructions::runInstructions();
+					Instructions::runInstructions();
 				}
 				
 				$pdf->SetX($x);					
@@ -490,13 +503,13 @@ class Table extends Element
 		//check new page
 		if($height_tableFooter>0){
 			//check new page
-			JasperPHP\Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_tableFooter));
-			JasperPHP\Instructions::runInstructions();
+			Instructions::addInstruction(array("type"=>"PreventY_axis",'y_axis'=>$height_tableFooter));
+			Instructions::runInstructions();
 			//new page?
-			if(self::$page != JasperPHP\Instructions::$currrentPage){
-				self::$page = JasperPHP\Instructions::$currrentPage;
+			if(self::$page != Instructions::$currrentPage){
+				self::$page = Instructions::$currrentPage;
 				$pdf->Ln(0);
-				$y = JasperPHP\Instructions::$y_axis;				
+				$y = Instructions::$y_axis;				
 			}
 		}	
 		
@@ -514,7 +527,7 @@ class Table extends Element
 					$field->objElement->reportElement["height"]=$height_tableFooter;					
 					//$field->objElement->reportElement["y"]=$y;
 					$field->generate(array($jasperObj,null));
-					JasperPHP\Instructions::runInstructions();
+					Instructions::runInstructions();
 				}
 				
 				$pdf->SetX($x);					
@@ -536,8 +549,8 @@ class Table extends Element
 	}
 	
 	static function SetY_axis($addY_axis){
-		JasperPHP\Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $addY_axis));
-		JasperPHP\Instructions::runInstructions();		
+		Instructions::addInstruction(array("type" => "SetY_axis", "y_axis" => $addY_axis));
+		Instructions::runInstructions();		
 	}
 	
 }

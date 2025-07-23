@@ -2,21 +2,12 @@
 
 namespace JasperPHP;
 
-use JasperPHP;
 use JasperPHP\ado\TTransaction;
-//use TTransaction;
 
 /**
- * classe Report
- * classe para construção de relatorio
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- *
- *
- * 2015.03.11 -- criação
- * */
+ * Report class
+ * This class is responsible for building and generating Jasper reports.
+ */
 class Report extends Element {
    
     public static $defaultFolder = 'app.jrxml';
@@ -40,6 +31,20 @@ class Report extends Element {
     public $rowData;
     public $lastRowData;
     public $arrayStyles;
+    public $report_count = 0;
+    public $arraysqltable = [];
+
+    // Properties from <jasperReport> attributes
+    public $name;
+    public $pageWidth;
+    public $pageHeight;
+    public $columnWidth;
+    public $leftMargin;
+    public $rightMargin;
+    public $topMargin;
+    public $bottomMargin;
+    public $isIgnorePagination;
+    public $uuid;
 
     public function __construct($xmlFile, $param) {
         if (file_exists(self::$defaultFolder . DIRECTORY_SEPARATOR . $xmlFile)) {
@@ -93,23 +98,24 @@ class Report extends Element {
 
         if(array_key_exists('net.sf.jasperreports.data.adapter',$this->arrayProperty)){
             $connectionName = explode('.',$this->arrayProperty['net.sf.jasperreports.data.adapter'])[1];
-            $result = \Illuminate\Support\Facades\DB::connection($connectionName)->select($this->sql);
-            $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
-            $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
+            // $result = \Illuminate\Support\Facades\DB::connection($connectionName)->select($this->sql);
+            $result = [];
+            $arrayVariable = $this->arrayVariable ?? [];
+            $recordObject = $arrayVariable['recordObj']['initialValue'] ?? "stdClass";
             if($recordObject != 'stdClass'){
                 $result  = $recordObject::hydrate($result);
             }
             $this->rowData = $result[0];
             return $result;
 
-        }elseif ($conn = TTransaction::get()) {
+        } elseif ($conn = TTransaction::get()) {
             // registra mensagem de log
             TTransaction::log($this->sql);
 
             // executa instrução de SELECT
             $result = $conn->Query($this->sql);
-            $arrayVariable = isset($this->arrayVariable) ? $this->arrayVariable : array();
-            $recordObject = array_key_exists('recordObj', $arrayVariable) ? $this->arrayVariable['recordObj']['initialValue'] : "stdClass";
+            $arrayVariable = $this->arrayVariable ?? [];
+            $recordObject = $arrayVariable['recordObj']['initialValue'] ?? "stdClass";
 
             $this->rowData = $result->fetchObject($recordObject);
             return $result;
@@ -121,9 +127,9 @@ class Report extends Element {
 	
 	public function getDbDataQuery($sql) {
 
-        if ($conn = JasperPHP\ado\TTransaction::get()) {
+        if ($conn = TTransaction::get()) {
             // registra mensagem de log
-            JasperPHP\ado\TTransaction::log($sql);
+            TTransaction::log($sql);
 
             // executa instrução de SELECT
             $result = $conn->Query($sql);
@@ -211,9 +217,10 @@ class Report extends Element {
     }
 
 	public function prepareSql($sql, $arrayParameter=array()){
-		if (isset($arrayParameter) && !empty($arrayParameter)) {
+		if (!empty($arrayParameter)) {
                 foreach ($arrayParameter as $v => $a) {
                     if (is_array($a)) {
+                        $foo = [];
                         foreach ($a as $x) {
                             // se for um inteiro
                             if (is_integer($x)) {
@@ -249,7 +256,7 @@ class Report extends Element {
         $this->sql = (string) $xml_path->queryString;
         if (strlen(trim($xml_path->queryString)) > 0) {
 
-            if (isset($this->arrayParameter)) {
+            if ($this->arrayParameter) {
 				$this->sql=$this->prepareSql($this->sql,$this->arrayParameter);
             }
         }
@@ -261,7 +268,7 @@ class Report extends Element {
                 $this->variable_calculation($k, $out, $row);
             }
         }
-        if($this->pageChanged == true){
+        if($this->pageChanged){
             $this->pageChanged = false;
         }
     }
@@ -297,21 +304,21 @@ class Report extends Element {
 
     public function get_expression($text, $row, $writeHTML = null, $element = null) {
         preg_match_all("/P{(\w+)}/", $text, $matchesP);
-        if ($matchesP) {
+        if ($matchesP[0]) {
             foreach ($matchesP[1] as $macthP) {
                 $text = str_ireplace(array('$P{' . $macthP . '}', '"'), array($this->arrayParameter[$macthP], ''), $text);
             }
         }
 
         preg_match_all("/V{(\w+)}/", $text, $matchesV);
-        if ($matchesV) {
+        if ($matchesV[0]) {
             foreach ($matchesV[1] as $macthV) {
                 $text = $this->getValOfVariable($macthV, $text, $writeHTML, $element);
             }
         }
         
         preg_match_all("/F{[^}]*}/", $text, $matchesF);
-        if ($matchesF) {
+        if ($matchesF[0]) {
             //var_dump($matchesF);
             foreach ($matchesF[0] as $macthF) {
                 $macth = str_ireplace(array("F{", "}"), "", $macthF);
@@ -341,11 +348,11 @@ class Report extends Element {
         } elseif ($variable == "MASTER_TOTAL_PAGES") {
             return str_ireplace(array('$V{MASTER_TOTAL_PAGES}'), array('{:ptp:}'), $text);
         } elseif ($variable == "PAGE_NUMBER" || $variable == "MASTER_CURRENT_PAGE" || $variable == "CURRENT_PAGE_NUMBER" ) {
-            if ( (JasperPHP\Instructions::$processingPageFooter && JasperPHP\Instructions::$lastPageFooter)
+            if ( (Instructions::$processingPageFooter && Instructions::$lastPageFooter)
                || (isset($element->evaluationTime) && $element->evaluationTime == "Report") ) {
                 return str_ireplace(array('$V{' . $variable . '}'), array('{:ptp:}'), $text);
             }
-            return str_ireplace(array('$V{' . $variable . '}'), array(JasperPHP\Instructions::$currrentPage), $text);
+            return str_ireplace(array('$V{' . $variable . '}'), array(Instructions::$currrentPage), $text);
         } else {
             return str_ireplace(array('$V{' . $variable . '}'), array($ans), $text);
         }
@@ -372,7 +379,7 @@ class Report extends Element {
                     }
                 } else if (is_object($obj)) {
                     preg_match_all("/(\w+)\(\)/", $part, $matchMethod);
-                    if ($matchMethod && array_key_exists(0, $matchMethod[1])) {
+                    if (array_key_exists(0, $matchMethod[1])) {
                         $method = $matchMethod[1][0];
                         $obj = $obj->$method();
                     } else {
@@ -409,24 +416,20 @@ class Report extends Element {
             } else {
                 return str_ireplace(array('$' . $matchesV[0][0] . "()"), array(call_user_func($funcName, $val)), $text);
             }
-        } elseif (is_array($val)) {
-            return $val;
-        } elseif ($val === false) {
-            return str_ireplace('$F{' . $field . '}', '0', $text);
         } else {
             return str_ireplace(array('$F{' . $field . '}'), array(($val)), $text);
         }
     }
-
+    
     public function variable_calculation($k, $out, $row) {
         preg_match_all("/P{(\w+)}/", $out['target'], $matchesP);
-        if ($matchesP) {
+        if ($matchesP[0]) {
             foreach ($matchesP[1] as $macthP) {
                 $out['target'] = str_ireplace(array('$P{' . $macthP . '}'), array($this->arrayParameter[$macthP]), $out['target']);
             }
         }
         preg_match_all("/V{(\w+)}/", $out['target'], $matchesV);
-        if ($matchesV) {
+        if ($matchesV[0]) {
             foreach ($matchesV[1] as $macthV) {
                 if(is_array($this->arrayVariable[$macthV])){
                     $ans = array_key_exists('ans', $this->arrayVariable[$macthV]) ? $this->arrayVariable[$macthV]['ans'] : '';
@@ -438,16 +441,14 @@ class Report extends Element {
             }
         }
         preg_match_all("/F{(\w+)}/", $out['target'], $matchesF);
-        if ($matchesF) {
+        if ($matchesF[0]) {
             foreach ($matchesF[1] as $macthF) {
                 $out['target'] = $this->getValOfField($macthF, $row, $out['target']); //str_ireplace(array('$F{'.$macthF.'}'),array(utf8_encode($row->$macthF)),$out['target']); 
             }
         }
         $htmlData = array_key_exists('htmlData', $this->arrayVariable) ? $this->arrayVariable['htmlData']['class'] : '';
         if (preg_match('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)/', $out['target'], $matchesMath) > 0 && $htmlData != 'HTMLDATA') {
-            
-            error_reporting(0);
-            $mathValue = eval('return (' . $out['target'] . ');');
+            $mathValue = eval('return (' . $this->get_expression($out['target'], $row) . ');');
             error_reporting(5);
         }
         
@@ -457,7 +458,7 @@ class Report extends Element {
         
         switch ($out["calculation"]) {
             case "Sum":
-                if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
+                if (($this->arrayVariable[$k]['class'] ?? null) === "java.sql.Time") {
                     $value = $this->time_to_sec($value);
 
                     $value += $this->time_to_sec($newValue);
@@ -467,7 +468,7 @@ class Report extends Element {
                 }
                 break;
             case "Average":
-                if (isset($this->arrayVariable[$k]['class']) && $this->arrayVariable[$k]['class'] == "java.sql.Time") {
+                if (($this->arrayVariable[$k]['class'] ?? null) === "java.sql.Time") {
                     $value = $this->time_to_sec($value);
                     $value += $this->time_to_sec($newValue);
                     $value = $this->sec_to_time($value);
@@ -490,8 +491,8 @@ class Report extends Element {
             case "Highest":
                 $out["ans"] = 0;
                 foreach ($this->arraysqltable as $table) {
-                    if ($rowData->$out["target"] > $out["ans"]) {
-                        $value = $rowData->$out["target"];
+                    if ($table->$out["target"] > $out["ans"]) {
+                        $value = $table->$out["target"];
                     }
                 }
                 break;
@@ -519,17 +520,17 @@ class Report extends Element {
     }
 
     public function getPageNo() {
-        $pdf = JasperPHP\Instructions::get();
+        $pdf = Instructions::get();
         return $pdf->getPage();
     }
 
     public function getAliasNbPages() {
-        $pdf = JasperPHP\Instructions::get();
+        $pdf = Instructions::get();
         return $pdf->getNumPages();
     }
 
     public function updatePageNo($s) {
-        $pdf = JasperPHP\Instructions::get();
+        $pdf = Instructions::get();
         return str_replace('$this->PageNo()', $pdf->PageNo(), $s);
     }
 
@@ -661,8 +662,8 @@ class Report extends Element {
         $z = 0;
         $rt = "";
         $valor = ($valor) ? $valor : 0;
-        $valor = (strpos($valor, ',') == false ) ? number_format($valor, 2, '.', '.') : number_format(str_replace(',', '.', str_replace(".", "", $valor)), 2, '.', '.');
-        $inteiro = explode(".", $valor);
+        $valor = (strpos($valor, ',') == false ) ? (float)$valor : (float)str_replace(',', '.', str_replace(".", "", $valor));
+        $inteiro = explode(".", (string)$valor);
         for ($i = 0; $i < count($inteiro); $i++)
             for ($ii = strlen($inteiro[$i]); $ii < 3; $ii++)
                 $inteiro[$i] = "0" . $inteiro[$i];
@@ -703,22 +704,28 @@ class Report extends Element {
         //$this->variable_handler($this->objElement);
         //$this->queryString_handler($this->objElement);
         //var_dump($this->objElement);
-        if (strlen(trim($this->sql)) > 0) {
+        if (empty($this->dbData) && strlen(trim($this->sql)) > 0) {
             $this->dbData = $this->getDbData();
         }
         // exibe a tag
-        $instructions = JasperPHP\Instructions::setJasperObj($obj?$obj:$this);
+        $instructions = Instructions::setJasperObj($obj ?? $this);
         parent::generate($this);
-        //JasperPHP\Instructions::runInstructions();
-        //JasperPHP\Instructions::clearInstructrions();
+        //Instructions::runInstructions();
+        //Instructions::clearInstructrions();
         return $this->arrayVariable;
     }
 
     public function out() {
 
-        JasperPHP\Instructions::runInstructions();
+        Instructions::runInstructions();
         //$this->runInstructions($instructions);
     }
+
+    public function setData(array $data)
+    {
+        $this->dbData = $data;
+    }
+
     public function addStyle($style){
         //print_r($style);return;
         $attributes = $style->attributes();
@@ -727,7 +734,7 @@ class Report extends Element {
     }
     
     public function getStyle($key){
-        if(isset($this->arrayStyles["{$key}"])){
+        if($this->arrayStyles["{$key}"] ?? null){
         return $this->arrayStyles["{$key}"];
         }
     }
@@ -736,7 +743,7 @@ class Report extends Element {
         if($style){
             //default
             $attributes = $style->attributes();
-            if(isset($style->conditionalStyle)){ 
+            if($style->conditionalStyle){ 
                 //percore os styles
                 foreach($style->conditionalStyle as $styleNew){                
                     $expression = $styleNew->conditionExpression;             
@@ -744,8 +751,11 @@ class Report extends Element {
                     $resultExpression = false;
                     $expression = $this->get_expression($expression, $rowData);
                     //echo 'if(' . $expression . '){$resultExpression=true;}<br/>';
+                    // WARNING: Using eval() can be a security risk and makes debugging difficult.
+                    // A more robust solution would involve parsing and evaluating expressions without eval.
                     eval('if(' . $expression . '){$resultExpression=true;}'); 
                     //echo $resultExpression."<br/>";
+                    // @phpstan-ignore-next-line
                     if($resultExpression){
                         //get definition style condicional
                         $attributCondicional= $styleNew->style->attributes();
@@ -767,4 +777,23 @@ class Report extends Element {
         }        
     }
 
+    public function time_to_sec($time) {
+        if (is_string($time)) {
+            $parts = explode(':', $time);
+            if (count($parts) === 3) {
+                return (int)$parts[0] * 3600 + (int)$parts[1] * 60 + (int)$parts[2];
+            }
+        }
+        return $time;
+    }
+
+    public function sec_to_time($seconds) {
+        if (is_numeric($seconds)) {
+            $h = floor($seconds / 3600);
+            $m = floor(($seconds % 3600) / 60);
+            $s = $seconds % 60;
+            return sprintf('%02d:%02d:%02d', $h, $m, $s);
+        }
+        return $seconds;
+    }
 }

@@ -2,19 +2,14 @@
 
 namespace JasperPHP;
 
-use \JasperPHP;
-
 /**
- * classe TLabel
- * classe para construção de rótulos de texto
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2015.03.11
- * @access   restrict
- * 
- * 2015.03.11 -- criação
- * */
+ * Line class
+ * This class represents a line element in a Jasper report.
+ */
 class Line extends Element {
+
+    public $graphicElement;
+    public $printWhenExpression;
 
     public function generate($obj = null) {
 
@@ -68,23 +63,25 @@ class Line extends Element {
             $printWhenExpression = $obj->get_expression($printWhenExpression, $row);
 
             //echo    'if('.$printWhenExpression.'){$print_expression_result=true;}';
+            // WARNING: Using eval() can be a security risk and makes debugging difficult.
+            // A more robust solution would involve parsing and evaluating expressions without eval.
             eval('if(' . $printWhenExpression . '){$print_expression_result=true;}');
         } else {
             $print_expression_result = true;
         }
-        if ($print_expression_result == true) {
+        if ($print_expression_result) {
             if ($data->reportElement["width"][0] + 0 > $data->reportElement["height"][0] + 0) {    //width > height means horizontal line
-                JasperPHP\Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"] + 0, "y1" => $data->reportElement["y"] + 0,
+                Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"] + 0, "y1" => $data->reportElement["y"] + 0,
                     "x2" => $data->reportElement["x"] + $data->reportElement["width"], "y2" => $data->reportElement["y"] + $data->reportElement["height"] - 1,
                     "hidden_type" => $hidden_type, "style" => $style, "forecolor" => $data->reportElement["forecolor"] . "",
                     "printWhenExpression" => $printWhenExpression));
             } elseif ($data->reportElement["height"][0] + 0 > $data->reportElement["width"][0] + 0) {        //vertical line
-                JasperPHP\Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"], "y1" => $data->reportElement["y"],
+                Instructions::addInstruction(array("type" => "Line", "x1" => $data->reportElement["x"], "y1" => $data->reportElement["y"],
                     "x2" => $data->reportElement["x"] + $data->reportElement["width"] - 1, "y2" => $data->reportElement["y"] + $data->reportElement["height"], "hidden_type" => $hidden_type, "style" => $style,
                     "forecolor" => $data->reportElement["forecolor"] . "", "printWhenExpression" => $data->reportElement->printWhenExpression));
             }
-            JasperPHP\Instructions::addInstruction(array("type" => "SetDrawColor", "r" => 0, "g" => 0, "b" => 0, "hidden_type" => "drawcolor"));
-            JasperPHP\Instructions::addInstruction(array("type" => "SetFillColor", "r" => 255, "g" => 255, "b" => 255, "hidden_type" => "fillcolor"));
+            Instructions::addInstruction(array("type" => "SetDrawColor", "r" => 0, "g" => 0, "b" => 0, "hidden_type" => "drawcolor"));
+            Instructions::addInstruction(array("type" => "SetFillColor", "r" => 255, "g" => 255, "b" => 255, "hidden_type" => "fillcolor"));
         }
         parent::generate($obj);
     }
