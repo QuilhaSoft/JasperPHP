@@ -104,7 +104,21 @@ class Detail extends Element {
                 $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
                 $obj->lastRowData = $obj->rowData;
                 $row = ( is_array($dbData) || $dbData instanceOf \ArrayAccess ) ? (isset($dbData[$rowIndex])) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
+                if (!is_object($row) && is_array($row)) {
+                    $row = (object)$row;
+                }
                 //echo $rowIndex;
+                 if (count($obj->arrayGroup) > 0) {
+                    foreach ($obj->arrayGroup as $group) {
+                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
+                        $groupExpression = $matchesF[1][0];
+                        if ($obj->rowData->$groupExpression != $row->$groupExpression && $group->groupFooter) {
+                            $groupFooter = new GroupFooter($group->groupFooter);
+                            $groupFooter->generate(array($obj, $obj->rowData));
+                            $group->resetVariables = 'true';
+                        }
+                    }
+                }
                 
                 $obj->rowData = $row;
                 $obj->variables_calculation($obj, $row);
