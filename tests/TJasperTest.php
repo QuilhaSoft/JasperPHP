@@ -3,7 +3,7 @@
 namespace JasperPHP\Tests;
 
 use PHPUnit\Framework\TestCase;
-use JasperPHP\TJasper;
+use JasperPHP\core\TJasper;
 
 class TJasperTest extends TestCase
 {
@@ -51,19 +51,34 @@ class TJasperTest extends TestCase
 
     public function testCanInstantiateTJasper()
     {
-        // This test still relies on an existing testReport.jrxml, which might not be ideal.
-        // For now, we'll keep it as is, but it's a candidate for future refactoring.
-        $this->assertInstanceOf(TJasper::class, new TJasper('testReport.jrxml', ['type' => 'pdf']));
+        $defaultDataSourceConfig = [
+            'type' => 'array',
+            'data' => [],
+        ];
+        $this->assertInstanceOf(TJasper::class, new TJasper('testReport.jrxml', ['type' => 'pdf'], $defaultDataSourceConfig, false));
     }
 
     public function testCanInstantiateTJasperWithData()
     {
-        $sampleData = [
-            (object)['id' => 1, 'name' => 'Item A', 'quantity' => 10],
-            (object)['id' => 2, 'name' => 'Item B', 'quantity' => 20],
+        $sampleDataArray = [
+            ['id' => 1, 'name' => 'Item A', 'quantity' => 10],
+            ['id' => 2, 'name' => 'Item B', 'quantity' => 20],
         ];
 
-        $jasper = new TJasper($this->tempJrxmlFile, ['type' => 'pdf'], $sampleData);
+        $expectedDataObjects = [
+            (object)['id' => 1, 'name' => 'Item A', 'quantity' => 10, 'rowIndex' => 1],
+            (object)['id' => 2, 'name' => 'Item B', 'quantity' => 20, 'rowIndex' => 2],
+        ];
+
+        $dataSourceConfig = [
+            'type' => 'array',
+            'data' => $sampleDataArray,
+        ];
+
+        $jasper = new TJasper($this->tempJrxmlFile, ['type' => 'pdf'], $dataSourceConfig, false);
+
+        // Call generate to populate dbData
+        $jasper->getReport()->generate();
 
         $reflection = new \ReflectionClass($jasper);
         $reportProperty = $reflection->getProperty('report');
@@ -75,6 +90,6 @@ class TJasperTest extends TestCase
         $dbDataProperty->setAccessible(true);
         $dbData = $dbDataProperty->getValue($report);
 
-        $this->assertEquals($sampleData, $dbData);
+        $this->assertEquals($expectedDataObjects, $dbData);
     }
 }

@@ -61,6 +61,11 @@ class ComposerStaticInit89fe44c0fa41b9b31dffbfe6decc0802
         ),
         'J' => 
         array (
+            'JasperPHP\\processors\\' => 21,
+            'JasperPHP\\exception\\' => 20,
+            'JasperPHP\\elements\\' => 19,
+            'JasperPHP\\database\\' => 19,
+            'JasperPHP\\core\\' => 15,
             'JasperPHP\\' => 10,
         ),
         'F' => 
@@ -197,6 +202,26 @@ class ComposerStaticInit89fe44c0fa41b9b31dffbfe6decc0802
         'PhpCsFixer\\' => 
         array (
             0 => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/src',
+        ),
+        'JasperPHP\\processors\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/processors',
+        ),
+        'JasperPHP\\exception\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/exception',
+        ),
+        'JasperPHP\\elements\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/elements',
+        ),
+        'JasperPHP\\database\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/database',
+        ),
+        'JasperPHP\\core\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/core',
         ),
         'JasperPHP\\' => 
         array (

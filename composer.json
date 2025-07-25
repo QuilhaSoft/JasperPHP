@@ -12,7 +12,12 @@
     ],
     "autoload": {
         "psr-4" : {
-            "JasperPHP\\" : ["src"]
+            "JasperPHP\\core\\" : "src/core/",
+            "JasperPHP\\elements\\" : "src/elements/",
+            "JasperPHP\\processors\\" : "src/processors/",
+            "JasperPHP\\database\\" : "src/database/",
+            "JasperPHP\\exception\\" : "src/exception/",
+            "JasperPHP\\" : "src/"
         }
     },
     "require": {
