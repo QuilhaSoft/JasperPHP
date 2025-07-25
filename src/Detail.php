@@ -102,7 +102,7 @@ class Detail extends Element {
                 
                 $arrayVariable = ($obj->arrayVariable) ? $obj->arrayVariable : array();
                 $recordObject = array_key_exists('recordObj', $arrayVariable) ? $obj->arrayVariable['recordObj']['initialValue'] : "stdClass";
-                $obj->lastRowData = $obj->rowData;
+                $obj->lastRowData = $row;
                 $row = ( is_array($dbData) || $dbData instanceOf \ArrayAccess ) ? (isset($dbData[$rowIndex])) ? $dbData[$rowIndex] : null : $dbData->fetchObject($recordObject);
                 if (!is_object($row) && is_array($row)) {
                     $row = (object)$row;
@@ -110,11 +110,12 @@ class Detail extends Element {
                 //echo $rowIndex;
                  if (count($obj->arrayGroup) > 0) {
                     foreach ($obj->arrayGroup as $group) {
-                        preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
-                        $groupExpression = $matchesF[1][0];
-                        if ($obj->rowData->$groupExpression != $row->$groupExpression && $group->groupFooter) {
+                        $groupExpression = $obj->get_expression($group->groupExpression, $row);
+                        // preg_match_all("/F{(\w+)}/", $group->groupExpression, $matchesF);
+                        // $groupExpression = $matchesF[1][0];
+                        if ($obj->lastRowData->$groupExpression != $row->$groupExpression && $group->groupFooter) {
                             $groupFooter = new GroupFooter($group->groupFooter);
-                            $groupFooter->generate(array($obj, $obj->rowData));
+                            $groupFooter->generate(array($obj, $row));
                             $group->resetVariables = 'true';
                         }
                     }
