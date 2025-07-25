@@ -46,46 +46,71 @@ class TJasper {
         }
     }
 
-    public function outpage($type = 'pdf') {
+    /**
+     * Generates the report and outputs it based on the specified mode.
+     *
+     * @param string $outputMode 'I' for inline, 'D' for download, 'F' for file, 'S' for string.
+     * @param string $filename The filename for download or file output.
+     * @param string $filePath The path where the file will be saved if $outputMode is 'F'.
+     * @return string|void Returns the report content as a string if $outputMode is 'S', otherwise void.
+     */
+    public function output($outputMode = 'I', $filename = 'report.pdf', $filePath = null) {
         $this->report->generate();
-        $this->report->out();
+        $this->report->out(); // This prepares the output object (e.g., FPDF, HTML content)
+
         switch ($this->type) {
             case 'pdf':
                 $pdf = Instructions::get();
-                $pdf->Output('report.pdf', "I");
+                if ($outputMode === 'F' && $filePath !== null) {
+                    return $pdf->Output($filePath, $outputMode);
+                } else {
+                    return $pdf->Output($filename, $outputMode);
+                }
                 break;
-            // case 'xls':
-            //     header('Content-Type: application/vnd.ms-excel');
-            //     header('Content-Disposition: attachment;filename="01simple.xls"');
-            //     header('Cache-Control: max-age=0');
-            //     // If you're serving to IE 9, then the following may be needed
-            //     header('Cache-Control: max-age=1');
-            //     // If you're serving to IE over SSL, then the following may be needed
-            //     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-            //     header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-            //     header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-            //     header('Pragma: public'); // HTTP/1.0
-            //     $objWriter = PHPExcel_IOFactory::createWriter(Instructions::$objOutPut, 'Excel5');
-            //     $objWriter->save('php://output');
-            //     break;
-            // case 'xlsx':
-            //     header('Content-Type: application/vnd.ms-excel');
-            //     header('Content-Disposition: attachment;filename="01simple.xls"');
-            //     header('Cache-Control: max-age=0');
-            //     // If you're serving to IE 9, then the following may be needed
-            //     header('Cache-Control: max-age=1');
-            //     // If you're serving to IE over SSL, then the following may be needed
-            //     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-            //     header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-            //     header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-            //     header('Pragma: public'); // HTTP/1.0
-            //     $objWriter = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx(Instructions::$objOutPut);
-            //     $objWriter->save('php://output');
-            //     break;
+            case 'xls':
+            case 'xlsx':
+                // For XLS/XLSX, the output is typically handled by the processor directly writing to php://output
+                // or saving to a file. The current Instructions::get() might return the Spreadsheet object.
+                // This part needs to be adapted based on how XlsProcessor/XlsxProcessor handle output.
+                // Assuming Instructions::get() returns the Spreadsheet object for now.
+                $spreadsheet = Instructions::get();
+                $writer = null;
+                if ($this->type === 'xls') {
+                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+                } else { // xlsx
+                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                }
+
+                if ($outputMode === 'S') {
+                    ob_start();
+                    $writer->save('php://output');
+                    return ob_get_clean();
+                } elseif ($outputMode === 'F' && $filePath !== null) {
+                    $writer->save($filePath);
+                    return ''; // No direct content to return for file save
+                } else { // 'I' or 'D'
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    header('Content-Disposition: ' . ($outputMode === 'D' ? 'attachment' : 'inline') . ';filename="' . $filename . '"');
+                    header('Cache-Control: max-age=0');
+                    $writer->save('php://output');
+                    return ''; // No direct content to return for browser output
+                }
+                break;
             case 'html':
                 $html = Instructions::get();
-                $html->out();
+                if ($outputMode === 'S') {
+                    return $html->getHtmlContent(); // Assuming getHtmlContent() exists or similar
+                } elseif ($outputMode === 'F' && $filePath !== null) {
+                    file_put_contents($filePath, $html->getHtmlContent());
+                    return '';
+                } else { // 'I' or 'D' (inline for HTML is typical)
+                    $html->out();
+                    return '';
+                }
                 break;
+            default:
+                // Handle unsupported types or throw an exception
+                throw new \Exception("Unsupported report type for output: " . $this->type);
         }
     }
 

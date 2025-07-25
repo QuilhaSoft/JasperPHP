@@ -90,8 +90,32 @@ try {
         }
         echo "</pre>";
     } else {
-        // In normal mode, output the report
-        $jasper->outpage($report_type);
+        // Determine output mode and filename
+        $outputMode = isset($_GET['output_mode']) ? strtoupper($_GET['output_mode']) : 'I'; // I: Inline, D: Download, F: File, S: String
+        $outputFilename = isset($_GET['filename']) ? $_GET['filename'] : 'report.' . $report_type;
+        $outputFilePath = null;
+
+        if ($outputMode === 'F') {
+            // Define a path to save the file. Make sure this directory is writable.
+            $outputFilePath = __DIR__ . '/../temp/' . $outputFilename;
+            // Ensure the directory exists
+            if (!is_dir(dirname($outputFilePath))) {
+                mkdir(dirname($outputFilePath), 0777, true);
+            }
+        }
+
+        // Output the report based on the chosen mode
+        $reportContent = $jasper->output($outputMode, $outputFilename, $outputFilePath);
+
+        if ($outputMode === 'S') {
+            // If output mode is 'S', the content is returned as a string
+            echo "<pre>Report Content (base64 encoded for binary types):\n";
+            echo htmlspecialchars(base64_encode($reportContent)); // Base64 encode for display if binary
+            echo "</pre>";
+        } elseif ($outputMode === 'F') {
+            echo "Report saved to: " . htmlspecialchars($outputFilePath);
+        }
+        // For 'I' and 'D' modes, the output is sent directly to the browser by the output() method.
     }
 } catch (\Exception $e) {
 
