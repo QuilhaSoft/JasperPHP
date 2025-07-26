@@ -114,6 +114,46 @@ $dataSource = [
 ];
 ```
 
+### Using Embedded SQL Query (from JRXML)
+The library also retains the classic JasperReports functionality of executing a SQL query embedded directly within the `.jrxml` file. When no `dataSource` is provided in the PHP code, JasperPHP will look for a `<queryString>` tag inside the report file and execute it using the provided database connection.
+
+This method is especially useful for creating master-detail reports, where a subreport can fetch its own data based on parameters passed from the main report.
+
+**Example JRXML (`subreport.jrxml`):**
+```xml
+...
+<parameter name="CUSTOMER_ID" class="java.lang.Integer"/>
+<queryString>
+    <![CDATA[SELECT * FROM orders WHERE customer_id = $P{CUSTOMER_ID}]]>
+</queryString>
+<field name="order_date" class="java.util.Date"/>
+<field name="order_total" class="java.math.BigDecimal"/>
+...
+```
+
+**Example PHP:**
+To run a report with an embedded query, provide the database connection details but omit the `'sql'` key from the `dataSource`.
+
+```php
+$dbConfig = [
+    'type' => 'db',
+    // No 'sql' key is needed here
+    'db_driver' => 'mysql',
+    'db_host' => 'localhost',
+    'db_name' => 'mydatabase',
+    'db_user' => 'user',
+    'db_pass' => 'password',
+];
+
+// Parameters needed by the query in the JRXML
+$reportParams = [
+    'CUSTOMER_ID' => 123
+];
+
+$jasper = new TJasper('report_with_query.jrxml', $reportParams, $dbConfig);
+$jasper->output();
+```
+
 ## Output Methods
 The `output()` method provides several ways to deliver the generated report.
 
