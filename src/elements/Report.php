@@ -824,7 +824,7 @@ class Report extends Element
     public function generate()
     {
         $this->loadData($this->dataSourceConfig);
-        if (empty($this->dbData) && strlen(trim($this->sql)) > 0) {
+        if ($this->dataSourceConfig['type'] == 'db' && strlen(trim($this->sql)) > 0) {
             $this->dbData = $this->getDbData();
         }
         // exibe a tag
