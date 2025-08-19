@@ -1,7 +1,6 @@
 <?php
-namespace JasperPHP\core;
+namespace JasperPHP\elements;
 
-use JasperPHP\elements\Element;
 
 /**
  * Background class
