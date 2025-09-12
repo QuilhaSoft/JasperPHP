@@ -30,11 +30,11 @@ if (isset($_GET['data_source'])) {
                     'type' => 'db',
                     'sql' => $_GET['sql'],
                     'db_driver' => $_GET['db_driver'] ?? 'mysql',
-                    'db_host' => $_GET['db_host'] ?? 'localhost',
+                    'db_host' => $_GET['db_host'] ?? '127.0.0.1',
                     'db_port' => $_GET['db_port'] ?? '3306',
-                    'db_name' => $_GET['db_name'] ?? '',
-                    'db_user' => $_GET['db_user'] ?? '',
-                    'db_pass' => $_GET['db_pass'] ?? '',
+                    'db_name' => $_GET['db_name'] ?? 'fc_app',
+                    'db_user' => $_GET['db_user'] ?? 'fc_app',
+                    'db_pass' => $_GET['db_pass'] ?? '1234',
                 ];
             } else {
                 // Fallback to default array data if SQL is missing for DB source
@@ -73,10 +73,9 @@ if (isset($_GET['data_source'])) {
             break;
     }
 }
-
 try {
     // Pass dataSourceConfig instead of sampleData
-    $jasper = new TJasper($report_name, ['type' => $report_type], $dataSourceConfig, $debugMode);
+    $jasper = new TJasper($report_name, $_GET, $dataSourceConfig, $debugMode);
 
     if ($debugMode) {
         // In debug mode, execute generate() to collect messages, but don't output PDF

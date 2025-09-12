@@ -125,39 +125,6 @@ class StaticText extends Element
             default: return 1;
         }
     }
-
-    public function formatPen($pen)
-    {
-        $drawcolor = [];
-        if (isset($pen["lineColor"])) {
-            $drawcolor = $this->report->getColor($pen["lineColor"]);
-        }
-
-        $dash = "";
-        if (isset($pen["lineStyle"])) {
-            if ($pen["lineStyle"] == "Dotted") $dash = "1,1";
-            elseif ($pen["lineStyle"] == "Dashed") $dash = "4,2";
-        }
-
-        return [
-            'width' => (float) ($pen["lineWidth"] ?? 0),
-            'cap' => 'butt',
-            'join' => 'miter',
-            'dash' => $dash,
-            'phase' => 0,
-            'color' => $drawcolor
-        ];
-    }
-    
-    public function formatBox($box)
-    {
-        $border = [];
-        if (($box->topPen["lineWidth"] ?? 0) > 0.0) $border["T"] = $this->formatPen($box->topPen);
-        if (($box->leftPen["lineWidth"] ?? 0) > 0.0) $border["L"] = $this->formatPen($box->leftPen);
-        if (($box->bottomPen["lineWidth"] ?? 0) > 0.0) $border["B"] = $this->formatPen($box->bottomPen);
-        if (($box->rightPen["lineWidth"] ?? 0) > 0.0) $border["R"] = $this->formatPen($box->rightPen);
-        return $border;
-    }
 }
 
 ?>
