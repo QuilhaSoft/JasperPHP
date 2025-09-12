@@ -1,5 +1,5 @@
+vendor
 .git
 .env
 REFACTORING_PROGRESS.md
 public/debug_eval.log
-vendor
