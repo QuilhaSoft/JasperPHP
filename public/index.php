@@ -14,10 +14,42 @@ $debugMode = isset($_GET['debug']) && $_GET['debug'] === 'true';
 
 $dataSourceConfig = [
     'type' => 'array', // Default type
-    'data' => [ // Default sample data for 'array' type
-        (object)['id' => 1, 'name' => 'Item A', 'quantity' => 10],
-        (object)['id' => 2, 'name' => 'Item B', 'quantity' => 20],
-        (object)['id' => 3, 'name' => 'Item C', 'quantity' => 30],
+    'data' => [ 
+        (object)[
+            'despesas_grupo_codigo' => 1,
+            'despesas_grupo' => (object)['despesas_grupo_nome' => 'Grupo de Despesas A'],
+            'despesas_subgrupo_codigo' => 101,
+            'despesas_subgrupo_nome' => 'Subgrupo A1',
+            'plano_contas_codigo' => 'PC-001'
+        ],
+        (object)[
+            'despesas_grupo_codigo' => 1,
+            'despesas_grupo' => (object)['despesas_grupo_nome' => 'Grupo de Despesas A'],
+            'despesas_subgrupo_codigo' => 102,
+            'despesas_subgrupo_nome' => 'Subgrupo A2',
+            'plano_contas_codigo' => 'PC-002'
+        ],
+        (object)[
+            'despesas_grupo_codigo' => 2,
+            'despesas_grupo' => (object)['despesas_grupo_nome' => 'Grupo de Despesas B'],
+            'despesas_subgrupo_codigo' => 201,
+            'despesas_subgrupo_nome' => 'Subgrupo B1',
+            'plano_contas_codigo' => 'PC-003'
+        ],
+        (object)[
+            'despesas_grupo_codigo' => 2,
+            'despesas_grupo' => (object)['despesas_grupo_nome' => 'Grupo de Despesas B'],
+            'despesas_subgrupo_codigo' => 202,
+            'despesas_subgrupo_nome' => 'Subgrupo B2',
+            'plano_contas_codigo' => 'PC-004'
+        ],
+        (object)[
+            'despesas_grupo_codigo' => 2,
+            'despesas_grupo' => (object)['despesas_grupo_nome' => 'Grupo de Despesas B'],
+            'despesas_subgrupo_codigo' => 203,
+            'despesas_subgrupo_nome' => 'Subgrupo B3',
+            'plano_contas_codigo' => 'PC-005'
+        ]
     ],
 ];
 

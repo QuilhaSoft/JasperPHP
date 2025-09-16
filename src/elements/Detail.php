@@ -6,6 +6,7 @@ use JasperPHP\elements\Element;
 use JasperPHP\core\Instructions;
 use JasperPHP\elements\Report;
 use JasperPHP\elements\GroupHeader;
+use JasperPHP\elements\GroupFooter;
 use JasperPHP\core\Background;
 
 /**
@@ -82,6 +83,20 @@ class Detail extends Element
             $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
             
             if($this->report->rowData) {
+                if (isset($this->report->lastRowData) && !empty($this->report->arrayGroup)) {
+                    foreach ($this->report->arrayGroup as $group) {
+                        if (isset($group->groupExpression) && isset($group->groupFooter)) {
+                            $currentGroupValue = $this->report->get_expression($group->groupExpression, $this->report->rowData);
+                            $previousGroupValue = $this->report->get_expression($group->groupExpression, $this->report->lastRowData);
+
+                            if ($currentGroupValue != $previousGroupValue) {
+                                $groupFooter = new \JasperPHP\elements\GroupFooter($group->groupFooter, $this->report);
+                                $groupFooter->generate();
+                                $group->resetVariables = 'true';
+                            }
+                        }
+                    }
+                }
                 $this->report->variables_calculation($this->report->rowData);
             }
             $rowIndex++;
