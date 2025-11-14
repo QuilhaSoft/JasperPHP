@@ -1,4 +1,4 @@
-![alt text](https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png) 
+![alt text]([https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png](https://github.com/QuilhaSoft/JasperPHP/blob/master/images/jasperLogo.png)) 
 
 # JasperPHP
 A pure PHP library to generate reports from JasperSoft Studio (.jrxml files), without the need for a Java bridge or a Jasper Server.
