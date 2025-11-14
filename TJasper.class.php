@@ -1,124 +1,3 @@
-![alt text]([https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png](https://github.com/QuilhaSoft/JasperPHP/blob/master/images/jasperLogo.png)) 
-
-# JasperPHP
-Library to generate reports created with the JasperSoft Studio application<br>
-Pure PHP library, without a java server or Jasper Server
-
-Please, consider donating funds to support us
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
-
-See more blog, documentation, and more on https://jasperphp.net 
-
-# Export formats
- PDF <br>
- XLS
-
-# Supported tags/components
-<table>
-    <tr>
-        <td>TAG/component</td>
-        <td>Status</td>
-        <td>TAG/component</td>
-        <td>Status</td>
-    </tr>
-    <tr>
-        <td colspan="4">Basic elements</td>
-    </tr>
-    <tr>
-        <td>Text Field</td>
-        <td>OK</td>
-        <td>Static Text</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Image</td>
-        <td>OK</td>
-        <td>Break</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Rectangle</td>
-        <td>OK</td>
-        <td>Line</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>SubReport*</td>
-        <td>OK</td>
-        <td>Barcode</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td colspan="4">Composite elements</td>
-    </tr>
-    <tr>
-        <td>Page Number</td>
-        <td>OK</td>
-        <td>Total Pages</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Current Date</td>
-        <td>OK</td>
-        <td>Page X of Y</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td colspan="4">Bands</td>
-    </tr>
-    <tr>
-        <td>Title</td>
-        <td>OK</td>
-        <td>Page Header</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Group</td>
-        <td>OK</td>
-        <td>Detail</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Column Header</td>
-        <td>OK</td>
-        <td>Column Footer</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Page Footer</td>
-        <td>OK</td>
-        <td>Sumary</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Background</td>
-        <td>OK</td>
-        <td>Style</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Frame</td>
-        <td>OK</td>
-        <td>dynamic table</td>
-        <td>OK</td>
-    </tr>
-</table>
-* Subreports are supported recursively and unlimited
-
-# Other features
-<lu>
-    <li>sum, average,minimum, max of variables</li>
-    <li>read and calculate subreport variables</li>
-    <li>array of objects as input data</li>
-    <li>textfield with html render with data replacement</li>
-    <li>active record</li>
-    <li>Conditional styles ready too</li>
-    <li>support for Laravel DB Facade adding tag `property name="net.sf.jasperreports.data.adapter" value="laravel.sqlsrv"` on jrxml files or edit Default data adapter on report properties on JasperSoft Studio</li>
-</lu>
-<br>
-
-# Generic sample
-```php
 <?php
 
 use JasperPHP\Report;
@@ -154,7 +33,7 @@ class TJasper {
         $GLOBALS['reports'] = array();
         $xmlFile = $jrxml;
         $this->type = (array_key_exists('type', $param)) ? $param['type'] : 'pdf';
-        //error_reporting(0);
+        error_reporting(0);
         $this->param = $param;
         $this->report = new JasperPHP\Report($xmlFile, $param); // $GLOBALS['reports'][$xmlFile];
         switch ($this->type) {
@@ -221,35 +100,12 @@ class TJasper {
 require('autoloader.php');
 require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
 require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
+
 //require('../TCPDF/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in stand alone instalations)
-// on production using composer instalation is not necessaty
-
-//Assuming the 'xlsx' format use the 'phpoffice/phpspreadsheet' lib installation via 'composer require phpoffice/phpspreadsheet'
-
+// on production using composer instalation is not necessaty 
 $report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
 TTransaction::open('dev');
 TTransaction::setLogger(new TLoggerHTML('log.html'));
+JasperPHP\Report::$proccessintructionsTime = 'inline'; // if uncomented this line intructions are proccessed afte each database row
 $jasper = new TJasper($report_name, $_GET);
 $jasper->outpage();
-?>
-
-```
-
-# Requirements
-* PHP 5.2+
-* "tecnickcom/tcpdf":"6.2.*"
-* "PHPOffice/PHPExcel" only of XLS export
-* "PHPOffice/PhpSpreadsheet" only of XLSX export
-
-# How to use this sample
-Define database conections params into file config\dev.ini<br>
-View file src\ado\TConection.php to define database type<br>
-Sample URL:<br>
-http://localhost/vendor/quilhasoft/JasperPHP/TJasper.class.php?param1=foo&param2=bar<br>
-URL params passed into URL are the params defined into xmlr file.<br>
-# Using composer
-Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
-
-## License
-
-* MIT License
