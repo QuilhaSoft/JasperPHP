@@ -1,255 +1,222 @@
 ![alt text]([https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png](https://github.com/QuilhaSoft/JasperPHP/blob/master/images/jasperLogo.png)) 
 
 # JasperPHP
-Library to generate reports created with the JasperSoft Studio application<br>
-Pure PHP library, without a java server or Jasper Server
+A pure PHP library to generate reports from JasperSoft Studio (.jrxml files), without the need for a Java bridge or a Jasper Server.
 
-Please, consider donating funds to support us
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
-See more blog, documentation, and more on https://jasperphp.net 
+For more details, documentation, and blog posts, visit [jasperphp.net](https://jasperphp.net).
 
-# Export formats
- PDF <br>
- XLS
+## Recent Changes & Modernization
+This project has undergone a significant modernization effort to align with current PHP best practices. Key changes include:
+- **Composer Integration:** The project now uses Composer for dependency management.
+- **PSR-4 Autoloading:** Switched to PSR-4 for class autoloading, with a reorganized and namespaced directory structure (`src/`).
+- **Static Analysis:** `phpstan` has been integrated to improve code quality and catch errors.
+- **Flexible Data Sources:** Added support for multiple data sources, including Arrays, JSON/CSV files, and direct database queries.
+- **Versatile Output Methods:** Introduced new methods to stream reports to the browser, force downloads, save to a file, or get the content as a base64 string.
 
-# Supported tags/components
-<table>
-    <tr>
-        <td>TAG/component</td>
-        <td>Status</td>
-        <td>TAG/component</td>
-        <td>Status</td>
-    </tr>
-    <tr>
-        <td colspan="4">Basic elements</td>
-    </tr>
-    <tr>
-        <td>Text Field</td>
-        <td>OK</td>
-        <td>Static Text</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Image</td>
-        <td>OK</td>
-        <td>Break</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Rectangle</td>
-        <td>OK</td>
-        <td>Line</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>SubReport*</td>
-        <td>OK</td>
-        <td>Barcode</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td colspan="4">Composite elements</td>
-    </tr>
-    <tr>
-        <td>Page Number</td>
-        <td>OK</td>
-        <td>Total Pages</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Current Date</td>
-        <td>OK</td>
-        <td>Page X of Y</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td colspan="4">Bands</td>
-    </tr>
-    <tr>
-        <td>Title</td>
-        <td>OK</td>
-        <td>Page Header</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Group</td>
-        <td>OK</td>
-        <td>Detail</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Column Header</td>
-        <td>OK</td>
-        <td>Column Footer</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Page Footer</td>
-        <td>OK</td>
-        <td>Sumary</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Background</td>
-        <td>OK</td>
-        <td>Style</td>
-        <td>OK</td>
-    </tr>
-    <tr>
-        <td>Frame</td>
-        <td>OK</td>
-        <td>dynamic table</td>
-        <td>OK</td>
-    </tr>
-</table>
-* Subreports are supported recursively and unlimited
+## Requirements
+- PHP 7.4 or higher
+- Composer for dependency management.
 
-# Other features
-<lu>
-    <li>sum, average,minimum, max of variables</li>
-    <li>read and calculate subreport variables</li>
-    <li>array of objects as input data</li>
-    <li>textfield with html render with data replacement</li>
-    <li>active record</li>
-    <li>Conditional styles ready too</li>
-    <li>support for Laravel DB Facade adding tag `property name="net.sf.jasperreports.data.adapter" value="laravel.sqlsrv"` on jrxml files or edit Default data adapter on report properties on JasperSoft Studio</li>
-</lu>
-<br>
+The following PHP extensions are also required:
+- `gd`
+- `mbstring`
+- `xml`
 
-# Generic sample
+## Installation
+Install the library using Composer:
+```bash
+composer require quilhasoft/jasperphp:dev-master
+```
+
+## Quick Start
+Here is a basic example of how to generate a report. For a more detailed and runnable example, see `public/index.php`.
+
 ```php
 <?php
 
-use JasperPHP\Report;
-use JasperPHP\ado\TTransaction;
-use JasperPHP\ado\TLogger;
-use JasperPHP\ado\TLoggerHTML;
+require_once __DIR__ . '/vendor/autoload.php';
 
-//use \NumberFormatter;
-//use PHPexcel as PHPexcel; // experimental
-/**
- * classe TJasper
- *
- * @author   Rogerio Muniz de Castro <rogerio@quilhasoft.com.br>
- * @version  2018.10.15
- * @access   restrict
- * 
- * 2015.03.11 -- create
- * 2018.10.15 -- revision and internationalize, add TLogger classes
- * */
-class TJasper {
+use JasperPHP\core\TJasper;
 
-    private $report;
-    private $type;
-    private $param;
+// Path to your .jrxml file
+$reportFile = __DIR__ . '/path/to/your/report.jrxml';
 
-    /**
-     * method __construct()
-     * 
-     * @param $jrxml = a jrxml file name
-     * @param $param = a array with params to use into jrxml report
-     */
-    public function __construct($jrxml, array $param) {
-        $GLOBALS['reports'] = array();
-        $xmlFile = $jrxml;
-        $this->type = (array_key_exists('type', $param)) ? $param['type'] : 'pdf';
-        //error_reporting(0);
-        $this->param = $param;
-        $this->report = new JasperPHP\Report($xmlFile, $param); // $GLOBALS['reports'][$xmlFile];
-        switch ($this->type) {
-            case 'pdf':
-                JasperPHP\Instructions::prepare($this->report);
-                break;
-            case 'xls':
-                JasperPHP\Instructions::setProcessor('\JasperPHP\XlsProcessor');
-                JasperPHP\Instructions::prepare($this->report);
-                break;
-            case 'xlsx':
-                //Process use 'PHPOffice/PhpSpreadsheet' 
-                JasperPHP\Instructions::setProcessor('\JasperPHP\XlsxProcessor');
-                JasperPHP\Instructions::prepare($this->report);
-                break;
-        }
-    }
+// Report parameters (if any)
+$params = ['title' => 'My Report'];
 
-    public function outpage($type = 'pdf') {
-        $this->report->generate();
-        $this->report->out();
-        switch ($this->type) {
-            case 'pdf':
-                $pdf = JasperPHP\Instructions::get();
-                $pdf->Output('report.pdf', "I");
-                break;
-            case 'xls':
-                header('Content-Type: application/vnd.ms-excel');
-                header('Content-Disposition: attachment;filename="01simple.xls"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-                header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header('Pragma: public'); // HTTP/1.0
-                $objWriter = PHPExcel_IOFactory::createWriter(JasperPHP\Instructions::$objOutPut, 'Excel5');
-                $objWriter->save('php://output');
-                break;
-            case 'xlsx':
-                header('Content-Type: application/vnd.ms-excel');
-                header('Content-Disposition: attachment;filename="01simple.xls"');
-                header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
-                // If you're serving to IE over SSL, then the following may be needed
-                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-                header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header('Pragma: public'); // HTTP/1.0
-                $objWriter = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx(JasperPHP\Instructions::$objOutPut);
-                $objWriter->save('php://output');
-                break;
-        }
-    }
+// Data source configuration
+$dataSource = [
+    'type' => 'array',
+    'data' => [
+        ['id' => 1, 'name' => 'Product A', 'price' => 10.50],
+        ['id' => 2, 'name' => 'Product B', 'price' => 22.00],
+    ]
+];
 
-    public function setVariable($name, $value) {
-        $this->report->arrayVariable[$name]['initialValue'] = $value;
-    }
+try {
+    // Instantiate the report
+    $jasper = new TJasper($reportFile, $params, $dataSource);
 
+    // Generate and output the report to the browser
+    // The output() method handles the entire process
+    $jasper->output(); // Default output is PDF inline
+
+} catch (\Exception $e) {
+    echo 'Error generating report: ' . $e->getMessage();
 }
-
-require('autoloader.php');
-require('../../tecnickcom/tcpdf/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
-require('../../phpoffice/phpexcel/Classes/PHPExcel.php'); // point to tcpdf class previosly instaled , (probaly in composer instalations)
-//require('../TCPDF/tcpdf.php'); // point to tcpdf class previosly instaled , (probaly in stand alone instalations)
-// on production using composer instalation is not necessaty
-
-//Assuming the 'xlsx' format use the 'phpoffice/phpspreadsheet' lib installation via 'composer require phpoffice/phpspreadsheet'
-
-$report_name = isset($_GET['report']) ? $_GET['report'] : 'testReport.jrxml';  // sql into testReport.txt report do not select any table.
-TTransaction::open('dev');
-TTransaction::setLogger(new TLoggerHTML('log.html'));
-$jasper = new TJasper($report_name, $_GET);
-$jasper->outpage();
-?>
-
 ```
 
-# Requirements
-* PHP 5.2+
-* "tecnickcom/tcpdf":"6.2.*"
-* "PHPOffice/PHPExcel" only of XLS export
-* "PHPOffice/PhpSpreadsheet" only of XLSX export
+## Data Sources
+You can use different types of data sources to populate your reports.
 
-# How to use this sample
-Define database conections params into file config\dev.ini<br>
-View file src\ado\TConection.php to define database type<br>
-Sample URL:<br>
-http://localhost/vendor/quilhasoft/JasperPHP/TJasper.class.php?param1=foo&param2=bar<br>
-URL params passed into URL are the params defined into xmlr file.<br>
-# Using composer
-Add "quilhasoft/jasperphp":"dev-master" into your composer config file and update/install
+### Array
+Pass an array of objects or associative arrays directly.
+```php
+$dataSource = [
+    'type' => 'array',
+    'data' => [
+        (object)['id' => 1, 'name' => 'Item A'],
+        (object)['id' => 2, 'name' => 'Item B']
+    ]
+];
+```
+
+### Database (DB)
+Execute a SQL query to fetch data.
+```php
+$dataSource = [
+    'type' => 'db',
+    'sql' => 'SELECT * FROM customers',
+    'db_driver' => 'mysql',
+    'db_host' => 'localhost',
+    'db_port' => '3306',
+    'db_name' => 'mydatabase',
+    'db_user' => 'user',
+    'db_pass' => 'password',
+];
+```
+
+### JSON or CSV File
+Load data from a local `.json` or `.csv` file.
+```php
+// From a JSON file
+$dataSource = [
+    'type' => 'json_file',
+    'path' => '/path/to/your/data.json'
+];
+
+// From a CSV file
+$dataSource = [
+    'type' => 'csv_file',
+    'path' => '/path/to/your/data.csv'
+];
+```
+
+### Using Embedded SQL Query (from JRXML)
+The library also retains the classic JasperReports functionality of executing a SQL query embedded directly within the `.jrxml` file. When no `dataSource` is provided in the PHP code, JasperPHP will look for a `<queryString>` tag inside the report file and execute it using the provided database connection.
+
+This method is especially useful for creating master-detail reports, where a subreport can fetch its own data based on parameters passed from the main report.
+
+**Example JRXML (`subreport.jrxml`):**
+```xml
+...
+<parameter name="CUSTOMER_ID" class="java.lang.Integer"/>
+<queryString>
+    <![CDATA[SELECT * FROM orders WHERE customer_id = $P{CUSTOMER_ID}]]>
+</queryString>
+<field name="order_date" class="java.util.Date"/>
+<field name="order_total" class="java.math.BigDecimal"/>
+...
+```
+
+**Example PHP:**
+To run a report with an embedded query, provide the database connection details but omit the `'sql'` key from the `dataSource`.
+
+```php
+$dbConfig = [
+    'type' => 'db',
+    // No 'sql' key is needed here
+    'db_driver' => 'mysql',
+    'db_host' => 'localhost',
+    'db_name' => 'mydatabase',
+    'db_user' => 'user',
+    'db_pass' => 'password',
+];
+
+// Parameters needed by the query in the JRXML
+$reportParams = [
+    'CUSTOMER_ID' => 123
+];
+
+$jasper = new TJasper('report_with_query.jrxml', $reportParams, $dbConfig);
+$jasper->output();
+```
+
+## Output Methods
+The `output()` method provides several ways to deliver the generated report.
+
+```php
+public function output(string $mode = 'I', string $filename = 'report.pdf', ?string $filePath = null): ?string
+```
+
+- **`$mode`**:
+  - `I` (Inline): Streams the report directly to the browser. (Default)
+  - `D` (Download): Forces the browser to download the report file.
+  - `F` (File): Saves the report to a local file specified by `$filePath`.
+  - `S` (String): Returns the raw report content as a string (or base64 encoded for binary formats).
+- **`$filename`**: The name of the file for `I` and `D` modes.
+- **`$filePath`**: The absolute path to save the file in `F` mode.
+
+### Examples:
+```php
+// Stream to browser
+$jasper->output('I', 'my_report.pdf');
+
+// Force download
+$jasper->output('D', 'invoice.pdf');
+
+// Save to a file
+$jasper->output('F', 'report.pdf', '/path/to/save/report.pdf');
+
+// Get as a string
+$reportContent = $jasper->output('S');
+```
+
+## Supported Formats
+- PDF
+- XLS
+- XLSX
+
+## Supported JRXML Elements
+The library supports a wide range of JRXML tags and components.
+
+| TAG/Component   | Status | TAG/Component   | Status |
+|-----------------|--------|-----------------|--------|
+| **Basic Elements** | | | |
+| Text Field      | OK     | Static Text     | OK     |
+| Image           | OK     | Break           | OK     |
+| Rectangle       | OK     | Line            | OK     |
+| SubReport*      | OK     | Barcode         | OK     |
+| **Composite Elements** | | | |
+| Page Number     | OK     | Total Pages     | OK     |
+| Current Date    | OK     | Page X of Y     | OK     |
+| **Bands**       | | | |
+| Title           | OK     | Page Header     | OK     |
+| Group           | OK     | Detail          | OK     |
+| Column Header   | OK     | Column Footer   | OK     |
+| Page Footer     | OK     | Summary         | OK     |
+| Background      | OK     | Style           | OK     |
+| Frame           | OK     | Dynamic Table   | OK     |
+
+*\* Subreports are supported recursively and without limits.*
+
+## Other Features
+- Aggregation functions for variables (sum, average, min, max).
+- Reading and calculating variables from subreports.
+- Conditional styling.
+- Support for Laravel DB Facade by setting the `net.sf.jasperreports.data.adapter` property in your JRXML.
 
 ## License
-
-* MIT License
+This library is licensed under the MIT License.
