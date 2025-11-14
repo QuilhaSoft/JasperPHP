@@ -1,11 +1,11 @@
-[![alt text]([https://jasperphp.net/wp-content/uploads/2020/01/cropped-ms-icon-150x150-2.png](https://github.com/QuilhaSoft/JasperPHP/blob/master/images/jasperLogo.png)) ](https://github.com/QuilhaSoft/JasperPHP/blob/master/images/jasperLogo.png)
+![alt text](https://cloud-1de12d.becdn.net/media/original/a10c0d62833293c1793e99504a249665/jasperLogo.png)
 
 # JasperPHP
 A pure PHP library to generate reports from JasperSoft Studio (.jrxml files), without the need for a Java bridge or a Jasper Server.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EE7CD4UZEL3A4&source=url)
 
-For more details, documentation, and blog posts, visit [jasperphp.net](https://jasperphp.net).
+For more details, documentation, and blog posts, visit [jasperphp.com](https://jasperphp.com).
 
 ## Recent Changes & Modernization
 This project has undergone a significant modernization effort to align with current PHP best practices. Key changes include:
