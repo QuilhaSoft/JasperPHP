@@ -80,25 +80,24 @@ class Detail extends Element
             // Prepare for next iteration
             $this->report->lastRowData = $this->report->rowData;
             $recordObject = $this->report->arrayVariable['recordObj']['initialValue'] ?? "stdClass";
-            $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
-            
-            if($this->report->rowData) {
-                if (isset($this->report->lastRowData) && !empty($this->report->arrayGroup)) {
-                    foreach ($this->report->arrayGroup as $group) {
-                        if (isset($group->groupExpression) && isset($group->groupFooter)) {
-                            $currentGroupValue = $this->report->get_expression($group->groupExpression, $this->report->rowData);
-                            $previousGroupValue = $this->report->get_expression($group->groupExpression, $this->report->lastRowData);
+            $newRowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
 
-                            if ($currentGroupValue != $previousGroupValue) {
-                                $groupFooter = new \JasperPHP\elements\GroupFooter($group->groupFooter, $this->report);
-                                $groupFooter->generate();
-                                $group->resetVariables = 'true';
-                            }
+            if (isset($this->report->lastRowData) && !empty($this->report->arrayGroup)) {
+                foreach ($this->report->arrayGroup as $group) {
+                    if (isset($group->groupExpression) && isset($group->groupFooter)) {
+                        $currentGroupValue = $this->report->get_expression($group->groupExpression, $newRowData);
+                        $previousGroupValue = $this->report->get_expression($group->groupExpression, $this->report->lastRowData);
+
+                        if ($currentGroupValue != $previousGroupValue) {
+                            $groupFooter = new \JasperPHP\elements\GroupFooter($group->groupFooter, $this->report);
+                            $groupFooter->generate();
+                            $group->resetVariables = 'true';
                         }
                     }
                 }
-                $this->report->variables_calculation($this->report->rowData);
             }
+            $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
+            $this->report->variables_calculation($this->report->rowData);
             $rowIndex++;
         }
     }
