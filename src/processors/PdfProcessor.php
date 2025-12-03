@@ -599,8 +599,8 @@ class PdfProcessor {
             $oldErrorReporting = error_reporting(0); // Temporarily disable error reporting
             try {
                 // Adicionando log para depuração
-                $logger  = new \JasperPHP\database\TLoggerHTML('debug_eval.log'); // Certifique-se de que TLoggerHTML está disponível
-                $logger->write("Expressão antes do eval: " . $expression);
+                //$logger  = new \JasperPHP\database\TLoggerHTML('debug_eval.log'); // Certifique-se de que TLoggerHTML está disponível
+                //$logger->write("Expressão antes do eval: " . $expression);
                 eval('if(' . $expression . '){$this->print_expression_result=true;}');
             } catch (\ParseError $e) {
                 $this->jasperObj->addDebugMessage("Erro de Parse na expressão (PdfProcessor): " . $expression . " - " . $e->getMessage());
