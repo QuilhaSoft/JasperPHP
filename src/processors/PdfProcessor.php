@@ -574,13 +574,15 @@ class PdfProcessor {
                 $yAfter = $pdf->GetY();
                 $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : 0;
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
-                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"]
+				$pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
+                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $pattern), $arraydata["border"]
                         , $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, false, true, $maxheight); //,$arraydata["valign"]);
                 if (($yAfter + $arraydata["height"]) <= Instructions::$arrayPageSetting["pageHeight"]) {
                     Instructions::$y_axis = $pdf->GetY() - 20;
                 }
             } else {
-                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, true, true, $maxheight);
+				$pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
+                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $pattern), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, true, true, $maxheight);
             }
             $pdf->StopTransform();
             
