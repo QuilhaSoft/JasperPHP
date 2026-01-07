@@ -214,10 +214,10 @@ class PdfProcessor {
         $this->print_expression($arraydata);
         if ($this->print_expression_result == true) {
 
-            $path = $arraydata["path"];
-            $imgtype = mb_substr($path, -3);
+            $path = $arraydata["path"];       
+			$imgtype = strtolower(pathinfo($path, PATHINFO_EXTENSION));
             $arraydata["link"] = $arraydata["link"] . "";
-            if ($imgtype == 'jpg')
+            if ($imgtype == 'jpg' || $imgtype == 'jpeg')
                 $imgtype = "JPEG";
             elseif ($imgtype == 'png' || $imgtype == 'PNG')
                 $imgtype = "PNG";
