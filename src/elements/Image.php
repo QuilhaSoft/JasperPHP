@@ -25,7 +25,7 @@ class Image extends Element
         $imagePath = $this->report->get_expression($imageExpression, $rowData);
         $imagePath = str_ireplace(['"+', '" +', '+"', '+ "', '"'], '', $imagePath);
 
-        $imageType = substr($imagePath, -3);
+        $imageType = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
 
         $hyperlinkReference = '';
         if (isset($data->hyperlinkReferenceExpression)) {
