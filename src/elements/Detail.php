@@ -32,8 +32,9 @@ class Detail extends Element
         $isDbDataArrayOrAccess = (is_array($dbData) || $dbData instanceof \ArrayAccess);
         
         // Initialize with the first row
-        $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[0] ?? null) : $dbData->fetchObject($this->report->arrayVariable['recordObj']['initialValue'] ?? "stdClass");
-        
+		if($isDbDataArrayOrAccess){
+			$this->report->rowData = $dbData[0] ?? null;
+		}        
         $this->report->variables_calculation($this->report->rowData);
 
         while ($this->report->rowData) {
@@ -96,7 +97,7 @@ class Detail extends Element
                     }
                 }
             }
-            $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
+            $this->report->rowData = $newRowData;
             $this->report->variables_calculation($this->report->rowData);
             $rowIndex++;
         }
