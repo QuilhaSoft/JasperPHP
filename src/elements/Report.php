@@ -811,7 +811,7 @@ class Report extends Element
         }
     }
 
-    public function getColor($hex)
+    public static function getColor($hex)
     {
         if (!$hex) return null;
         return [
