@@ -126,7 +126,7 @@ class Element
     {
         $drawcolor = [];
         if (isset($pen["lineColor"])) {
-            $drawcolor = self::$report->getColor($pen["lineColor"]);
+            $drawcolor = Report::getColor($pen["lineColor"]);
         }
 
         $dash = "";
