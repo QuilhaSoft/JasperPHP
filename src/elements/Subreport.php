@@ -1,4 +1,5 @@
 <?php
+
 namespace JasperPHP\elements;
 
 use JasperPHP\elements\Element;
@@ -25,8 +26,8 @@ class Subreport extends Element
         $rowData = $this->report->rowData;
         $reportInstance = $this->report;
         $this->returnValues = array();
-        
-        
+
+
         $print_expression_result = false;
         $printWhenExpression = (string)$this->objElement->reportElement->printWhenExpression;
         if ($printWhenExpression != '') {
@@ -40,7 +41,7 @@ class Subreport extends Element
         if ($print_expression_result !== true) {
             return;
         }
-        
+
         $xmlFile = (string) $this->objElement->subreportExpression;
         $xmlFile = str_ireplace(array('"'), array(''), $xmlFile);
         //$rowArray =is_array($row)?$row:get_object_vars($row);
@@ -52,14 +53,16 @@ class Subreport extends Element
             } else {
                 $rowArray = get_object_vars($rowData);
             }
+        } elseif (!$rowData) {
+            $rowArray = [];
         }
         $newParameters = ($rowArray) ? array_merge($reportInstance->arrayParameter, $rowArray) : $reportInstance->arrayParameter;
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
         $report = new Report($xmlFile, $newParameters, $reportInstance); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
-        
-        if ( preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1 ) {
-            $report->dbData = $reportInstance->get_expression((string)$this->objElement->dataSourceExpression,$rowData,null);
+
+        if (preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1) {
+            $report->dbData = $reportInstance->get_expression((string)$this->objElement->dataSourceExpression, $rowData, null);
         }
 
         $report->generate();
@@ -69,5 +72,3 @@ class Subreport extends Element
         $reportInstance->setReturnVariables($this, $report->arrayVariable);
     }
 }
-
-?>
