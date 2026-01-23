@@ -824,8 +824,10 @@ class Report extends Element
     public function generate()
     {
         $this->loadData($this->dataSourceConfig);
-        if ($this->dataSourceConfig['type'] == 'db' && strlen(trim($this->sql)) > 0) {
-            $this->dbData = $this->getDbData();
+        if (!empty($this->dataSourceConfig)) {
+            if ($this->dataSourceConfig['type'] == 'db' && strlen(trim($this->sql)) > 0) {
+                $this->dbData = $this->getDbData();
+            }
         }
         // exibe a tag
         $instructions = Instructions::setJasperObj($this);
@@ -838,74 +840,76 @@ class Report extends Element
     private function loadData(array $config)
     {
         $this->addDebugMessage("Iniciando carregamento de dados com a configuração: " . print_r($config, true));
-        switch ($config['type']) {
-            case 'array':
-                $processedData = [];
-                if (is_array($config['data']) || $config['data'] instanceof \Traversable) {
-                    foreach ($config['data'] as $item) {
-                        if (is_array($item)) {
-                            $processedData[] = (object)$item;
-                            $this->addDebugMessage("Convertendo array interno para objeto em fonte de dados 'array'.");
-                        } elseif (is_object($item)) {
-                            $processedData[] = $item;
-                        } else {
-                            $this->addDebugMessage("Aviso: Valor escalar ou tipo inesperado encontrado na fonte de dados 'array'. Ignorando ou convertendo para objeto vazio. Valor: " . print_r($item, true));
-                            $processedData[] = (object)[]; // Garante que seja um objeto
+        if (!empty($config)) {
+            switch ($config['type']) {
+                case 'array':
+                    $processedData = [];
+                    if (is_array($config['data']) || $config['data'] instanceof \Traversable) {
+                        foreach ($config['data'] as $item) {
+                            if (is_array($item)) {
+                                $processedData[] = (object)$item;
+                                $this->addDebugMessage("Convertendo array interno para objeto em fonte de dados 'array'.");
+                            } elseif (is_object($item)) {
+                                $processedData[] = $item;
+                            } else {
+                                $this->addDebugMessage("Aviso: Valor escalar ou tipo inesperado encontrado na fonte de dados 'array'. Ignorando ou convertendo para objeto vazio. Valor: " . print_r($item, true));
+                                $processedData[] = (object)[]; // Garante que seja um objeto
+                            }
                         }
-                    }
-                    $this->dbData = $processedData;
-                    $this->addDebugMessage("Dados carregados de um array/coleção. Total de registros: " . count($this->dbData));
-                } else {
-                    $this->addDebugMessage("Erro: Dados inválidos fornecidos para fonte de dados 'array'. Esperado array ou Traversable. Tipo recebido: " . gettype($config['data']));
-                    $this->dbData = [];
-                }
-                break;
-            case 'db':
-                if (isset($config['sql'])) {
-                    try {
-                        $this->dbData = $this->_connectAndFetchDbData($config);
-                        $this->addDebugMessage("Dados carregados do banco de dados com SQL: " . $config['sql']);
-                    } catch (\Exception $e) {
-                        $this->addDebugMessage("Erro ao carregar dados do banco de dados: " . $e->getMessage());
+                        $this->dbData = $processedData;
+                        $this->addDebugMessage("Dados carregados de um array/coleção. Total de registros: " . count($this->dbData));
+                    } else {
+                        $this->addDebugMessage("Erro: Dados inválidos fornecidos para fonte de dados 'array'. Esperado array ou Traversable. Tipo recebido: " . gettype($config['data']));
                         $this->dbData = [];
                     }
-                } else {
-                    $this->addDebugMessage("Erro: SQL não fornecido para fonte de dados do tipo 'db'.");
-                    $this->dbData = [];
-                }
-                break;
-            case 'json_file':
-                if (isset($config['path'])) {
-                    try {
-                        $this->dbData = $this->loadJsonData($config['path']);
-                        $this->addDebugMessage("Dados carregados do arquivo JSON: " . $config['path']);
-                    } catch (\Exception $e) {
-                        $this->addDebugMessage("Erro ao carregar dados do arquivo JSON: " . $e->getMessage());
+                    break;
+                case 'db':
+                    if (isset($config['sql'])) {
+                        try {
+                            $this->dbData = $this->_connectAndFetchDbData($config);
+                            $this->addDebugMessage("Dados carregados do banco de dados com SQL: " . $config['sql']);
+                        } catch (\Exception $e) {
+                            $this->addDebugMessage("Erro ao carregar dados do banco de dados: " . $e->getMessage());
+                            $this->dbData = [];
+                        }
+                    } else {
+                        $this->addDebugMessage("Erro: SQL não fornecido para fonte de dados do tipo 'db'.");
                         $this->dbData = [];
                     }
-                } else {
-                    $this->addDebugMessage("Erro: Caminho do arquivo não fornecido para fonte de dados do tipo 'json_file'.");
-                    $this->dbData = [];
-                }
-                break;
-            case 'csv_file':
-                if (isset($config['path'])) {
-                    try {
-                        $this->dbData = $this->loadCsvData($config['path']);
-                        $this->addDebugMessage("Dados carregados do arquivo CSV: " . $config['path']);
-                    } catch (\Exception $e) {
-                        $this->addDebugMessage("Erro ao carregar dados do arquivo CSV: " . $e->getMessage());
+                    break;
+                case 'json_file':
+                    if (isset($config['path'])) {
+                        try {
+                            $this->dbData = $this->loadJsonData($config['path']);
+                            $this->addDebugMessage("Dados carregados do arquivo JSON: " . $config['path']);
+                        } catch (\Exception $e) {
+                            $this->addDebugMessage("Erro ao carregar dados do arquivo JSON: " . $e->getMessage());
+                            $this->dbData = [];
+                        }
+                    } else {
+                        $this->addDebugMessage("Erro: Caminho do arquivo não fornecido para fonte de dados do tipo 'json_file'.");
                         $this->dbData = [];
                     }
-                } else {
-                    $this->addDebugMessage("Erro: Caminho do arquivo não fornecido para fonte de dados do tipo 'csv_file'.");
+                    break;
+                case 'csv_file':
+                    if (isset($config['path'])) {
+                        try {
+                            $this->dbData = $this->loadCsvData($config['path']);
+                            $this->addDebugMessage("Dados carregados do arquivo CSV: " . $config['path']);
+                        } catch (\Exception $e) {
+                            $this->addDebugMessage("Erro ao carregar dados do arquivo CSV: " . $e->getMessage());
+                            $this->dbData = [];
+                        }
+                    } else {
+                        $this->addDebugMessage("Erro: Caminho do arquivo não fornecido para fonte de dados do tipo 'csv_file'.");
+                        $this->dbData = [];
+                    }
+                    break;
+                default:
+                    $this->addDebugMessage("Tipo de fonte de dados desconhecido: " . $config['type']);
                     $this->dbData = [];
-                }
-                break;
-            default:
-                $this->addDebugMessage("Tipo de fonte de dados desconhecido: " . $config['type']);
-                $this->dbData = [];
-                break;
+                    break;
+            }
         }
         if (empty($this->dbData)) {
             $this->addDebugMessage("Aviso: Nenhuns dados foram carregados.");
