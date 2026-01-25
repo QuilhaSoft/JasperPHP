@@ -48,7 +48,12 @@ class Detail extends Element
             
             $this->report->rowData->rowIndex = $rowIndex;
             $this->report->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
+			$this->report->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
+            $this->report->arrayVariable['REPORT_COUNT']['calculation'] = null;
+			
             $this->report->arrayVariable['totalRows']["ans"] = $totalRows;
+			$this->report->arrayVariable['totalRows']['target'] = $totalRows;
+            $this->report->arrayVariable['totalRows']['calculation'] = null;
 
             // Group Headers
             if (!empty($this->report->arrayGroup)) {
