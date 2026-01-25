@@ -35,7 +35,7 @@ class Detail extends Element
 		if($isDbDataArrayOrAccess){
 			$this->report->rowData = $dbData[0] ?? null;
 		}        
-        $this->report->variables_calculation($this->report->rowData);
+        $this->report->variables_calculation($this->report->rowData,$this->report->rowData);
 
         while ($this->report->rowData) {
             if (Report::$proccessintructionsTime == 'inline') {
@@ -98,7 +98,7 @@ class Detail extends Element
                 }
             }
             $this->report->rowData = $newRowData;
-            $this->report->variables_calculation($this->report->rowData);
+            $this->report->variables_calculation($this->report->rowData,$this->report->rowData);
             $rowIndex++;
         }
     }
