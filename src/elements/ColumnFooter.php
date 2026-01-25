@@ -23,6 +23,9 @@ class ColumnFooter extends Element
             return;
         }
 
+        //revovery report count
+		$this->report->arrayVariable['REPORT_COUNT']["ans"] = $rowData->rowIndex;	
+
         foreach ($this->children as $child) {
             if (is_object($child)) {
                 $print_expression_result = false;
