@@ -68,7 +68,7 @@ class Element
 	public function getChildByClassName($childClassName)
 	{
 		foreach ($this->children as $Child) {
-			if (get_class($Child) == "JasperPHP" . $childClassName) return $Child;
+			if (get_class($Child) == "JasperPHP\\elements\\" . $childClassName) return $Child;
 		}
 	}
 	public function recommendFont($utfstring, $defaultfont, $pdffont = "")
