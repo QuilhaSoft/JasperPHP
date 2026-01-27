@@ -58,9 +58,15 @@ class Subreport extends Element
         }
         $newParameters = ($rowArray) ? array_merge($reportInstance->arrayParameter, $rowArray) : $reportInstance->arrayParameter;
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
-        $report = new Report($xmlFile, $newParameters, $reportInstance); //$GLOBALS['reports'][$xmlFile];
+        $report = new Report($xmlFile, $newParameters, $reportInstance, $reportInstance->debugMode); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
-
+        
+        //query in subreport
+		$queryString = (string)$report->objElement->queryString??null;
+		if(!empty($queryString)){
+			$report->setDataSourceConfig($reportInstance->getDataSourceConfig());			
+		}
+        
         if (preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1) {
             $report->dbData = $reportInstance->get_expression((string)$this->objElement->dataSourceExpression, $rowData, null);
         }
