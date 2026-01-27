@@ -72,6 +72,14 @@ class Report extends Element
         $this->charge($xml, $param, $parentReport);
         //$this->objElement = $xml;
     }
+    
+	public function getDataSourceConfig(){
+		return $this->dataSourceConfig;
+	}
+	
+	public function setDataSourceConfig($dataSourceConfig){
+		return $this->dataSourceConfig = $dataSourceConfig;
+	}
 
     public function addDebugMessage($message)
     {
