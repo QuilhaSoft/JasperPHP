@@ -10,7 +10,7 @@ class HtmlProcessor
     private $htmlBody = '';
     private $report;
     private $styles = [];
-    
+
     // Cursor state
     private $x = 0;
     private $y = 0;
@@ -25,7 +25,12 @@ class HtmlProcessor
         }
         return self::$instance;
     }
-    
+
+    public static function reset()
+    {
+        self::$instance = null;
+    }
+
     public static function get()
     {
         return self::getInstance();
@@ -73,10 +78,22 @@ class HtmlProcessor
         $this->styles['font-style'] = (strpos($options['fontstyle'], 'I') !== false) ? 'italic' : 'normal';
     }
 
-    public function SetFillColor($options) { $this->styles['background-color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})"; }
-    public function SetTextColor($options) { $this->styles['color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})"; }
-    public function SetDrawColor($options) { $this->styles['border-color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})"; }
-    public function SetLineWidth($options) { $this->styles['border-width'] = $options['width'] . 'px'; }
+    public function SetFillColor($options)
+    {
+        $this->styles['background-color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})";
+    }
+    public function SetTextColor($options)
+    {
+        $this->styles['color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})";
+    }
+    public function SetDrawColor($options)
+    {
+        $this->styles['border-color'] = "rgb({$options['r']}, {$options['g']}, {$options['b']})";
+    }
+    public function SetLineWidth($options)
+    {
+        $this->styles['border-width'] = $options['width'] . 'px';
+    }
 
     public function Line($options)
     {
@@ -84,7 +101,7 @@ class HtmlProcessor
         $y1 = $options['y1'] + $this->y_axis;
         $x2 = $options['x2'] + ($this->report->arrayPageSetting["leftMargin"] ?? 0);
         $y2 = $options['y2'] + $this->y_axis;
-        
+
         $style = "left:{$x1}px; top:{$y1}px; width:" . ($x2 - $x1) . "px; height:" . ($y2 - $y1) . "px; border-top: {$this->styles['border-width']} solid {$this->styles['border-color']};";
         $this->htmlBody .= "\t\t" . '<div class="element line" style="' . $style . '"></div>' . "\n";
     }
@@ -95,7 +112,7 @@ class HtmlProcessor
         $y = $options['y'] + $this->y_axis;
         $w = $options['width'];
         $h = $options['height'];
-        
+
         $css = "left:{$x}px; top:{$y}px; width:{$w}px; height:{$h}px; border: {$this->styles['border-width']} solid {$this->styles['border-color']};";
         if (isset($options['draw']) && strpos($options['draw'], 'F') !== false) {
             $css .= 'background-color: ' . $this->styles['background-color'] . ';';
@@ -110,7 +127,7 @@ class HtmlProcessor
         $w = $options['width'];
         $h = $options['height'];
         $file = $options['path'];
-        
+
         $style = "left:{$x}px; top:{$y}px; width:{$w}px; height:{$h}px;";
         $this->htmlBody .= "\t\t" . '<img src="' . $file . '" class="element image" style="' . $style . '">' . "\n";
     }
@@ -126,12 +143,16 @@ class HtmlProcessor
         $fill = $options['fill'];
 
         $style = "left:{$this->x}px; top:{$this->y}px; width:{$w}px; height:{$h}px; line-height:{$h}px;";
-        
+
         foreach ($this->styles as $key => $value) {
             $style .= "{$key}:{$value};";
         }
-        if ($border) { $style .= "border: {$this->styles['border-width']} solid {$this->styles['border-color']};"; }
-        if ($fill) { $style .= "background-color: {$this->styles['background-color']};"; }
+        if ($border) {
+            $style .= "border: {$this->styles['border-width']} solid {$this->styles['border-color']};";
+        }
+        if ($fill) {
+            $style .= "background-color: {$this->styles['background-color']};";
+        }
 
         $alignMap = ['L' => 'left', 'C' => 'center', 'R' => 'right'];
         $style .= "text-align:" . ($alignMap[$align] ?? 'left') . ";";
@@ -145,7 +166,7 @@ class HtmlProcessor
             $this->x = ($this->report->arrayPageSetting["leftMargin"] ?? 0);
         }
     }
-    
+
     public function MultiCell($options)
     {
         $options['txt'] = str_replace("\n", "<br>", $options['txt']);
@@ -159,7 +180,10 @@ class HtmlProcessor
     }
 
     public function AliasNbPages($alias = '{nb}') {}
-    public function PageNo() { return ''; }
+    public function PageNo()
+    {
+        return '';
+    }
 
     public function getHtmlContent()
     {
@@ -177,10 +201,10 @@ class HtmlProcessor
         $html .= "\t\t@media print { body, .page { margin: 0; border: 0; } }\n";
         $html .= "\t</style>\n";
         $html .= "</head>\n<body>\n\t<div class=\"page\">\n" . $this->htmlBody . "\t</div>\n</body>\n</html>";
-        
+
         $totalPages = substr_count($this->htmlBody, 'class=\"page\"') + 1;
         $html = str_replace('{:ptp:}', $totalPages, $html);
-        
+
         return $html;
     }
 

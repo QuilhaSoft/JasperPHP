@@ -9,12 +9,14 @@ use JasperPHP\processors\PdfProcessor;
  * Instructions class
  * This class manages and executes instructions for generating Jasper reports.
  */
-final class Instructions {
+final class Instructions
+{
 
     static public $objOutPut;
     static public $fontdir;
-    static private $intructions;
+    static private $intructions = array();
     static public $JasperObj;
+    static private $jasperObjStack = array();
     static public $currrentPage = 1;
     static public $y_axis;
     static public $arrayPageSetting;
@@ -22,29 +24,61 @@ final class Instructions {
     static private $instructionProcessor = \JasperPHP\processors\PdfProcessor::class;
     static public $lastPageFooter = true;
     static public $processingPageFooter = false;
-    
-    private function __construct() {
-        
+
+    public static function reset()
+    {
+        self::$objOutPut = null;
+        self::$intructions = array();
+        self::$JasperObj = null;
+        self::$jasperObjStack = array();
+        self::$currrentPage = 1;
+        self::$y_axis = null;
+        self::$arrayPageSetting = null;
+        self::$print_expression_result = null;
+        self::$lastPageFooter = true;
+        self::$processingPageFooter = false;
+
+        if (method_exists(self::$instructionProcessor, 'reset')) {
+            self::$instructionProcessor::reset();
+        }
+        // Keep $fontdir and $instructionProcessor as they are likely constant or set once
     }
 
-    public static function setProcessor($instructionProcessor) {
+    private function __construct() {}
+
+    public static function setProcessor($instructionProcessor)
+    {
         self::$instructionProcessor = $instructionProcessor;
     }
 
-    public static function prepare($report) {
+    public static function prepare($report)
+    {
         // Chama o método prepare estático do processador apropriado
         self::$instructionProcessor::prepare($report);
     }
 
-    public static function addInstruction($instruction) {
+    public static function addInstruction($instruction)
+    {
         self::$intructions[] = $instruction;
     }
 
-    public static function setJasperObj(Element $JasperObj) {
+    public static function setJasperObj(Element $JasperObj)
+    {
+        if (self::$JasperObj !== null) {
+            array_push(self::$jasperObjStack, self::$JasperObj);
+        }
         self::$JasperObj = $JasperObj;
     }
 
-    public static function get() {
+    public static function restoreJasperObj()
+    {
+        if (!empty(self::$jasperObjStack)) {
+            self::$JasperObj = array_pop(self::$jasperObjStack);
+        }
+    }
+
+    public static function get()
+    {
         // Para HTML, o objeto real pode ser a própria classe estática ou uma instância armazenada estaticamente
         if (is_callable([self::$instructionProcessor, 'get'])) {
             return self::$instructionProcessor::get();
@@ -52,47 +86,45 @@ final class Instructions {
         return self::$objOutPut;
     }
 
-    public static function getInstructions() {
+    public static function getInstructions()
+    {
         return self::$intructions;
     }
 
-    public static function clearInstructrions() {
+    public static function clearInstructrions()
+    {
         self::$intructions = array();
     }
 
-    public static function getPageNo() {
+    public static function getPageNo()
+    {
         return self::$objOutPut->PageNo();
     }
 
-    public static function runInstructions() {
+    public static function runInstructions()
+    {
         $JasperObj = self::$JasperObj;
         $instructions = self::$intructions;
         self::$intructions = array();
-        
-        // Para PDF, uma nova instância é criada por instrução, passando o relatório.
-        // Para HTML, usaremos um manipulador de instância estática para manter o estado.
-        $isHtml = (self::$instructionProcessor === \JasperPHP\processors\HtmlProcessor::class);
+
         $instructionHandler = null;
-        if (!$isHtml) {
-            // Comportamento original para PDF e outros
-            foreach ($instructions as $arraydata) {
-                $methodName = $arraydata["type"];
-                $methodName = $methodName == 'break' ? 'breaker' : $methodName;
-                
-                $instructionHandler = new self::$instructionProcessor($JasperObj);
+        if (method_exists(self::$instructionProcessor, 'getInstance')) {
+            $instructionHandler = self::$instructionProcessor::getInstance($JasperObj);
+        }
+
+        foreach ($instructions as $arraydata) {
+            $methodName = $arraydata["type"];
+            $methodName = $methodName == 'break' ? 'breaker' : $methodName;
+
+            if ($instructionHandler) {
                 if (method_exists($instructionHandler, $methodName)) {
                     $instructionHandler->$methodName($arraydata);
                 }
-            }
-        } else {
-            // Comportamento modificado para HTML para manter o estado
-            $instructionHandler = self::$instructionProcessor::getInstance();
-            foreach ($instructions as $arraydata) {
-                $methodName = $arraydata["type"];
-                $methodName = $methodName == 'break' ? 'breaker' : $methodName;
-
-                if (method_exists($instructionHandler, $methodName)) {
-                    $instructionHandler->$methodName($arraydata);
+            } else {
+                // Fallback for processors without getInstance (re-instantiated per instruction)
+                $handler = new self::$instructionProcessor($JasperObj);
+                if (method_exists($handler, $methodName)) {
+                    $handler->$methodName($arraydata);
                 }
             }
         }

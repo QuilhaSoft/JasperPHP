@@ -830,8 +830,7 @@ class Report extends Element
         // exibe a tag
         $instructions = Instructions::setJasperObj($this);
         parent::generate();
-        //Instructions::runInstructions();
-        //Instructions::clearInstructrions();
+        Instructions::restoreJasperObj();
         return $this->arrayVariable;
     }
 
