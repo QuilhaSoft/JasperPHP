@@ -32,9 +32,10 @@ class Detail extends Element
         $isDbDataArrayOrAccess = (is_array($dbData) || $dbData instanceof \ArrayAccess);
         
         // Initialize with the first row
-        $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[0] ?? null) : $dbData->fetchObject($this->report->arrayVariable['recordObj']['initialValue'] ?? "stdClass");
-        
-        $this->report->variables_calculation($this->report->rowData);
+		if($isDbDataArrayOrAccess){
+			$this->report->rowData = $dbData[0] ?? null;
+		}        
+        $this->report->variables_calculation($this->report->rowData,$this->report->rowData);
 
         while ($this->report->rowData) {
             if (Report::$proccessintructionsTime == 'inline') {
@@ -47,7 +48,12 @@ class Detail extends Element
             
             $this->report->rowData->rowIndex = $rowIndex;
             $this->report->arrayVariable['REPORT_COUNT']["ans"] = $rowIndex;
+			$this->report->arrayVariable['REPORT_COUNT']['target'] = $rowIndex;
+            $this->report->arrayVariable['REPORT_COUNT']['calculation'] = null;
+			
             $this->report->arrayVariable['totalRows']["ans"] = $totalRows;
+			$this->report->arrayVariable['totalRows']['target'] = $totalRows;
+            $this->report->arrayVariable['totalRows']['calculation'] = null;
 
             // Group Headers
             if (!empty($this->report->arrayGroup)) {
@@ -80,25 +86,24 @@ class Detail extends Element
             // Prepare for next iteration
             $this->report->lastRowData = $this->report->rowData;
             $recordObject = $this->report->arrayVariable['recordObj']['initialValue'] ?? "stdClass";
-            $this->report->rowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
-            
-            if($this->report->rowData) {
-                if (isset($this->report->lastRowData) && !empty($this->report->arrayGroup)) {
-                    foreach ($this->report->arrayGroup as $group) {
-                        if (isset($group->groupExpression) && isset($group->groupFooter)) {
-                            $currentGroupValue = $this->report->get_expression($group->groupExpression, $this->report->rowData);
-                            $previousGroupValue = $this->report->get_expression($group->groupExpression, $this->report->lastRowData);
+            $newRowData = $isDbDataArrayOrAccess ? ($dbData[$rowIndex] ?? null) : $dbData->fetchObject($recordObject);
 
-                            if ($currentGroupValue != $previousGroupValue) {
-                                $groupFooter = new \JasperPHP\elements\GroupFooter($group->groupFooter, $this->report);
-                                $groupFooter->generate();
-                                $group->resetVariables = 'true';
-                            }
+            if (isset($this->report->lastRowData) && !empty($this->report->arrayGroup)) {
+                foreach ($this->report->arrayGroup as $group) {
+                    if (isset($group->groupExpression) && isset($group->groupFooter)) {
+                        $currentGroupValue = $this->report->get_expression($group->groupExpression, $newRowData);
+                        $previousGroupValue = $this->report->get_expression($group->groupExpression, $this->report->lastRowData);
+
+                        if ($currentGroupValue != $previousGroupValue) {
+                            $groupFooter = new \JasperPHP\elements\GroupFooter($group->groupFooter, $this->report);
+                            $groupFooter->generate();
+                            $group->resetVariables = 'true';
                         }
                     }
                 }
-                $this->report->variables_calculation($this->report->rowData);
             }
+            $this->report->rowData = $newRowData;
+            $this->report->variables_calculation($this->report->rowData,$this->report->rowData);
             $rowIndex++;
         }
     }

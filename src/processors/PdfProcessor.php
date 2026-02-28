@@ -253,9 +253,9 @@ class PdfProcessor
         if ($this->print_expression_result == true) {
 
             $path = $arraydata["path"];
-            $imgtype = mb_substr($path, -3);
+            $imgtype = strtolower(pathinfo($path, PATHINFO_EXTENSION));
             $arraydata["link"] = $arraydata["link"] . "";
-            if ($imgtype == 'jpg')
+            if ($imgtype == 'jpg' || $imgtype == 'jpeg')
                 $imgtype = "JPEG";
             elseif ($imgtype == 'png' || $imgtype == 'PNG')
                 $imgtype = "PNG";
@@ -643,10 +643,11 @@ class PdfProcessor
                 $yAfter = $pdf->GetY();
                 $maxheight = array_key_exists('maxheight', $arraydata) ? $arraydata['maxheight'] : 0;
                 //if($arraydata["link"])   echo $arraydata["linktarget"].",".$arraydata["link"]."<br/><br/>";
+                $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
                 $pdf->MultiCell(
                     $w,
                     $h,
-                    $JasperObj->formatText($txt, $arraydata["pattern"]),
+                    $JasperObj->formatText($txt, $pattern),
                     $arraydata["border"],
                     $arraydata["align"],
                     $arraydata["fill"],
@@ -663,7 +664,8 @@ class PdfProcessor
                     Instructions::$y_axis = $pdf->GetY() - 20;
                 }
             } else {
-                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $arraydata["pattern"]), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, true, true, $maxheight);
+                $pattern = (array_key_exists("pattern", $arraydata)) ? $arraydata["pattern"] : '';
+                $pdf->MultiCell($w, $h, $JasperObj->formatText($txt, $pattern), $arraydata["border"], $arraydata["align"], $arraydata["fill"], 1, $x, $y, true, 0, true, true, $maxheight);
             }
             $pdf->StopTransform();
         }
@@ -682,8 +684,8 @@ class PdfProcessor
             $oldErrorReporting = error_reporting(0); // Temporarily disable error reporting
             try {
                 // Adicionando log para depuração
-                $logger  = new \JasperPHP\database\TLoggerHTML('debug_eval.log'); // Certifique-se de que TLoggerHTML está disponível
-                $logger->write("Expressão antes do eval: " . $expression);
+                //$logger  = new \JasperPHP\database\TLoggerHTML('debug_eval.log'); // Certifique-se de que TLoggerHTML está disponível
+                //$logger->write("Expressão antes do eval: " . $expression);
                 eval('if(' . $expression . '){$this->print_expression_result=true;}');
             } catch (\ParseError $e) {
                 $this->jasperObj->addDebugMessage("Erro de Parse na expressão (PdfProcessor): " . $expression . " - " . $e->getMessage());
