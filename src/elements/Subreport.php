@@ -57,19 +57,21 @@ class Subreport extends Element
             $rowArray = [];
         }
         $newParameters = ($rowArray) ? array_merge($reportInstance->arrayParameter, $rowArray) : $reportInstance->arrayParameter;
+        $dataSource = [
+            "type" => $reportInstance->getDataSourceConfig()['type'],
+            "data" => $reportInstance->get_expression($this->objElement->dataSourceExpression, $rowData, null)
+        ];
         //$GLOBALS['reports'][$xmlFile] = (array_key_exists($xmlFile, $GLOBALS['reports'])) ? $GLOBALS['reports'][$xmlFile] : new JasperPHP\Report($xmlFile);
-        $report = new Report($xmlFile, $newParameters, $reportInstance, $reportInstance->debugMode); //$GLOBALS['reports'][$xmlFile];
+        $report = new Report($xmlFile, $newParameters, $reportInstance, $reportInstance->debugMode, $dataSource); //$GLOBALS['reports'][$xmlFile];
         //$this->children= array($report);
-        
         //query in subreport
-		$queryString = (string)$report->objElement->queryString??null;
-		if(!empty($queryString)){
-			$report->setDataSourceConfig($reportInstance->getDataSourceConfig());			
-		}
-        
-        if (preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1) {
-            $report->dbData = $reportInstance->get_expression((string)$this->objElement->dataSourceExpression, $rowData, null);
-        }
+        // $queryString = (string)$report->objElement->queryString ?? null;
+        // if (!empty($queryString)) {
+        //     $report->setDataSourceConfig($reportInstance->getDataSourceConfig());
+        // }
+        // if (preg_match("#^\$F{#", (string)$this->objElement->dataSourceExpression) === 1) {
+        //     $report->dbData = $reportInstance->get_expression((string)$this->objElement->dataSourceExpression, $rowData, null);
+        // }
 
         $report->generate();
         foreach ($this->objElement->returnValue as $r) {
