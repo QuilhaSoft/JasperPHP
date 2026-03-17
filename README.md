@@ -9,7 +9,7 @@ For more details, documentation, and blog posts, visit [jasperphp.com](https://j
 
 ## Recent Changes & Modernization
 This project has undergone a significant modernization effort to align with current PHP best practices. Key changes include:
-- **Laravel\Octane integration:** Added classes to reset statcs classes and values to each request (tested OK)
+- **Laravel\Octane integration:** Added methods to reset static classes and values to each request (tested OK)
 - **Composer Integration:** The project now uses Composer for dependency management.
 - **PSR-4 Autoloading:** Switched to PSR-4 for class autoloading, with a reorganized and namespaced directory structure (`src/`).
 - **Static Analysis:** `phpstan` has been integrated to improve code quality and catch errors.
