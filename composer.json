@@ -24,5 +24,12 @@
         "php": "^7.4 || ^8.0" ,
         "tecnickcom/tcpdf":"^6.3.5"
     },
-    "config": {}
+    "config": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JasperPHP\\JasperPHPServiceProvider"
+            ]
+        }
+    }
 }
