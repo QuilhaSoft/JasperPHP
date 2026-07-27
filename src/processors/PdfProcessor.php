@@ -590,7 +590,7 @@ class PdfProcessor
 
             if ($arraydata["writeHTML"] == true) {
                 //echo  ($txt);
-                $pdf->writeHTML($txt, true, 0, true, true);
+                $pdf->writeHTML($txt, true, 0, true, true, $arraydata["align"]);
                 $pdf->Ln();
                 /* if($this->currentband=='detail'){
                   if($this->maxpagey['page_'.($pdf->getPage()-1)]=='')
